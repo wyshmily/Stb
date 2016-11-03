@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Stb.Platform.Models.JobCategory>
+
+@{
+    ViewData["Title"] = "技能设置";
+}
+
+<h2>技能设置 - 工作门类</h2>
+<br />
+<p>
+    <a asp-action="Create">新增工作门类</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a asp-controller="JobClass" asp-action="Index" asp-route-id="@item.Id">工作种类</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

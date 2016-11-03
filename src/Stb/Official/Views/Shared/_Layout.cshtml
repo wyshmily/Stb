@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="师徒帮,北京和顺智视,121师徒帮,121stb,一二一师徒帮" />
+    <Meta name="Description" Content="一二一师徒帮，互联网时代用工首选！">
+    <title>@ViewData["Title"] - 121师徒帮</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/official.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/official.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    @*nav*@
+    <div>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-area="official" asp-controller="home" asp-action="index"><img src="~/images/logo.png" class="logo" alt="121师徒帮" /></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="official" asp-controller="home" asp-action="index">首页</a></li>
+                        <li><a asp-area="official" asp-controller="home" asp-action="talent">人才培养和服务</a></li>
+                        <li><a asp-area="official" asp-controller="home" asp-action="service">施工服务</a></li>
+                        <li><a asp-area="official" asp-controller="home" asp-action="joinus">诚邀加盟</a></li>
+                        <li><a asp-area="official" asp-controller="home" asp-action="contact">关于我们</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*banner*@
+    <div class="top-banner"><img src="~/images/index/logo_05.png" class="img-responsive center-block"/></div>
+
+    <div>
+        @RenderBody()
+        <hr />
+        <footer>
+            <div class="container footer text-center">
+                <div class="row">
+                    <div class="col-md-2">
+                        亲情链接
+                    </div>
+                    <div class="col-md-2">
+                        <a href="http://www.58.com/" target="_blank"><img src="~/images/index/58.png" class="relative" alt="58同城" /></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="http://www.ganji.com/" target="_blank"><img src="~/images/index/ganji.png" class="relative" alt="赶集网" /></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="http://www.hc360.com/" target="_blank"><img src="~/images/index/huicong.png" class="relative" alt="慧聪网" /></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="http://www.baixing.com/" target="_blank"><img src="~/images/index/bxw.png" class="relative" alt="百姓网" /></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="http://www.kuyiso.com/" target="_blank"><img src="~/images/index/kys.png" class="relative" alt="酷易搜" /></a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="copy">
+                    <br />
+                    <p>Copyright &copy; 2013-2015.北京和顺智视科技有限公司 All rights reserved.</p>
+                    <p>技术支持technology@ishixin.com</p>
+                </div>
+                <a href="#head" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+            </div>
+        </footer>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/js/official.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="~/js/official.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

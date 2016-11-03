@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Stb.Platform.Models.ContractorStaff>
+
+@{
+    ViewData["Title"] = "员工列表";
+    Contractor contractor = ViewData["Contractor"] as Contractor;
+}
+
+<h2>@ViewData["Title"]  -  @contractor.Name</h2>
+
+<p>
+    <a asp-action="Create" asp-route-id="@contractor.Id">新增员工</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Contractor.Name)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contractor.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Contractor" asp-action="Index">返回承包商列表</a>
+</div>
+

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Stb.Platform.Models.JobCategory>
+
+@{
+    ViewData["Title"] = "技能一览";
+}
+
+<h2>技能一览</h2>
+<br />
+
+<div class="container">
+    <div class="col-md-6">
+        @foreach (var category in Model)
+        {
+            <ul>
+                <li>
+                    @category.Name
+                <ul>
+                    @foreach (var jobClass in category.JobClasses)
+                    {
+                        <li>
+                            @jobClass.Name
+                            <ul>
+                                @foreach(var jobMeasurement in jobClass.JobMeasurements)
+                                {
+                                    <li>@jobMeasurement.Name &nbsp;&nbsp;&nbsp;&nbsp; @jobMeasurement.Unit</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+
+        </ul>
+        }
+    </div>
+</div>
+

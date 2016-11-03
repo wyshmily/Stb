@@ -1,0 +1,59 @@
+﻿@model Stb.Platform.Models.JobMeasurement
+
+@{
+    ViewData["Title"] = "技能设置";
+    JobClass jobClass = ViewData["JobClass"] as JobClass;
+}
+
+<h2>技能设置 - 计量项目</h2>
+<br />
+<h4 class="text-center">所属工作种类：@jobClass.JobCategory.Name - @jobClass.Name</h4>
+<br />
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>计量项目信息</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="JobClassId" />
+        <div class="form-group">
+            <label class="col-md-2 control-label">所属工作门类</label>
+            <div class="col-md-10">
+                <input asp-for="@jobClass.JobCategory.Name" class="form-control" disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">工作种类</label>
+            <div class="col-md-10">
+                <input asp-for="@jobClass.Name" class="form-control" disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Unit" class="form-control" />
+                <span asp-validation-for="Unit" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index" asp-route-id="@jobClass.Id">返回列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

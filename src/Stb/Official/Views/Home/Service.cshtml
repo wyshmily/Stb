@@ -1,0 +1,177 @@
+﻿@model Stb.Official.Models.ServiceViewModel
+@{
+    ViewData["Title"] = "施工服务";
+}
+
+<div class="index-element service-bg7">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <br><br><br><br><br><br><br><br>
+                <img src="~/images/service/bg2.png" /><br><br>
+                <h2>因为热爱，我们注重每一个服务细节</h2><br><br>
+            </div>
+            <div class="col-md-6 ">
+                <br><br>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <br>
+                        <h2 class="text-center">我要发布任务</h2><br>
+                    </div>
+                    <div class="panel-body">
+                        <form asp-action="PubService" class="form-horizontal" data-ajax="true" data-ajax-failure="showError" data-ajax-success="showSuccess" data-ajax-begin="publishBegin">
+                            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+                            <div class="col-md-12 form-group">
+                                <select asp-for="job.standardid" asp-items="Model.standardList" class="form-control">
+                                    <option>请选择施工项目类别</option>
+                                </select>
+                                <span asp-validation-for="job.standardid" class="text-danger"></span>
+                            </div><br><br><br>
+
+                            <div class="col-md-12 form-group">
+                                <input asp-for="job.phone" class="form-control" placeholder="请输入手机号" />
+                                <span asp-validation-for="job.phone" class="text-danger"></span>
+                            </div>
+                            <br><br><br>
+                            <div class="col-md-12 form-group">
+                                <input asp-for="job.content" class="form-control" placeholder="请输入任务描述" />
+                                <span asp-validation-for="job.content" class="text-danger"></span>
+                            </div>
+                            <br><br><br>
+                            <div class="col-md-12 form-group">
+                                <button id="service_button" type="submit" formnovalidate="formnovalidate" class="btn btn-info btn-block">发布任务找师傅</button><br>
+                            </div>
+                            <div id="publish_result" class="form-group col-md-12 text-center"></div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <br />
+    <br />
+    <div><img src="~/images/service/pic1.png" /></div>
+    <div class="row">
+        <div class="col-md-4 service-item">
+            <img src="~/images/service/pic2.png" />
+            <span class="h2 service-item">电话交换系统</span>
+        </div>
+    </div><br>
+
+    <div style="background-color: #ecf0f1;">
+        <br>
+        <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供现场线缆敷设、通话设备安装、软件安装、接口调试、工作模式设置等服务。<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设备安装调试范围包括数字用户交换机、虚拟交换机、电话机、传真机等。
+        </p><br>
+    </div>
+</div>
+<br><br>
+<div class="container">
+    <div><img src="~/images/service/pic3.png" /></div>
+    <div class="row">
+        <div class="col-md-4 service-item">
+            <img src="~/images/service/pic4.png" />
+            <span class="h2">机关、企业会议系统</span>
+        </div>
+    </div><br>
+
+    <div style="background-color: #ecf0f1;">
+        <br>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供会议扩声、会议同声传译、会议讨论、会议电视、会议表决、会议表决、会议集中控制、会议签到、会议摄录等专用系统及配套设备的安装、调试、运维保障服务。</p><br>
+    </div>
+</div>
+<br><br>
+<div class="container">
+    <div><img src="~/images/service/pic5.png" /></div>
+    <div class="row">
+        <div class="col-md-4 service-item">
+            <img src="~/images/service/pic6.png" />
+            <span class="h2">公共广播系统</span>
+        </div>
+    </div><br>
+
+    <div style="background-color: #ecf0f1;">
+        <br>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供现场音源设备、生源处理设备、扩音设备、放音设备、传输线缆和配套软件的安装、调试、工作模式设置等服务。</p><br>
+    </div>
+</div>
+<br><br>
+<div class="container">
+    <div><img src="~/images/service/pic7.png" /></div>
+    <div class="row">
+        <div class="col-md-4 service-item">
+            <img src="~/images/service/pic8.png" />
+            <span class="h2">综合布线系统</span>
+        </div>
+    </div><br>
+
+    <div style="background-color: #ecf0f1;">
+        <br>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;针对机关、企业、厂矿、学校、公共场所、居民小区，提供工作区、控制区、设备间、管理间、建筑群等处的管路安装、垂直干线、水平分线到位服务。</p><br>
+    </div>
+</div>
+<br><br>
+<div class="container">
+    <div><img src="~/images/service/pic9.png" /></div>
+    <div class="row">
+        <div class="col-md-4 service-item">
+            <img src="~/images/service/pic10.png" />
+            <span class="h2">安全防范系统</span>
+        </div>
+    </div><br>
+
+    <div style="background-color: #ecf0f1;">
+        <br>
+        <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安全保障人身和财产安全，运用计算机通信、联网电视监控及入侵报警等技术形成的安全防范体系。<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;平台针对各类安防企业和施工单位的实际需要，提供以下各类项目的安装调试、施工组织、售后维保服务。
+        </p><br>
+    </div>
+</div><br><br>
+<div class="container-fluid">
+    <div class="row">
+            <div class="col-md-5">
+                <div class="col-sm-6"><img src="~/images/service/pic11.png" /></div>
+                <div class="col-sm-6"><img src="~/images/service/pic12.png" /></div>
+            </div>
+            <div class="col-md-2"><img src="~/images/service/pic13.png" /></div>
+            <div class="col-md-5">
+                <div class="col-sm-6"><img src="~/images/service/pic14.png" /></div>
+                <div class="col-sm-6"><img src="~/images/service/pic15.png" /></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="col-sm-6"><img src="~/images/service/pic16.png" /></div>
+                <div class="col-sm-6"><img src="~/images/service/pic17.png" /></div>
+            </div>
+            <div class="col-md-2"><img src="~/images/service/pic18.png" /></div>
+            <div class="col-md-5">
+                <div class="col-sm-6"><img src="~/images/service/pic19.png" /></div>
+                <div class="col-sm-6"><img src="~/images/service/pic20.png" /></div>
+            </div>
+        </div>
+</div>
+@*<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center"><img src="~/images/service/bg6.png" /></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>*@
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

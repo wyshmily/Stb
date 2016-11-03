@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Stb.Platform.Models.Project>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactDeadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactorStaffId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedStartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeadWorkerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlatoonId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkerNeeded)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactDeadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactorStaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedStartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeadWorkerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlatoonId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkLocation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkerNeeded)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
