@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stb.Data;
-using Stb.Platform.Models;
+using Stb.Data.Models;
 using Stb.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Stb.Api.Models;
@@ -53,22 +53,26 @@ namespace Stb
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("Authenticated", policy => policy.RequireClaim(ClaimTypes.Name));
-                options.AddPolicy(Policies.AdministratorOnly, policy => policy.RequireClaim(ClaimTypes.Role, "系统管理员"));
-            });
+            services.AddIdentity<Platoon, IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddDefaultTokenProviders();
+
+            //services.AddAuthorization(options =>
+            //{
+            //    //options.AddPolicy("Authenticated", policy => policy.RequireClaim(ClaimTypes.Name));
+            //    options.AddPolicy(Policies.AdministratorOnly, policy => policy.RequireClaim(ClaimTypes.Role, "系统管理员"));
+            //});
 
             services.AddMvc();
 
 
-            services.Configure<RazorViewEngineOptions>(options =>
-            {
-                options.AreaViewLocationFormats.Clear();
-                options.AreaViewLocationFormats.Add("{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("{2}/Views/Shared/{0}.cshtml");
-                //options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-            });
+            //services.Configure<RazorViewEngineOptions>(options =>
+            //{
+            //    options.AreaViewLocationFormats.Clear();
+            //    options.AreaViewLocationFormats.Add("{2}/Views/{1}/{0}.cshtml");
+            //    options.AreaViewLocationFormats.Add("{2}/Views/Shared/{0}.cshtml");
+            //    //options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            //});
 
             services.Configure<Settings>(Configuration);
 
@@ -87,8 +91,9 @@ namespace Stb
 
                 // Cookie settings
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(1);
-                //options.Cookies.ApplicationCookie.LoginPath = "/Account/LogIn";
+                options.Cookies.ApplicationCookie.LoginPath = "/Platform/Account/LogIn";
                 //options.Cookies.ApplicationCookie.LogoutPath = "/Account/LogOff";
+                options.Cookies.ApplicationCookie.AccessDeniedPath = "/Platform/Account/Forbidden";
 
                 // User settings
                 options.User.RequireUniqueEmail = false;
@@ -121,14 +126,14 @@ namespace Stb
 
             app.UseIdentity();
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = "Cookie",
-                LoginPath = new PathString("/platform/Account/login/"),
-                AccessDeniedPath = new PathString("/platform/Account/Forbidden/"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            //{
+            //    AuthenticationScheme = "Cookie",
+            //    LoginPath = new PathString("/Account/login/"),
+            //    AccessDeniedPath = new PathString("/Account/Forbidden/"),
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true
+            //});
 
             //app.UseBearerAuthentication(options =>
             //{
@@ -138,36 +143,15 @@ namespace Stb
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
+
             app.UseMvc(routes =>
             {
-                routes.MapAreaRoute("platform", "platform", "platform/{controller=home}/{action=index}/{id?}");
-
-                routes.MapAreaRoute("official", "official", "{action=index}/{id?}", new { controller = "home" });
-
-                //routes.MapAreaRoute("api", "api", "api/{controller=home}/{action=index}/{id?}");
-
-                //routes.MapRoute(
-                //    name: "default",
-                //    template: "{controller=home}/{action=index}/{id?}",
-                //    defaults: new { area = "official" });
+                routes.MapRoute(
+                    name: "default",
+                    template: "platform/{controller=Home}/{action=Index}/{id?}");
             });
 
             DbInitializer.Initialize(context, roleManager);
-
-            //PlatformUser admin = new PlatformUser
-            //{
-            //    UserName = "18513110716",
-            //    Name = "房鹤",
-            //};
-            //var result = userManager.CreateAsync(admin, "123456").Result;
-
-            //userManager.AddToRoleAsync(admin,"系统管理员").Wait();
-
-            //List<ApplicationUser> users = userManager.Users.ToList();
-            //ApplicationUser user = users.Single(u => u.UserName == "18513110716");
-            //userManager.RemovePasswordAsync(user).Wait();
-            //userManager.AddPasswordAsync(user, "123456").Wait();
-
         }
     }
 }

@@ -1,0 +1,28 @@
+﻿@model Stb.Data.Models.JobCategory
+
+@{
+    ViewData["Title"] = "技能设置";
+}
+
+<h2>技能设置 - 删除工作门类</h2>
+<br />
+<h4 class="text-danger text-center">确定删除技能门类?</h4>
+<div>
+    <h4>工作门类信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            <a asp-action="Index">返回列表</a>
+        </div>
+    </form>
+</div>

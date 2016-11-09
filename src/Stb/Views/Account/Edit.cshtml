@@ -1,0 +1,53 @@
+﻿@model Stb.Data.Models.AccountViewModels.AccountEditViewModel
+
+@{
+    ViewData["Title"] = "修改用户";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>用户信息</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="User.Id" />
+        <input type="hidden" asp-for="User.Password" />
+        <div class="form-group">
+            <label asp-for="User.Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.Name" class="form-control" />
+                <span asp-validation-for="User.Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="User.UserName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.UserName" class="form-control" />
+                <span asp-validation-for="User.UserName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="User.Role" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-items="@Model.Roles" class="form-control" asp-for="User.Role">
+                    <option value="@null">请选择用户角色</option>
+                </select>
+                <span asp-validation-for="User.Role" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">返回用户列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

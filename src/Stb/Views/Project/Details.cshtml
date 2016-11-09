@@ -1,0 +1,84 @@
+﻿@model Stb.Data.Models.Project
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactDeadline)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactDeadline)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactorStaffId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactorStaffId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedDays)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedDays)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedStartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedStartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LeadWorkerId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LeadWorkerId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlatoonId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlatoonId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProjectType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkLocation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkLocation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkerNeeded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkerNeeded)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

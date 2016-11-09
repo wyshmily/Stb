@@ -1,0 +1,62 @@
+﻿@model Stb.Data.Models.ContractorViewModels.ContractorViewModel
+
+@{
+    ViewData["Title"] = "删除承包商";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<h4 class="text-danger text-center">确认删除承包商？</h4>
+<div>
+    <h4>承包商信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Contractor.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contractor.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contractor.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contractor.Address)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contractor.Phone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contractor.Phone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contractor.Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contractor.Enabled)
+        </dd>
+    </dl>
+    <h4>负责人信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.HeadStaff.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HeadStaff.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HeadStaff.Phone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HeadStaff.Phone)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            <a asp-action="Index">返回承包商列表</a>
+        </div>
+    </form>
+</div>

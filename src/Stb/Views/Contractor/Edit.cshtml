@@ -1,0 +1,67 @@
+﻿@model Stb.Data.Models.Contractor
+
+@{
+    ViewData["Title"] = "修改承包商";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>承包商信息</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="HeadStaffId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-items="@(new SelectList(Model.Staffs, "Id", "Name"))" asp-for="HeadStaffId" class="form-control">
+                    <option>请选择负责人</option>
+                </select>
+                <span asp-validation-for="HeadStaffId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="Enabled" />
+                    <label asp-for="Enabled"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">返回承包商列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

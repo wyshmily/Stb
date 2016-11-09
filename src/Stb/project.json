@@ -42,7 +42,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "Stb.Data": "1.0.0-*"
   },
 
   "tools": {
@@ -83,8 +84,7 @@
     "include": [
       "wwwroot",
       "Views",
-      "Platform/Views",
-      "Official/Views",
+      "Areas/**/Views",
       "appsettings.json",
       "web.config"
     ]

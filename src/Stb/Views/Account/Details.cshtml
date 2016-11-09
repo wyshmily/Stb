@@ -1,0 +1,36 @@
+﻿@model Stb.Data.Models.AccountViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "用户详情";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<div>
+    <h4>用户信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |
+    <a asp-action="Index">返回用户列表</a>
+</div>

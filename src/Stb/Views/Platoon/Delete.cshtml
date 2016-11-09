@@ -1,0 +1,127 @@
+﻿@model Stb.Data.Models.PlatoonViewModels.PlatoonViewModel
+
+@{
+    ViewData["Title"] = "删除排长";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<h4 class="text-danger text-center">确定删除排长？</h4>
+<div>
+    <h4>账号信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Enabled)
+        </dd>
+    </dl>
+    <h4>基本资料</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd>
+            @if (Model.Enabled)
+            {<span>男</span>}
+            else
+            {<span>女</span>}
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdCardNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdCardNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NativePlace)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NativePlace)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HealthStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealthStatus)
+        </dd>
+    </dl>
+    <h4>社交账号</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.QQ)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QQ)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Wechat)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Wechat)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Alipay)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Alipay)
+        </dd>
+    </dl>
+    <h4>退伍情况</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MilitaryTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MilitaryTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DischargeTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DischargeTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ArmyPost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ArmyPost)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ArmyRank)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ArmyRank)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            <a asp-action="Index">返回排长列表</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,49 @@
+﻿@model Stb.Data.Models.JobMeasurement
+
+@{
+    ViewData["Title"] = "技能设置";
+    JobClass jobClass = ViewData["JobClass"] as JobClass;
+}
+
+<h2>技能设置 - 计量项目</h2>
+<br />
+<h4 class="text-center">所属工作种类：@jobClass.JobCategory.Name - @jobClass.Name</h4>
+<br />
+<h4 class="text-danger text-center">确认删除计量项目?</h4>
+<div>
+    <h4>计量项目信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            所属工作门类
+        </dt>
+        <dd>
+            @jobClass.JobCategory.Name
+        </dd>
+        <dt>
+            所属工作种类
+        </dt>
+        <dd>
+            @jobClass.Name
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            <a asp-action="Index" asp-route-id="@jobClass.Id">返回列表</a>
+        </div>
+    </form>
+</div>

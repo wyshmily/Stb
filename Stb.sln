@@ -11,7 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stb", "src\Stb\Stb.xproj", "{FA506079-509C-478C-9226-6AB54B4699BD}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stb.Platform", "src\Stb\Stb.Platform.xproj", "{FA506079-509C-478C-9226-6AB54B4699BD}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stb.Data", "src\Stb.Data\Stb.Data.xproj", "{3EFCB039-5C59-435B-99AD-01B67C127915}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stb.Official", "src\Stb.Official\Stb.Official.xproj", "{9925C636-01C9-4C44-8B42-5AECE6306AB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,11 +27,21 @@ Global
 		{FA506079-509C-478C-9226-6AB54B4699BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA506079-509C-478C-9226-6AB54B4699BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA506079-509C-478C-9226-6AB54B4699BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EFCB039-5C59-435B-99AD-01B67C127915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFCB039-5C59-435B-99AD-01B67C127915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EFCB039-5C59-435B-99AD-01B67C127915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFCB039-5C59-435B-99AD-01B67C127915}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9925C636-01C9-4C44-8B42-5AECE6306AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9925C636-01C9-4C44-8B42-5AECE6306AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9925C636-01C9-4C44-8B42-5AECE6306AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9925C636-01C9-4C44-8B42-5AECE6306AB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FA506079-509C-478C-9226-6AB54B4699BD} = {F74BB072-4EBC-496D-A1A6-87380FBF4657}
+		{3EFCB039-5C59-435B-99AD-01B67C127915} = {F74BB072-4EBC-496D-A1A6-87380FBF4657}
+		{9925C636-01C9-4C44-8B42-5AECE6306AB3} = {F74BB072-4EBC-496D-A1A6-87380FBF4657}
 	EndGlobalSection
 EndGlobal
