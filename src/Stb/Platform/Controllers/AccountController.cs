@@ -24,7 +24,6 @@ namespace Stb.Platform.Controllers
         private readonly UserManager<PlatformUser> _userManager;
         private readonly SignInManager<PlatformUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IPasswordHasher<PlatformUser> _hasher;
 
         private readonly ILogger _logger;
 
@@ -32,13 +31,11 @@ namespace Stb.Platform.Controllers
             UserManager<PlatformUser> userManager,
             SignInManager<PlatformUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            IPasswordHasher<PlatformUser> hasher,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _hasher = hasher;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
@@ -107,6 +104,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ApplicationUsers
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Index()
         {
             List<PlatformUser> appUserList = await _userManager.Users.Include(u => u.Roles).OrderBy(u => u.UserName).ToListAsync();
@@ -115,6 +113,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ApplicationUsers/Details/5
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -132,6 +131,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ApplicationUsers/Create
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Create()
         {
             AccountEditViewModel viewModel = new AccountEditViewModel
@@ -147,6 +147,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Create(AccountViewModel user)
         {
             if (ModelState.IsValid)
@@ -176,6 +177,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ApplicationUsers/Edit/5
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -201,6 +203,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Edit(string id, AccountViewModel user)
         {
             if (id != user.Id)
@@ -250,6 +253,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ApplicationUsers/Delete/5
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -269,6 +273,7 @@ namespace Stb.Platform.Controllers
         // POST: ApplicationUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var appUser = await _userManager.FindByIdAsync(id);
@@ -276,12 +281,12 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("Index");
         }
 
+        #region Helpers
+
         private bool ApplicationUserExists(string id)
         {
             return _userManager.Users.Any(u => u.Id == id);
         }
-
-        
 
         private async Task<AccountViewModel> GetAppUserViewModel(PlatformUser user)
         {
@@ -289,8 +294,6 @@ namespace Stb.Platform.Controllers
             viewModel.Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
             return viewModel;
         }
-
-        #region Helpers
 
         private void AddErrors(IdentityResult result)
         {
