@@ -4,11 +4,8 @@
 
 代码结构
 <pre>-- src
-     -- Stb 师徒帮代码根目录
-          -- Api 师徒帮App接口
-          -- Data 数据库上下文
-          -- Official 师徒帮官网
-          -- Platform 师徒帮后台
-          -- Services 服务
-          -- wwwroot 网站静态文件根目录
+     -- Stb.Api 师徒帮后台接口（目前还没创建这个项目）
+     -- Stb.Data 数据库上下文和模型定义，由其它三个项目共享
+     -- Stb.Official 师徒帮官网
+     -- Stb.Platform 师徒帮后台
 </pre>
