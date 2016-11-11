@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Stb.Platform.Models.WorkerViewModels.WorkerIndexViewModel>
+
+@{
+    ViewData["Title"] = "工人管理";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-action="Create">新增工人</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsHead)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeaderName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @if (item.Gender)
+                    {<span>男</span>}
+                    else
+                    {<span>女</span>}
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsHead)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HeaderName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">详情</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

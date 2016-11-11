@@ -1,0 +1,40 @@
+﻿@model Stb.Platform.Models.AccountViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "删除用户";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<h4 class="text-danger text-center">确认删除用户？</h4>
+<div>
+    <h4>用户信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="删除" class="btn btn-default" /> |
+            <a asp-action="Index">返回用户列表</a>
+        </div>
+    </form>
+</div>

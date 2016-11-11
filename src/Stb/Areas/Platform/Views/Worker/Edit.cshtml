@@ -1,0 +1,227 @@
+﻿@using Stb.Platform.Models.DistrictViewModels
+@model Stb.Platform.Models.WorkerViewModels.WorkerViewModel
+
+@{
+    ViewData["Title"] = "修改工人";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Password" />
+
+        <h4>账号信息</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger" />
+            </div>
+        </div>
+        @*<div class="form-group">
+                <label asp-for="Password" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger" />
+                </div>
+            </div>*@
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="Enabled" checked />
+                    <label asp-for="Enabled"></label>
+                </div>
+            </div>
+        </div>
+        <h4>基本资料</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Gender" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <Select asp-for="Gender" class="form-control">
+                    <option value="@true" selected>男</option>
+                    <option value="@false">女</option>
+                </Select>
+                <span asp-validation-for="Gender" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="IdCardNumber" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="IdCardNumber" class="form-control" />
+                <span asp-validation-for="IdCardNumber" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Birthday" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Birthday" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NativePlace" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NativePlace" class="form-control" />
+                <span asp-validation-for="NativePlace" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="HealthStatus" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="HealthStatus" class="form-control" />
+                <span asp-validation-for="HealthStatus" class="text-danger" />
+            </div>
+        </div>
+        <h4>技能水平</h4>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="IsHead" />
+                    <label asp-for="IsHead"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobClasses" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <div class="col-sm-12 col-md-7 col-lg-6 no-padding-left">
+                    <ul class="form-control ul-form-control" id="JobClasses">
+                        @for (int i = 0; i < Model.JobClasses.Count; i++)
+                        {
+                            JobClassViewModel jobClass = Model.JobClasses[i];
+                            <li id="@($"li_job_{jobClass.JobClassId}")">
+                                <input type="hidden" name="@($"JobClasses[{i}].JobCategoryId")" value="@jobClass.JobCategoryId" />
+                                <input type="hidden" name="@($"JobClasses[{i}].JobCategoryName")" value="@jobClass.JobCategoryName" />
+                                <input type="hidden" name="@($"JobClasses[{i}].JobClassId")" value="@jobClass.JobClassId" />
+                                <input type="hidden" name="@($"JobClasses[{i}].JobClassName")" value="@jobClass.JobClassName" />
+                                <div class="input-group">
+                                    <input type="button" class="text-left form-control" value="@jobClass.JobCategoryName @jobClass.JobClassName" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default remove-jobclass" value="job_@jobClass.JobClassId" type="button">&times;</button>
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="col-md-5 col-lg-5 no-padding-left">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <Select id="jobCategorySelect" class="form-control"></Select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                <input id="selectAllJobClass" type="checkbox" />
+                                <label for="selectAllJobClass">全选</label>
+                            </div>
+                            <ul id="jobClassSelect" class="form-control ul-form-control"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Districts" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <div class="col-sm-12 col-md-7 col-lg-6 no-padding-left">
+                    <ul class="form-control ul-form-control" id="Districts">
+                        @for (int i = 0; i < Model.Districts.Count; i++)
+                        {
+                            DistrictViewModel district = Model.Districts[i];
+                            <li id="@($"li_{district.DistrictAdcode}")">
+                                <input type="hidden" name="@($"Districts[{i}].ProvinceAdcode")" value="@district.ProvinceAdcode" />
+                                <input type="hidden" name="@($"Districts[{i}].ProvinceName")" value="@district.ProvinceName" />
+                                <input type="hidden" name="@($"Districts[{i}].CityAdcode")" value="@district.CityAdcode" />
+                                <input type="hidden" name="@($"Districts[{i}].CityName")" value="@district.CityName" />
+                                <input type="hidden" name="@($"Districts[{i}].DistrictAdcode")" value="@district.DistrictAdcode" />
+                                <input type="hidden" name="@($"Districts[{i}].DistrictName")" value="@district.DistrictName" />
+                                <div class="input-group">
+                                    <input type="button" class="text-left form-control" value="@district.ProvinceName @district.CityName @district.DistrictName" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default remove-district" value="@district.DistrictAdcode" type="button">&times;</button>
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-5 col-lg-5 no-padding-left">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <Select id="provinceSelect" class="form-control"></Select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <Select id="citySelect" class="form-control"></Select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                <input id="selectAllDistrict" type="checkbox" />
+                                <label for="selectAllDistrict">全选</label>
+                            </div>
+                            <ul id="districtSelect" class="form-control ul-form-control"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <h4>社交账号</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="QQ" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="QQ" class="form-control" />
+                <span asp-validation-for="QQ" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Wechat" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Wechat" class="form-control" />
+                <span asp-validation-for="Wechat" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Alipay" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Alipay" class="form-control" />
+                <span asp-validation-for="Alipay" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">返回工人列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
