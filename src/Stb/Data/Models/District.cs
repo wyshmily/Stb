@@ -15,14 +15,18 @@ namespace Stb.Data.Models
 
         public string Name { get; set; }
 
-        public int AdCode { get; set; }
-
         public int CityId { get; set; }
+
+        public string CityName { get; set; }
+
+        public int ProvinceId { get; set; }
+
+        public string ProvinceName { get; set; }
 
         public City City { get; set; }
 
         public List<EndUserDistrict> EndUserDistricts { get; set; }
 
-        public List<Project> Projects { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

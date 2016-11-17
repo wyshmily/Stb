@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Areas.Api.Controllers
 {

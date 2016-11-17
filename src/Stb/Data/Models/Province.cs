@@ -8,15 +8,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Stb.Data.Models
 {
     // 省
-    public class Province
+    public class OrderIndexer
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; } // adcode
-
-        public string Name { get; set; }
-
-        //public int AdCode { get; set; }
-
-        public List<City> Cities { get; set; }
+        public int Id { get; set; } 
     }
 }

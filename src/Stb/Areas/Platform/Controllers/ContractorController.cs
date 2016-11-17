@@ -113,7 +113,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Contractor contractor, ContractorStaff headStaff)
+        public async Task<IActionResult> Edit(int id, Contractor contractor)
         {
             if (id != contractor.Id)
             {
@@ -140,6 +140,7 @@ namespace Stb.Platform.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            contractor.Staffs = await _context.ContractorStaff.Where(s => s.ContractorId == id).ToListAsync();
             return View(contractor);
         }
 

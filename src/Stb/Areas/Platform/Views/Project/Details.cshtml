@@ -1,84 +1,68 @@
 ﻿@model Stb.Data.Models.Project
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "项目详情";
 }
 
-<h2>Details</h2>
-
+<h2>@ViewData["Title"]</h2>
+<br />
 <div>
-    <h4>Project</h4>
+    <h4>项目信息</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ContactDeadline)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ContactDeadline)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ContactorStaffId)
+            @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ContactorStaffId)
+            @Html.DisplayFor(model => model.Client)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Contract)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contract)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractAmount)
+        </dd>
+        <dt>
+            <pre>@Html.DisplayNameFor(model => model.Description)</pre>
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ExpectedDays)
+            @Html.DisplayNameFor(model => model.Orders)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ExpectedDays)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ExpectedStartTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ExpectedStartTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LeadWorkerId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LeadWorkerId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PlatoonId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PlatoonId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProjectType)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkAddress)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.WorkAddress)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkLocation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.WorkLocation)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkerNeeded)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.WorkerNeeded)
-        </dd>
+        @if (Model.Orders.Count > 0)
+        {
+            @foreach (var order in Model.Orders)
+            {
+
+                <dd>
+                    <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id">@Html.DisplayFor(model => order.Id)</a>
+                </dd>
+            }
+        }
     </dl>
+
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |
+    <a asp-action="Index">返回</a>
 </div>

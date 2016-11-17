@@ -147,7 +147,9 @@ namespace Stb.Platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contractorStaff = await _context.ContractorStaff.SingleOrDefaultAsync(m => m.Id == id);
+            var contractorStaff = await _context.ContractorStaff.Include(s=>s.Orders).SingleOrDefaultAsync(m => m.Id == id);
+            foreach (var order in contractorStaff.Orders)
+                order.ContractorStaffId = null;
             _context.ContractorStaff.Remove(contractorStaff);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { id = contractorStaff.ContractorId });

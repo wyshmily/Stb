@@ -84,14 +84,22 @@
                 <span asp-validation-for="HealthStatus" class="text-danger" />
             </div>
         </div>
-        <h4>技能水平</h4>
+        <h4>专业技能</h4>
         <hr />
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-10 col-md-offset-2">
                 <div class="checkbox">
                     <input asp-for="IsHead" />
                     <label asp-for="IsHead"></label>
                 </div>
+            </div>
+        </div>
+        <div class="form-group" id="HeaderSearchDiv">
+            <label asp-for="HeaderId" class="col-md-2 control-label"></label>
+            <div class="col-md-10 dropdown">
+                <input asp-for="HeaderName" class="form-control dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" autocomplete="off" />
+                <input type="hidden" asp-for="HeaderId" />
+                <ul id="HeaderDropDown" class="dropdown-menu form-contorl-margin form-control" aria-labelledby="HeaderName"></ul>
             </div>
         </div>
         <div class="form-group">
@@ -107,8 +115,23 @@
                                 <input type="hidden" name="@($"JobClasses[{i}].JobCategoryName")" value="@jobClass.JobCategoryName" />
                                 <input type="hidden" name="@($"JobClasses[{i}].JobClassId")" value="@jobClass.JobClassId" />
                                 <input type="hidden" name="@($"JobClasses[{i}].JobClassName")" value="@jobClass.JobClassName" />
+                                <input type="hidden" name="@($"JobClasses[{i}].Grade")" value="@jobClass.Grade" />
                                 <div class="input-group">
                                     <input type="button" class="text-left form-control" value="@jobClass.JobCategoryName @jobClass.JobClassName" />
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle jobgrade-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @if (jobClass.Grade == 0)
+                                        { <span>标准工</span>}
+                                        else if (jobClass.Grade == 1)
+                                        { <span>大　工</span>}
+                                        else
+                                        { <span>小　工</span>}<span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#" data-jobgrade="0" class="jobgrade-option">标准工</a></li>
+                                            <li><a href="#" data-jobgrade="1" class="jobgrade-option">大　工</a></li>
+                                            <li><a href="#" data-jobgrade="2" class="jobgrade-option">小　工</a></li>
+                                        </ul>
+                                    </div>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default remove-jobclass" value="job_@jobClass.JobClassId" type="button">&times;</button>
                                     </span>

@@ -66,7 +66,7 @@
             @Html.DisplayFor(model => model.HealthStatus)
         </dd>
     </dl>
-    <h4>技能水平</h4>
+    <h4>专业技能</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -76,14 +76,29 @@
             @Html.DisplayFor(model => model.IsHead)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.HeaderName)
+        </dt>
+        <dd>
+            <a asp-action="Details" asp-route-id="@Model.HeaderId">
+                @Html.DisplayFor(model => model.HeaderName)
+            </a>
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.JobClasses)
         </dt>
         <dd>
-            @foreach (var district in Model.JobClasses)
+            @foreach (var jobClass in Model.JobClasses)
             {
-                @Html.DisplayFor(model => district.JobCategoryName)
-                <span> </span>
-                @Html.DisplayFor(model => district.JobClassName)
+                @Html.DisplayFor(model => jobClass.JobCategoryName)
+                <span>　</span>
+                @Html.DisplayFor(model => jobClass.JobClassName)
+                <span>　</span>
+                @if (jobClass.Grade == 0)
+                { <span>标准工</span>}
+                else if (jobClass.Grade == 1)
+                { <span>大工</span>}
+                else
+                { <span>小工</span>}
                 <br />
             }
         </dd>
@@ -96,9 +111,9 @@
             @foreach (var district in Model.Districts)
             {
                 @Html.DisplayFor(model => district.ProvinceName)
-                <span> </span>
+                <span>　</span>
                 @Html.DisplayFor(model => district.CityName)
-                <span> </span>
+                <span>　</span>
                 @Html.DisplayFor(model => district.DistrictName)
                 <br />
             }
@@ -126,6 +141,25 @@
             @Html.DisplayFor(model => model.Alipay)
         </dd>
     </dl>
+    <h4>工人团队</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>工人</dt>
+        <dd>
+            <ul class="ul-horizontal">
+                @foreach (var worker in Model.Workers)
+                {
+                    <li>
+                        <a asp-action="Details" asp-route-id="@worker.Id">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+                            @Html.DisplayFor(model => worker.Name)
+                        </a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |

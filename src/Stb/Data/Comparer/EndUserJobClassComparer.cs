@@ -10,7 +10,7 @@ namespace Stb.Data.Comparer
     {
         public bool Equals(EndUserJobClass x, EndUserJobClass y)
         {
-            return x.EndUserId == y.EndUserId && x.JobClassId == y.JobClassId;
+            return x.EndUserId == y.EndUserId && x.JobClassId == y.JobClassId && x.Grade == y.Grade;
         }
 
         public int GetHashCode(EndUserJobClass obj)

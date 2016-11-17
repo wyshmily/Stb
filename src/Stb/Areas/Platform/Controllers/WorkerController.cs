@@ -45,13 +45,13 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var Worker = await _userManager.Users.Include(u=>u.Header).Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).SingleOrDefaultAsync(m => m.Id == id);
+            var Worker = await _userManager.Users.Include(u => u.Header).Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u=>u.Workers).SingleOrDefaultAsync(m => m.Id == id);
             if (Worker == null)
             {
                 return NotFound();
             }
 
-            await _context.EndUserDistrict.Include(e => e.District).ThenInclude(d => d.City).ThenInclude(c => c.Province).Where(e => e.EndUserId == id).LoadAsync();
+            await _context.EndUserDistrict.Include(e => e.District).Where(e => e.EndUserId == id).LoadAsync();
 
             await _context.EndUserJobClass.Include(e => e.JobClass).ThenInclude(c => c.JobCategory).LoadAsync();
 
@@ -87,25 +87,11 @@ namespace Stb.Platform.Controllers
 
                     if (WorkerViewModel.Districts != null)
                     {
-                        var provinces = WorkerViewModel.Districts.Select(d => new Province
-                        {
-                            Id = d.ProvinceAdcode,
-                            Name = d.ProvinceName
-                        }).Distinct(new ProvinceComparer());
+                        var provinces = WorkerViewModel.Districts.Select(d => d.ToProvince()).Distinct(new ProvinceComparer());
 
-                        var cities = WorkerViewModel.Districts.Select(d => new City
-                        {
-                            Id = d.CityAdcode,
-                            Name = d.CityName,
-                            ProvinceId = d.ProvinceAdcode,
-                        }).Distinct(new CityComparer());
+                        var cities = WorkerViewModel.Districts.Select(d => d.ToCity()).Distinct(new CityComparer());
 
-                        var districts = WorkerViewModel.Districts.Select(d => new District
-                        {
-                            Id = d.DistrictAdcode,
-                            Name = d.DistrictName,
-                            CityId = d.CityAdcode
-                        }).Distinct(new DistrictComparer());
+                        var districts = WorkerViewModel.Districts.Select(d => d.ToDistrict()).Distinct(new DistrictComparer());
 
                         var endUserDistricts = districts.Select(d => new EndUserDistrict
                         {
@@ -139,6 +125,7 @@ namespace Stb.Platform.Controllers
                         {
                             EndUserId = addedUser.Id,
                             JobClassId = c.JobClassId,
+                            Grade = c.Grade,
                         }).ToList();
 
                         _context.EndUserJobClass.AddRange(endUserJobClasses);
@@ -163,7 +150,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).SingleOrDefaultAsync(m => m.Id == id);
+            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).SingleOrDefaultAsync(m => m.Id == id);
             if (Worker == null)
             {
                 return NotFound();
@@ -193,8 +180,15 @@ namespace Stb.Platform.Controllers
                 try
                 {
                     var Worker = await _userManager.FindByIdAsync(id);
+                    if(Worker.IsHeader && !WorkerViewModel.IsHead)
+                    {
+                        List<Worker> workers = _context.Worker.Where(w => w.HeaderId == id).ToList();
+                        workers.ForEach(w => w.HeaderId = null);
+                    }
                     WorkerViewModel.Update(ref Worker);
                     var result = await _userManager.UpdateAsync(Worker);
+
+
                     if (!result.Succeeded)
                     {
                         AddErrors(result);
@@ -208,25 +202,11 @@ namespace Stb.Platform.Controllers
                     }
                     else
                     {
-                        var provinces = WorkerViewModel.Districts.Select(d => new Province
-                        {
-                            Id = d.ProvinceAdcode,
-                            Name = d.ProvinceName
-                        }).Distinct(new ProvinceComparer());
+                        var provinces = WorkerViewModel.Districts.Select(d => d.ToProvince()).Distinct(new ProvinceComparer());
 
-                        var cities = WorkerViewModel.Districts.Select(d => new City
-                        {
-                            Id = d.CityAdcode,
-                            Name = d.CityName,
-                            ProvinceId = d.ProvinceAdcode,
-                        }).Distinct(new CityComparer());
+                        var cities = WorkerViewModel.Districts.Select(d => d.ToCity()).Distinct(new CityComparer());
 
-                        var districts = WorkerViewModel.Districts.Select(d => new District
-                        {
-                            Id = d.DistrictAdcode,
-                            Name = d.DistrictName,
-                            CityId = d.CityAdcode
-                        }).Distinct(new DistrictComparer());
+                        var districts = WorkerViewModel.Districts.Select(d => d.ToDistrict()).Distinct(new DistrictComparer());
 
                         var endUserDistricts = districts.Select(d => new EndUserDistrict
                         {
@@ -267,6 +247,7 @@ namespace Stb.Platform.Controllers
                         {
                             JobClassId = d.JobClassId,
                             EndUserId = Worker.Id,
+                            Grade = d.Grade
                         });
 
                         _context.EndUserJobClass.RemoveRange(curEndUserJobClasses.Except(endUserJobClasses, new EndUserJobClassComparer()));
@@ -300,13 +281,13 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).SingleOrDefaultAsync(m => m.Id == id);
+            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u => u.Workers).SingleOrDefaultAsync(m => m.Id == id);
             if (Worker == null)
             {
                 return NotFound();
             }
 
-            await _context.EndUserDistrict.Include(e => e.District).ThenInclude(d => d.City).ThenInclude(c => c.Province).Where(e => e.EndUserId == id).LoadAsync();
+            await _context.EndUserDistrict.Include(e => e.District).Where(e => e.EndUserId == id).LoadAsync();
 
             await _context.EndUserJobClass.Include(e => e.JobClass).ThenInclude(c => c.JobCategory).LoadAsync();
 
@@ -319,8 +300,16 @@ namespace Stb.Platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var Worker = await _userManager.Users.SingleOrDefaultAsync(m => m.Id == id);
-            await _userManager.DeleteAsync(Worker);
+            Worker worker = await _userManager.Users.Include(u=>u.Workers).Include(u=>u.LeadOrders).Include(u=>u.LeadOrders).SingleOrDefaultAsync(m => m.Id == id);
+            foreach(var subWorker in worker.Workers)
+            {
+                subWorker.HeaderId = null;
+            }
+            foreach(var order in worker.LeadOrders)
+            {
+                order.LeadWorkerId = null;
+            }
+            await _userManager.DeleteAsync(worker);
             return RedirectToAction("Index");
         }
 

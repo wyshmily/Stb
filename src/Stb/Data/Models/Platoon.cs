@@ -19,7 +19,7 @@ namespace Stb.Data.Models
 
         public DateTime? DischargeTime { get; set; } // 退伍时间
 
-        public List<Project> Projects { get; set; }
+        public List<Order> Orders { get; set; }
 
     }
 }

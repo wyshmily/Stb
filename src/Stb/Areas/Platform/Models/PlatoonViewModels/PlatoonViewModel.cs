@@ -123,34 +123,12 @@ namespace Stb.Platform.Models.PlatoonViewModels
 
             if (platoon.EndUserDistricts != null)
             {
-                Districts = new List<DistrictViewModel>();
-                foreach (var endUserDistrict in platoon.EndUserDistricts)
-                {
-                    Districts.Add(new DistrictViewModel
-                    {
-                        DistrictAdcode = endUserDistrict.District.Id,
-                        DistrictName = endUserDistrict.District.Name,
-                        CityAdcode = endUserDistrict.District.City.Id,
-                        CityName = endUserDistrict.District.City.Name,
-                        ProvinceAdcode = endUserDistrict.District.City.Province.Id,
-                        ProvinceName = endUserDistrict.District.City.Province.Name,
-                    });
-                }
+                Districts = platoon.EndUserDistricts.Select(e => new DistrictViewModel(e.District)).ToList();
             }
 
             if (platoon.EndUserJobClasses != null)
             {
-                JobClasses = new List<JobClassViewModel>();
-                foreach (var endUserJobClass in platoon.EndUserJobClasses)
-                {
-                    JobClasses.Add(new JobClassViewModel
-                    {
-                        JobCategoryId = endUserJobClass.JobClass.JobCategoryId,
-                        JobCategoryName = endUserJobClass.JobClass.JobCategory.Name,
-                        JobClassId = endUserJobClass.JobClassId,
-                        JobClassName = endUserJobClass.JobClass.Name,
-                    });
-                }
+                JobClasses = platoon.EndUserJobClasses.Select(e => new JobClassViewModel(e)).ToList();
             }
 
         }

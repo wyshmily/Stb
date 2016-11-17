@@ -68,7 +68,11 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "是否班长")]
         public bool IsHead { get; set; }    // 是否班长
 
-        public WorkerViewModel Header { get; set; }  // 班长
+        [Display(Name = "班长")]
+        public string HeaderId { get; set; }  // 班长Id
+
+        [Display(Name = "班长")]
+        public string HeaderName { get; set; }  // 班长姓名
 
 
         [Display(Name = "专业技能")]
@@ -76,6 +80,8 @@ namespace Stb.Platform.Models.WorkerViewModels
 
         [Display(Name = "服务范围")]
         public List<DistrictViewModel> Districts { get; set; }
+
+        public List<WorkerViewModel> Workers { get; set; }
 
 
         public WorkerViewModel()
@@ -99,42 +105,26 @@ namespace Stb.Platform.Models.WorkerViewModels
             Alipay = worker.Alipay;
             Enabled = worker.Enabled;
             IsHead = worker.IsHeader;
+            HeaderId = worker.HeaderId;
 
-            if(worker.Header != null)
+            if (worker.Header != null)
             {
-                Header = new WorkerViewModel(worker.Header);
+                HeaderName = worker.Header.Name;
             }
 
             if (worker.EndUserDistricts != null)
             {
-                Districts = new List<DistrictViewModel>();
-                foreach (var endUserDistrict in worker.EndUserDistricts)
-                {
-                    Districts.Add(new DistrictViewModel
-                    {
-                        DistrictAdcode = endUserDistrict.District.Id,
-                        DistrictName = endUserDistrict.District.Name,
-                        CityAdcode = endUserDistrict.District.City.Id,
-                        CityName = endUserDistrict.District.City.Name,
-                        ProvinceAdcode = endUserDistrict.District.City.Province.Id,
-                        ProvinceName = endUserDistrict.District.City.Province.Name,
-                    });
-                }
+                Districts = worker.EndUserDistricts.Select(e => new DistrictViewModel(e.District)).ToList();
             }
 
             if (worker.EndUserJobClasses != null)
             {
-                JobClasses = new List<JobClassViewModel>();
-                foreach (var endUserJobClass in worker.EndUserJobClasses)
-                {
-                    JobClasses.Add(new JobClassViewModel
-                    {
-                        JobCategoryId = endUserJobClass.JobClass.JobCategoryId,
-                        JobCategoryName = endUserJobClass.JobClass.JobCategory.Name,
-                        JobClassId = endUserJobClass.JobClassId,
-                        JobClassName = endUserJobClass.JobClass.Name,
-                    });
-                }
+                JobClasses = worker.EndUserJobClasses.Select(e => new JobClassViewModel(e)).OrderBy(e=>e.JobClassId).ToList();
+            }
+
+            if(worker.Workers != null)
+            {
+                Workers = worker.Workers.Select(w => new WorkerViewModel(w)).ToList();
             }
 
         }
@@ -155,7 +145,12 @@ namespace Stb.Platform.Models.WorkerViewModels
                 Alipay = Alipay,
                 Enabled = Enabled,
                 IsHeader = IsHead,
+                HeaderId = HeaderId,
             };
+
+            // 确保班长自身不再有班长
+            if (worker.IsHeader)
+                worker.HeaderId = null;
 
             if (Id != null)
                 worker.Id = Id;
@@ -177,6 +172,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             worker.Alipay = Alipay;
             worker.Enabled = Enabled;
             worker.IsHeader = IsHead;
+            worker.HeaderId = HeaderId;
         }
     }
 }

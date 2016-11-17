@@ -52,9 +52,9 @@ namespace Stb.Data
 
         public DbSet<EndUserDistrict> EndUserDistrict { get; set; }
 
-        public DbSet<Project> Project { get; set; }
+        public DbSet<Order> Order { get; set; }
 
-        public DbSet<ProjectJobClass> ProjectJobClass { get; set; }
+        public DbSet<OrderJobClass> OrderJobClass { get; set; }
 
         public DbSet<Signment> Signment { get; set; }
 
@@ -67,5 +67,11 @@ namespace Stb.Data
         public DbSet<EndUserJobClass> EndUserJobClass { get; set; }
 
         public DbSet<WorkLoad> WorkLoad { get; set; }
+
+        public DbSet<OrderIndexer> OrderIndexer { get; set; }
+
+        public DbSet<Project> Project { get; set; }
+
+        //public DbSet<Stb.Data.Models.Program> Program { get; set; }
     }
 }
