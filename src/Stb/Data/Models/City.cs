@@ -21,6 +21,8 @@ namespace Stb.Data.Models
 
         public int ProvinceId { get; set; }
 
+        public string ProvinceName { get; set; }
+
         public Province Province { get; set; }
 
         public List<District> Districts { get; set; }

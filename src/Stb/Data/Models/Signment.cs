@@ -13,14 +13,14 @@ namespace Stb.Data.Models
         public int Id { get; set; }
 
         [Required]
-        public string ProjectId { get; set; }
+        public string OrderId { get; set; }
 
         [Required]
         public string WorkerId { get; set; }
 
         public DateTime Date { get; set; }
 
-        public Project Project { get; set; }
+        public Order Order { get; set; }
 
         public Worker Worker { get; set; }
     }

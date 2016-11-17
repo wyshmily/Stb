@@ -1,0 +1,138 @@
+﻿@model Stb.Platform.Models.OrderViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "新增工单";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <h4>客户信息</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="ContractorName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContractorId" type="hidden" />
+                <input asp-for="ContractorName" type="hidden" />
+                <input id="ContractorTypeahead" type="text" class="form-control" />
+                <span asp-validation-for="ContractorName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ContractorStaffName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContractorStaffId" type="hidden" />
+                <input asp-for="ContractorStaffName" type="hidden" />
+                <input id="ContractorStaffTypeahead" type="text" class="form-control" />
+                <span asp-validation-for="ContractorStaffName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ContractorStaffPhone" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContractorStaffPhone" class="form-control" />
+                <span asp-validation-for="ContractorStaffPhone" class="text-danger" />
+            </div>
+        </div>
+        <h4>工程概况</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WorkerNeeded" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="WorkerNeeded" class="form-control" />
+                <span asp-validation-for="WorkerNeeded" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExpectedStartTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ExpectedStartTime" class="form-control" />
+                <span asp-validation-for="ExpectedStartTime" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExpectedDays" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ExpectedDays" class="form-control" />
+                <span asp-validation-for="ExpectedDays" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ContactDeadline" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContactDeadline" class="form-control" />
+                <span asp-validation-for="ContactDeadline" class="text-danger" />
+            </div>
+        </div>
+        <h4>施工地点</h4>
+        <hr />
+        
+        <div class="form-group">
+            <label class="col-md-2 control-label">施工地区</label>
+            <div class="col-md-10">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <Select id="provinceSelect" asp-for="District.ProvinceAdcode" class="form-control"></Select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <Select id="citySelect" asp-for="District.CityAdcode" class="form-control"></Select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <Select id="districtSelect" asp-for="District.DistrictAdcode" class="form-control"></Select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WorkAddress" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="WorkAddress" class="form-control"></textarea>
+                <span asp-validation-for="WorkAddress" class="text-danger" />
+            </div>
+        </div>
+
+        <h4>指定排长</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="PlatoonName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PlatoonId" type="hidden" />
+                <input asp-for="PlatoonName" type="hidden" />
+                <input id="PlatoonTypeahead" class="form-control" />
+                <span asp-validation-for="PlatoonName" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="创建" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">返回</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

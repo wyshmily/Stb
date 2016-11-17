@@ -51,7 +51,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            await _context.EndUserDistrict.Include(e => e.District).ThenInclude(d => d.City).ThenInclude(c => c.Province).Where(e => e.EndUserId == id).LoadAsync();
+            await _context.EndUserDistrict.Include(e => e.District).Where(e => e.EndUserId == id).LoadAsync();
 
             await _context.EndUserJobClass.Include(e => e.JobClass).ThenInclude(c => c.JobCategory).LoadAsync();
 
@@ -87,25 +87,11 @@ namespace Stb.Platform.Controllers
 
                     if (platoonViewModel.Districts != null)
                     {
-                        var provinces = platoonViewModel.Districts.Select(d => new Province
-                        {
-                            Id = d.ProvinceAdcode,
-                            Name = d.ProvinceName
-                        }).Distinct(new ProvinceComparer());
+                        var provinces = platoonViewModel.Districts.Select(d => d.ToProvince()).Distinct(new ProvinceComparer());
 
-                        var cities = platoonViewModel.Districts.Select(d => new City
-                        {
-                            Id = d.CityAdcode,
-                            Name = d.CityName,
-                            ProvinceId = d.ProvinceAdcode,
-                        }).Distinct(new CityComparer());
+                        var cities = platoonViewModel.Districts.Select(d => d.ToCity()).Distinct(new CityComparer());
 
-                        var districts = platoonViewModel.Districts.Select(d => new District
-                        {
-                            Id = d.DistrictAdcode,
-                            Name = d.DistrictName,
-                            CityId = d.CityAdcode
-                        }).Distinct(new DistrictComparer());
+                        var districts = platoonViewModel.Districts.Select(d => d.ToDistrict()).Distinct(new DistrictComparer());
 
                         var endUserDistricts = districts.Select(d => new EndUserDistrict
                         {
@@ -169,7 +155,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            await _context.EndUserDistrict.Include(e => e.District).ThenInclude(d => d.City).ThenInclude(c => c.Province).Where(e => e.EndUserId == id).LoadAsync();
+            await _context.EndUserDistrict.Include(e => e.District).Where(e => e.EndUserId == id).LoadAsync();
 
             await _context.EndUserJobClass.Include(e => e.JobClass).ThenInclude(c => c.JobCategory).LoadAsync();
 
@@ -208,25 +194,11 @@ namespace Stb.Platform.Controllers
                     }
                     else
                     {
-                        var provinces = platoonViewModel.Districts.Select(d => new Province
-                        {
-                            Id = d.ProvinceAdcode,
-                            Name = d.ProvinceName
-                        }).Distinct(new ProvinceComparer());
+                        var provinces = platoonViewModel.Districts.Select(d => d.ToProvince()).Distinct(new ProvinceComparer());
 
-                        var cities = platoonViewModel.Districts.Select(d => new City
-                        {
-                            Id = d.CityAdcode,
-                            Name = d.CityName,
-                            ProvinceId = d.ProvinceAdcode,
-                        }).Distinct(new CityComparer());
+                        var cities = platoonViewModel.Districts.Select(d => d.ToCity()).Distinct(new CityComparer());
 
-                        var districts = platoonViewModel.Districts.Select(d => new District
-                        {
-                            Id = d.DistrictAdcode,
-                            Name = d.DistrictName,
-                            CityId = d.CityAdcode
-                        }).Distinct(new DistrictComparer());
+                        var districts = platoonViewModel.Districts.Select(d => d.ToDistrict()).Distinct(new DistrictComparer());
 
                         var endUserDistricts = districts.Select(d => new EndUserDistrict
                         {

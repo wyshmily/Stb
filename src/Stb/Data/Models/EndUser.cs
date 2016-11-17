@@ -26,7 +26,7 @@ namespace Stb.Data.Models
 
         public string HealthStatus { get; set; }    // 健康状况
 
-        public bool Enabled { get; set; } // 是否启用
+        public bool Enabled { get; set; } = true;// 是否启用
 
         public List<EndUserDistrict> EndUserDistricts { get; set; }
 

@@ -17,7 +17,7 @@ namespace Stb.Data.Models
 
         public int JobClassId { get; set; }
 
-        public string Grade { get; set; }   // 技能等级：大工；小工；标准工
+        public byte Grade { get; set; }   // 技能等级：1-大工；2-小工；0-标准工
 
         public EndUser EndUser { get; set; }
 

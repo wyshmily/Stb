@@ -26,6 +26,6 @@ namespace Stb.Data.Models
 
         public List<EndUserJobClass> EndUserJobClasses { get; set; }
 
-        public List<ProjectJobClass> ProjectJobClasses { get; set; }
+        public List<OrderJobClass> OrderJobClasses { get; set; }
     }
 }

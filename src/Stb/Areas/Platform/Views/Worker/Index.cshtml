@@ -49,7 +49,20 @@
                     @Html.DisplayFor(modelItem => item.IsHead)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HeaderName)
+                    @if(item.IsHead)
+                    {
+                        <span>-</span>
+                    }
+                    else if (item.HeaderId != null)
+                    {
+                    <a asp-action="Details" asp-route-id="@item.HeaderId">
+                        @Html.DisplayFor(modelItem => item.HeaderName)
+                    </a>
+                    }
+                    else
+                    { 
+                        <span class="text-warning">没有班长</span>
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |

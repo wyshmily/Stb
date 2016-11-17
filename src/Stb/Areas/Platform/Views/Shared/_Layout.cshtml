@@ -11,7 +11,6 @@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
               crossorigin="anonymous"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
@@ -53,8 +52,9 @@
                             </ul>
                         </li>
 
-                       
-                        <li><a asp- asp-controller="Project" asp-action="index">工单管理</a></li>
+                        <li><a asp- asp-controller="Project" asp-action="index">项目管理</a></li>
+                        <li><a asp- asp-controller="Order" asp-action="index">工单管理</a></li>
+
                         <li>
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">技能管理<span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -69,6 +69,7 @@
         </div>
     </div>
     <div class="container body-content">
+
         @RenderBody()
         <hr />
         <footer>
@@ -79,21 +80,24 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/typeahead.js/dist/typeahead.bundle.js"></script>
         <script src="~/js/platform.js" asp-append-version="true"></script>
         <script src="~/js/districts.js" asp-append-version="true"></script>
         <script src="~/js/jobClasses.js" asp-append-version="true"></script>
+        <script src="~/js/worker.js" asp-append-version="true"></script>
+        <script src="~/js/order.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
                 crossorigin="anonymous"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
+        <script src="~/lib/typeahead.js/dist/typeahead.bundle.min.js" asp-append-version="true"></script>
         <script src="~/js/platform.min.js" asp-append-version="true"></script>
     </environment>
 

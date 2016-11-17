@@ -25,6 +25,8 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "是否班长")]
         public bool IsHead { get; set; }
 
+        public string HeaderId { get; set; }
+
         [Display(Name = "班长")]
         public string HeaderName { get; set; }
 
@@ -40,6 +42,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Name = worker.Name;
             Gender = worker.Gender;
             IsHead = worker.IsHeader;
+            HeaderId = worker.HeaderId;
             if (worker.Header != null)
                 HeaderName = worker.Header.Name;
         }

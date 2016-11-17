@@ -133,11 +133,11 @@ namespace Stb.Platform.Controllers
 
         // GET: ApplicationUsers/Create
         [Authorize(Roles = Roles.Administrator)]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             AccountEditViewModel viewModel = new AccountEditViewModel
             {
-                Roles = new SelectList(await _roleManager.Roles.Select(r => r.Name).ToListAsync())
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
             };
 
             return View(viewModel);
@@ -172,7 +172,7 @@ namespace Stb.Platform.Controllers
             AccountEditViewModel viewModel = new AccountEditViewModel
             {
                 User = user,
-                Roles = new SelectList(await _roleManager.Roles.Select(r => r.Name).ToListAsync())
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
             };
             return View(viewModel);
         }
@@ -195,7 +195,7 @@ namespace Stb.Platform.Controllers
             return View(new AccountEditViewModel
             {
                 User = await GetAppUserViewModel(appUser),
-                Roles = new SelectList(await _roleManager.Roles.Select(r => r.Name).ToListAsync())
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
             });
         }
 
@@ -248,7 +248,7 @@ namespace Stb.Platform.Controllers
             return View(new AccountEditViewModel
             {
                 User = user,
-                Roles = new SelectList(await _roleManager.Roles.Select(r => r.Name).ToListAsync())
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
             });
         }
 

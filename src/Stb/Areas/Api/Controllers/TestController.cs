@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Stb.Api.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Areas.Api.Controllers
 {
@@ -24,7 +25,11 @@ namespace Stb.Areas.Api.Controllers
         [HttpGet("time")]
         public string Time()
         {
-            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            DateTime now = DateTime.Now;
+            return now.ToString("yyyy-MM-dd HH:mm:ss") + "   "
+                + new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString();
+
+
         }
 
         [HttpGet("echo/{msg?}")]

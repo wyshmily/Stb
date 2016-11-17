@@ -7,12 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace Stb.Platform.Controllers
+namespace Stb.Areas.Platform.Controllers
 {
-    [Authorize]
-    [Area(AreaNames.Platform)]
+    [Area("Platform")]
     public class ProjectController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,12 +23,11 @@ namespace Stb.Platform.Controllers
         // GET: Project
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Project.Include(p => p.Contractor).Include(p => p.District);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Project.ToListAsync());
         }
 
         // GET: Project/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -49,8 +46,6 @@ namespace Stb.Platform.Controllers
         // GET: Project/Create
         public IActionResult Create()
         {
-            ViewData["ContractorId"] = new SelectList(_context.Contractor, "Id", "Name");
-            ViewData["DistrictId"] = new SelectList(_context.District, "Id", "Id");
             return View();
         }
 
@@ -59,7 +54,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ContactDeadline,ContactorStaffId,ContractorId,Description,DistrictId,ExpectedDays,ExpectedStartTime,LeadWorkerId,PlatoonId,ProjectType,WorkAddress,WorkLocation,WorkerNeeded")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Client,Contract,ContractAmount,ContractNo,ContractUrl,Description,Name")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -67,13 +62,11 @@ namespace Stb.Platform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["ContractorId"] = new SelectList(_context.Contractor, "Id", "Name", project.ContractorId);
-            ViewData["DistrictId"] = new SelectList(_context.District, "Id", "Id", project.DistrictId);
             return View(project);
         }
 
         // GET: Project/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -85,8 +78,6 @@ namespace Stb.Platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["ContractorId"] = new SelectList(_context.Contractor, "Id", "Name", project.ContractorId);
-            ViewData["DistrictId"] = new SelectList(_context.District, "Id", "Id", project.DistrictId);
             return View(project);
         }
 
@@ -95,7 +86,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,ContactDeadline,ContactorStaffId,ContractorId,Description,DistrictId,ExpectedDays,ExpectedStartTime,LeadWorkerId,PlatoonId,ProjectType,WorkAddress,WorkLocation,WorkerNeeded")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Client,Contract,ContractAmount,ContractNo,ContractUrl,Description,Name")] Project project)
         {
             if (id != project.Id)
             {
@@ -122,13 +113,11 @@ namespace Stb.Platform.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ContractorId"] = new SelectList(_context.Contractor, "Id", "Name", project.ContractorId);
-            ViewData["DistrictId"] = new SelectList(_context.District, "Id", "Id", project.DistrictId);
             return View(project);
         }
 
         // GET: Project/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -147,7 +136,7 @@ namespace Stb.Platform.Controllers
         // POST: Project/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
             _context.Project.Remove(project);
@@ -155,7 +144,7 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool ProjectExists(string id)
+        private bool ProjectExists(int id)
         {
             return _context.Project.Any(e => e.Id == id);
         }

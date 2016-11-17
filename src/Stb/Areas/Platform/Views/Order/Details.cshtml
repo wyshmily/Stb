@@ -1,0 +1,115 @@
+﻿@model Stb.Platform.Models.OrderViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "工单详情";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<div>
+    <h4>客户信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorStaffName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorStaffName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorStaffPhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorStaffPhone)
+        </dd>
+    </dl>
+    <h4>工程概况</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            <pre>@Html.DisplayFor(model => model.Description)</pre>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkerNeeded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkerNeeded)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedStartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedStartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedDays)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedDays)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactDeadline)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactDeadline)
+        </dd>
+    </dl>
+    <h4>施工地点</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            施工地区
+        </dt>
+        <dd>
+            @if (Model.District != null)
+            {
+                @Html.DisplayFor(model => model.District.ProvinceName)
+                <span> </span>
+                @Html.DisplayFor(model => model.District.CityName)
+                <span> </span>
+                @Html.DisplayFor(model => model.District.DistrictName)
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkAddress)
+        </dt>
+        <dd>
+            <pre>@Html.DisplayFor(model => model.WorkAddress)</pre>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkerNeeded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkerNeeded)
+        </dd>
+    </dl>
+    <h4>施工情况</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlatoonName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlatoonName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |
+    <a asp-action="Index">返回</a>
+</div>

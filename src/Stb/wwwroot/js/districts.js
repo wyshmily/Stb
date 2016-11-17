@@ -1,6 +1,10 @@
 ﻿// Write your Javascript code.
 
+//
+
 $(document).ready(function () {
+
+   
 
     var provinceSelect = $("#provinceSelect");
     if (provinceSelect.size() > 0) {
@@ -59,7 +63,7 @@ function getCityList() {
                         var district = data.districts[0];
                         $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
                         districtSelect.empty();
-                        appendDistrictItem(district);
+                        appendDistrictItem(district, districtSelect.get(0).tagName);
                     }
 
                 }
@@ -69,6 +73,7 @@ function getCityList() {
 function getDistrictList() {
     var citySelect = $("#citySelect");
     var districtSelect = $("#districtSelect");
+
     $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1&level=city&keywords="
         + citySelect.val())
             .success(function (data) {
@@ -77,22 +82,26 @@ function getDistrictList() {
 
                     if (data.districts[0].districts.length > 0) {
                         $.each(data.districts[0].districts, function (i, district) {
-                            appendDistrictItem(district);
+                            appendDistrictItem(district, districtSelect.get(0).tagName);
                         });
                     } else {
                         var district = data.districts[0];
-                        appendDistrictItem(district);
+                        appendDistrictItem(district, districtSelect.get(0).tagName);
                     }
                 }
             });
 }
 
-function appendDistrictItem(district) {
+function appendDistrictItem(district, tag) {
     var provinceSelect = $("#provinceSelect");
     var citySelect = $("#citySelect");
     var districtSelect = $("#districtSelect");
     var districts = $("#Districts");
 
+    if (tag.toLowerCase() == "select") {
+        $("<option></option>").val(district.adcode).text(district.name).appendTo(districtSelect)
+        return;
+    }
 
     var input = $("<input type=\"checkbox\" />")
         .val(district.adcode)
@@ -151,7 +160,7 @@ function appendDistrictItem(district) {
 }
 
 function AdjustDistrictHiddenInputName() {
-    $("#Districts").find("li").each(function (i, li) {
+    $("#Districts").children("li").each(function (i, li) {
         $(this).find("input[type=hidden]")
             .first().attr("name", "Districts[" + i + "].ProvinceAdcode")
             .next().attr("name", "Districts[" + i + "].ProvinceName")

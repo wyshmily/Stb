@@ -12,13 +12,15 @@ namespace Stb.Data.Models
     {
         public bool IsHeader { get; set; }  // 是否班长
 
+        public string HeaderId { get; set; } // 班长Id
+
         public Worker Header { get; set; } 
 
         public List<Worker> Workers { get; set; }
 
-        public List<Project> LeadProjects { get; set; } // 作为班长参与的项目
+        public List<Order> LeadOrders { get; set; } // 作为班长参与的项目
 
-        public List<ProjectWorker> ProjectWorkers { get; set; } // 作为工人参与的项目
+        public List<OrderWorker> OrderWorkers { get; set; } // 作为工人参与的项目
 
         public List<Signment> Signments { get; set; }
 
