@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Stb.Migrations
+namespace Stb.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Stb.Data;
 
-namespace Stb.Migrations
+namespace Stb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161116030319_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -464,23 +465,17 @@ namespace Stb.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Client")
-                        .HasAnnotation("MaxLength", 64);
+                    b.Property<string>("Client");
 
-                    b.Property<string>("Contract")
-                        .HasAnnotation("MaxLength", 64);
+                    b.Property<string>("Contract");
 
-                    b.Property<decimal?>("ContractAmount");
-
-                    b.Property<string>("ContractNo")
-                        .HasAnnotation("MaxLength", 64);
+                    b.Property<decimal>("ContractAmount");
 
                     b.Property<string>("ContractUrl");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name")
-                        .HasAnnotation("MaxLength", 64);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 

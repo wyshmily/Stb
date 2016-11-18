@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Stb.Migrations
+namespace Stb.Data.Migrations
 {
     public partial class AlterTableProject : Migration
     {

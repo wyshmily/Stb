@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Stb.Data;
 
-namespace Stb.Migrations
+namespace Stb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161116041028_AlterTableProject")]
-    partial class AlterTableProject
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
