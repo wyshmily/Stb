@@ -101,7 +101,7 @@
                         @for (int i = 0; i < Model.JobClasses.Count; i++)
                         {
                             JobClassViewModel jobClass = Model.JobClasses[i];
-                            <li id="@($"li_job_{jobClass.JobClassId}")">
+                            <li id="@($"li_{jobClass.JobClassId}")">
                                 <input type="hidden" name="@($"JobClasses[{i}].JobCategoryId")" value="@jobClass.JobCategoryId" />
                                 <input type="hidden" name="@($"JobClasses[{i}].JobCategoryName")" value="@jobClass.JobCategoryName" />
                                 <input type="hidden" name="@($"JobClasses[{i}].JobClassId")" value="@jobClass.JobClassId" />
@@ -109,7 +109,7 @@
                                 <div class="input-group">
                                     <input type="button" class="text-left form-control" value="@jobClass.JobCategoryName @jobClass.JobClassName" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default remove-jobclass" value="job_@jobClass.JobClassId" type="button">&times;</button>
+                                        <button class="btn btn-default remove-jobclass" value="@jobClass.JobClassId" type="button">&times;</button>
                                     </span>
                                 </div>
                             </li>

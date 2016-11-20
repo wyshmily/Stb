@@ -12,7 +12,11 @@ namespace Stb.Data.Models
     {
         public bool IsHeader { get; set; }  // 是否班长
 
+        public bool IsCandidate { get; set; }   // 是否候选班长（IsHeader为false时有意义）
+
         public string HeaderId { get; set; } // 班长Id
+
+        public int? BestJobClassId { get; set; } // 擅长技能Id
 
         public Worker Header { get; set; } 
 
@@ -25,5 +29,7 @@ namespace Stb.Data.Models
         public List<Signment> Signments { get; set; }
 
         public List<WorkLoad> WorkLoads { get; set; }
+
+        public JobClass BestJobClass { get; set; }
     }
 }

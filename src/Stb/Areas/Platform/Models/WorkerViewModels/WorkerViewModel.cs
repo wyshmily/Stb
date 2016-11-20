@@ -68,6 +68,9 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "是否班长")]
         public bool IsHead { get; set; }    // 是否班长
 
+        [Display(Name = "候选班长")]
+        public bool IsCandidate { get; set; }    // 是否候选班长
+
         [Display(Name = "班长")]
         public string HeaderId { get; set; }  // 班长Id
 
@@ -82,6 +85,12 @@ namespace Stb.Platform.Models.WorkerViewModels
         public List<DistrictViewModel> Districts { get; set; }
 
         public List<WorkerViewModel> Workers { get; set; }
+
+        [Display(Name = "擅长技能")]
+        public int? BestJobClassId { get; set; } // 擅长技能
+
+        [Display(Name = "擅长技能")]
+        public string BestJobClassName { get; set; } // 擅长技能名称
 
 
         public WorkerViewModel()
@@ -105,11 +114,18 @@ namespace Stb.Platform.Models.WorkerViewModels
             Alipay = worker.Alipay;
             Enabled = worker.Enabled;
             IsHead = worker.IsHeader;
+            IsCandidate = worker.IsCandidate;
             HeaderId = worker.HeaderId;
+            BestJobClassId = worker.BestJobClassId;
 
             if (worker.Header != null)
             {
                 HeaderName = worker.Header.Name;
+            }
+
+            if (worker.BestJobClass != null)
+            {
+                BestJobClassName = worker.BestJobClass.Name;
             }
 
             if (worker.EndUserDistricts != null)
@@ -119,10 +135,10 @@ namespace Stb.Platform.Models.WorkerViewModels
 
             if (worker.EndUserJobClasses != null)
             {
-                JobClasses = worker.EndUserJobClasses.Select(e => new JobClassViewModel(e)).OrderBy(e=>e.JobClassId).ToList();
+                JobClasses = worker.EndUserJobClasses.Select(e => new JobClassViewModel(e)).OrderBy(e => e.JobClassId).ToList();
             }
 
-            if(worker.Workers != null)
+            if (worker.Workers != null)
             {
                 Workers = worker.Workers.Select(w => new WorkerViewModel(w)).ToList();
             }
@@ -145,7 +161,9 @@ namespace Stb.Platform.Models.WorkerViewModels
                 Alipay = Alipay,
                 Enabled = Enabled,
                 IsHeader = IsHead,
+                IsCandidate = IsCandidate,
                 HeaderId = HeaderId,
+                BestJobClassId = BestJobClassId,
             };
 
             // 确保班长自身不再有班长
@@ -172,7 +190,9 @@ namespace Stb.Platform.Models.WorkerViewModels
             worker.Alipay = Alipay;
             worker.Enabled = Enabled;
             worker.IsHeader = IsHead;
+            worker.IsCandidate = IsCandidate;
             worker.HeaderId = HeaderId;
+            worker.BestJobClassId = BestJobClassId;
         }
     }
 }

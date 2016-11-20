@@ -6,20 +6,20 @@ $(document).ready(function () {
     if (jobCategorySelect.size() > 0) {
         var jobClassSelect = $("#jobClassSelect");
         $.getJSON("../../../api/jobCategory")
-        .success(function (data) {
-            if (data.length > 0) {
-                jobCategorySelect.empty();
-                $.each(data, function (i, jobCateory) {
-                    $("<option></option>").val(jobCateory.id).text(jobCateory.name).appendTo(jobCategorySelect);
-                });
+            .success(function (data) {
+                if (data.length > 0) {
+                    jobCategorySelect.empty();
+                    $.each(data, function (i, jobCateory) {
+                        $("<option></option>").val(jobCateory.id).text(jobCateory.name).appendTo(jobCategorySelect);
+                    });
 
-                getJobClassList();
-            }
-        });
+                    getJobClassList();
+                }
+            });
 
         jobCategorySelect.change(function () {
             getJobClassList();
-        })
+        });
 
         $("#selectAllJobClass").click(function () {
             if ($(this).prop("checked")) {
@@ -53,17 +53,17 @@ function appendJobClassItem(jobClass) {
     var jobClassSelect = $("#jobClassSelect");
     var jobClasses = $("#JobClasses");
 
-    var userJobClassLi = jobClasses.find("#li_job_" + jobClass.id);
+    var userJobClassLi = jobClasses.find("#li_" + jobClass.id);
 
     var input = $("<input type=\"checkbox\" />")
         .val(jobClass.id)
         .text(jobClass.name)
-        .attr("id", "job_" + jobClass.id)
+        .attr("id", "" + jobClass.id)
         .prop("checked", userJobClassLi.size() != 0)
         .click(function () {
 
             if ($(this).prop("checked")) {
-                if (jobClasses.find("#li_job_" + jobClass.id).size() != 0) {
+                if (jobClasses.find("#li_" + jobClass.id).size() != 0) {
                     return;
                 }
                 var jobCategoryId = jobCategorySelect.val();
@@ -71,7 +71,7 @@ function appendJobClassItem(jobClass) {
                 var jobClassId = jobClass.id;
                 var jobClassName = jobClass.name;
                 var grade = 0;
-                var gradeName = "标准工"
+                var gradeName = "标准工";
 
 
                 var selectBtn = $("<div class=\"input-group-btn\"></span>")
@@ -86,10 +86,11 @@ function appendJobClassItem(jobClass) {
 
                 var removeBtn = $("<span class=\"input-group-btn\"></span>")
                     .append($("<button class=\"btn btn-default remove-jobclass\" type=\"button\">&times;</button>")
-                        .val("job_" + jobClassId).click(function () {
-                            jobClasses.find("#li_job_" + jobClassId).remove();
-                            jobClassSelect.find("#job_" + jobClassId).prop("checked", false);
+                        .val("" + jobClassId).click(function () {
+                            jobClasses.find("#li_" + jobClassId).remove();
+                            jobClassSelect.find("#" + jobClassId).prop("checked", false);
                             AdjustJobClassHiddenInputName();
+                            $("#BestJobClassId").find("option[value=" + jobClass.id + "]").remove();
                         }));
 
                 var inputGroup = $("<div class=\"input-group\"></div>")
@@ -105,25 +106,30 @@ function appendJobClassItem(jobClass) {
                     .append($("<input type=\"hidden\" />").val(jobClassName))
                     .append($("<input type=\"hidden\" />").val(grade))
                     .append(inputGroup)
-                    .attr("id", "li_job_" + jobClassId)
+                    .attr("id", "li_" + jobClassId)
                     .appendTo(jobClasses);
 
                 AdjustJobClassHiddenInputName();
                 AttachJobGradeSelectEvent();
 
 
+                // 在最擅长技能中增加选项
+                $("#BestJobClassId").append($("<option></option>").val(jobClassId).text(jobCategoryName + " " + jobClassName));
+
             } else {
-                jobClasses.find("#li_job_" + jobClass.id).remove();
+                jobClasses.find("#li_" + jobClass.id).remove();
                 AdjustJobClassHiddenInputName();
+
+                $("#BestJobClassId").find("option[value=" + jobClass.id + "]").remove();
             }
         });
 
 
     $("<li></li>")
-         .append($("<div class=\"checkbox\"></div>")
-             .append(input)
-             .append($("<label><label>").attr("for", "job_" + jobClass.id).text(jobClass.name)))
-         .appendTo(jobClassSelect);
+        .append($("<div class=\"checkbox\"></div>")
+            .append(input)
+            .append($("<label><label>").attr("for", "" + jobClass.id).text(jobClass.name)))
+        .appendTo(jobClassSelect);
 }
 
 function AdjustJobClassHiddenInputName() {
@@ -134,16 +140,18 @@ function AdjustJobClassHiddenInputName() {
             .next().attr("name", "JobClasses[" + i + "].JobCategoryName")
             .next().attr("name", "JobClasses[" + i + "].JobClassId")
             .next().attr("name", "JobClasses[" + i + "].JobClassName")
-            .next().attr("name", "JobClasses[" + i + "].Grade")
+            .next().attr("name", "JobClasses[" + i + "].Grade");
     });
 }
 
 $(document).ready(function () {
     $(".remove-jobclass").click(function () {
         var jobClassId = $(this).val();
+        console.log(jobClassId);
         $("#JobClasses").find("#li_" + jobClassId).remove();
         $("#jobClassSelect").find("#" + jobClassId).prop("checked", false);
         AdjustJobClassHiddenInputName();
+        $("#BestJobClassId").find("option[value=" + jobClassId + "]").remove();
     });
 });
 

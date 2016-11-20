@@ -8,9 +8,10 @@ using Stb.Data;
 namespace Stb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161120015032_AddWorkerBestJobClass")]
+    partial class AddWorkerBestJobClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -606,8 +607,6 @@ namespace Stb.Data.Migrations
                     b.Property<int?>("BestJobClassId");
 
                     b.Property<string>("HeaderId");
-
-                    b.Property<bool>("IsCandidate");
 
                     b.Property<bool>("IsHeader");
 

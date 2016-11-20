@@ -71,19 +71,27 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.IsHead)
+            身份
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IsHead)
+            @if (Model.IsHead)
+            { <span>班长</span> }
+            else if (Model.IsCandidate)
+            { <span>候选班长</span> }
+            else
+            { <span>工人</span> }
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.HeaderName)
-        </dt>
-        <dd>
-            <a asp-action="Details" asp-route-id="@Model.HeaderId">
-                @Html.DisplayFor(model => model.HeaderName)
-            </a>
-        </dd>
+        @if (!Model.IsHead)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.HeaderName)
+            </dt>
+            <dd>
+                <a asp-action="Details" asp-route-id="@Model.HeaderId">
+                    @Html.DisplayFor(model => model.HeaderName)
+                </a>
+            </dd>
+        }
         <dt>
             @Html.DisplayNameFor(model => model.JobClasses)
         </dt>
@@ -103,8 +111,12 @@
                 <br />
             }
         </dd>
-    </dl>
-    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BestJobClassName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BestJobClassName)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Districts)
         </dt>

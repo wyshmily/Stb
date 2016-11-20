@@ -9,17 +9,17 @@
         headSearchTimer = window.setTimeout(function () {
             searcher.select();
             searchHeader();
-        },100);
+        }, 100);
     })
-    .focusout(function () {
-        var searcher = $(this);
-        window.setTimeout(function () {
-            var old = searcher.attr("data-stb-header");
-            if (old && old != searcher.val()) {
-                searcher.val(old);
-            }
-        },300)
-    });
+        .focusout(function () {
+            var searcher = $(this);
+            window.setTimeout(function () {
+                var old = searcher.attr("data-stb-header");
+                if (old && old != searcher.val()) {
+                    searcher.val(old);
+                }
+            }, 300);
+        });
 
     $('#HeaderName').bind('input', function () {
         window.clearTimeout(headSearchTimer);
@@ -32,7 +32,7 @@
 
     $('#IsHead').click(function () {
         TriggerHeaderDisplay();
-    })
+    });
 
     TriggerHeaderDisplay();
 });
@@ -51,28 +51,28 @@ function searchHeader() {
         .success(function (data) {
             var dropdown = $("#HeaderDropDown");
             dropdown.empty();
-            
+
             $("<li></li>")
-                   .append($("<button class=\"btn-link btn\"></button>")
-                        .text("没有班长")
-                        .click(function () {
-                            console.info(2);
-                            event.preventDefault();
-                            searcher.val("");
-                            searcher.attr("data-stb-header", "")
-                            $("#HeaderId").val(null);
-                        }))
-                   .appendTo(dropdown);
+                .append($("<button class=\"btn-link btn\"></button>")
+                    .text("没有班长")
+                    .click(function () {
+                        console.info(2);
+                        event.preventDefault();
+                        searcher.val("");
+                        searcher.attr("data-stb-header", "");
+                        $("#HeaderId").val(null);
+                    }))
+                .appendTo(dropdown);
 
             $.each(data, function (i, header) {
                 var option = $("<button class=\"btn-link btn\"></button>")
-                        .text(header.name + "   " + header.userName)
-                        .click(function () {
-                            event.preventDefault();
-                            searcher.val(header.name);
-                            searcher.attr("data-stb-header", header.name)
-                            $("#HeaderId").val(header.id);
-                        });
+                    .text(header.name + "   " + header.userName)
+                    .click(function () {
+                        event.preventDefault();
+                        searcher.val(header.name);
+                        searcher.attr("data-stb-header", header.name);
+                        $("#HeaderId").val(header.id);
+                    });
                 if (header.userName == $("#UserName").val()) {
                     option.prop("disabled", "true");
                 }

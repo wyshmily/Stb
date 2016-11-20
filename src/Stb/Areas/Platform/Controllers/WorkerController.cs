@@ -45,7 +45,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var Worker = await _userManager.Users.Include(u => u.Header).Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u=>u.Workers).SingleOrDefaultAsync(m => m.Id == id);
+            var Worker = await _userManager.Users.Include(u => u.Header).Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u=>u.Workers).Include(u => u.BestJobClass).SingleOrDefaultAsync(m => m.Id == id);
             if (Worker == null)
             {
                 return NotFound();
@@ -281,7 +281,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u => u.Workers).SingleOrDefaultAsync(m => m.Id == id);
+            var Worker = await _userManager.Users.Include(u => u.EndUserDistricts).Include(u => u.EndUserJobClasses).Include(u => u.Header).Include(u => u.Workers).Include(u=>u.BestJobClass).SingleOrDefaultAsync(m => m.Id == id);
             if (Worker == null)
             {
                 return NotFound();
