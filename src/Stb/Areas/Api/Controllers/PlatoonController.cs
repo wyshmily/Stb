@@ -29,9 +29,9 @@ namespace Stb.Areas.Api.Controllers
         }
 
         [HttpGet("Search")]
-        public IEnumerable<Platoon> Search(string search)
+        public IEnumerable<Platoon> Search(int districtId, string search)
         {
-            var query = _context.Platoon.Where(c =>c.Enabled);
+            var query = _context.Platoon.Where(c => c.Enabled && c.EndUserDistricts.Any(d => d.DistrictId == districtId));
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(w => w.Name.Contains(search) || w.UserName.Contains(search));

@@ -2,25 +2,24 @@
 
 //
 
+var platoonNameInited = false;
 $(document).ready(function () {
-
-   
 
     var provinceSelect = $("#provinceSelect");
     if (provinceSelect.size() > 0) {
         var citySelect = $("#citySelect");
         var districtSelect = $("#districtSelect");
         $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1")
-        .success(function (data) {
-            if (data.status == 1) {
-                provinceSelect.empty();
-                $.each(data.districts[0].districts, function (i, district) {
-                    $("<option></option>").val(district.adcode).text(district.name).appendTo(provinceSelect);
-                });
+            .success(function (data) {
+                if (data.status == 1) {
+                    provinceSelect.empty();
+                    $.each(data.districts[0].districts, function (i, district) {
+                        $("<option></option>").val(district.adcode).text(district.name).appendTo(provinceSelect);
+                    });
 
-                getCityList();
-            }
-        });
+                    getCityList();
+                }
+            });
 
         provinceSelect.change(function () {
             getCityList();
@@ -28,6 +27,17 @@ $(document).ready(function () {
 
         citySelect.change(function () {
             getDistrictList();
+        });
+
+        districtSelect.change(function () {
+            var platoonTypeahead = $("#PlatoonTypeahead");
+            if (platoonTypeahead) {
+                var platoon = platoonTypeahead.typeahead('val');
+                platoonTypeahead.typeahead('val', '1');
+                platoonTypeahead.typeahead('val', '');
+                $("#PlatoonId").val(null);
+                $("#PlatoonName").val(null);
+            }
         });
 
         $("#selectAllDistrict").click(function () {
@@ -50,46 +60,71 @@ function getCityList() {
     var districtSelect = $("#districtSelect");
     $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1&level=province&keywords="
         + provinceSelect.val())
-            .success(function (data) {
-                if (data.status == 1) {
-                    citySelect.empty();
+        .success(function (data) {
+            if (data.status == 1) {
+                citySelect.empty();
 
-                    if (data.districts[0].districts.length > 0) {
-                        $.each(data.districts[0].districts, function (i, district) {
-                            $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
-                        });
-                        getDistrictList();
-                    } else {
-                        var district = data.districts[0];
+                if (data.districts[0].districts.length > 0) {
+                    $.each(data.districts[0].districts, function (i, district) {
                         $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
-                        districtSelect.empty();
-                        appendDistrictItem(district, districtSelect.get(0).tagName);
-                    }
+                    });
+                    getDistrictList();
 
+                } else {
+                    var district = data.districts[0];
+                    $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
+                    districtSelect.empty();
+                    appendDistrictItem(district, districtSelect.get(0).tagName);
+
+                    if (!platoonNameInited) {
+                        platoonNameInited = true;
+                        if ($("#PlatoonName").val()) {
+                            $("#PlatoonTypeahead").typeahead('val', "-1");
+                            $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
+                        }
+                    } else {
+                        $("#PlatoonTypeahead").typeahead('val', "-1");
+                        $("#PlatoonTypeahead").typeahead('val', "");
+                    }
                 }
-            });
+
+            }
+        });
 }
 
 function getDistrictList() {
     var citySelect = $("#citySelect");
     var districtSelect = $("#districtSelect");
 
+
     $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1&level=city&keywords="
         + citySelect.val())
-            .success(function (data) {
-                if (data.status == 1) {
-                    districtSelect.empty();
+        .success(function (data) {
+            if (data.status == 1) {
+                districtSelect.empty();
 
-                    if (data.districts[0].districts.length > 0) {
-                        $.each(data.districts[0].districts, function (i, district) {
-                            appendDistrictItem(district, districtSelect.get(0).tagName);
-                        });
-                    } else {
-                        var district = data.districts[0];
+                if (data.districts[0].districts.length > 0) {
+                    $.each(data.districts[0].districts, function (i, district) {
                         appendDistrictItem(district, districtSelect.get(0).tagName);
-                    }
+                    });
+                } else {
+                    var district = data.districts[0];
+                    appendDistrictItem(district, districtSelect.get(0).tagName);
                 }
-            });
+                console.log(2);
+
+                if (!platoonNameInited) {
+                    platoonNameInited = true;
+                    if ($("#PlatoonName").val()) {
+                        $("#PlatoonTypeahead").typeahead('val', "-1");
+                        $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
+                    }
+                } else {
+                    $("#PlatoonTypeahead").typeahead('val', "-1");
+                    $("#PlatoonTypeahead").typeahead('val', "");
+                }
+            }
+        });
 }
 
 function appendDistrictItem(district, tag) {

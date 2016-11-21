@@ -31,10 +31,12 @@ namespace Stb.Platform.Models.OrderViewModels
         [Required(ErrorMessage = "{0}不能为空")]
         public string ContractorStaffPhone { get; set; }    // 联系电话
 
+        [Display(Name = "排长")]
+        [Required(ErrorMessage = "请为项目选择排长")]
         public string PlatoonId { get; set; }   // 排长ID
 
         [Display(Name = "排长")]
-        [Required(ErrorMessage = "请为项目选择排长")]
+        //[Required(ErrorMessage = "请为项目选择排长")]
         public string PlatoonName { get; set; } // 排长姓名
 
         [Display(Name = "施工状态")]

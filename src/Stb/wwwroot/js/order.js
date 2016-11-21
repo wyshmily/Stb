@@ -7,7 +7,7 @@
         $.validator.setDefaults({ ignore: '' });
     }
 
-  
+
 
     var contractors = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -43,8 +43,12 @@
         limit: 10,
         identify: function (datum) { return datum.id; },
         remote: {
-            url: '../../../api/Platoon/Search?search=%QUERY',
-            wildcard: '%QUERY',
+            url: '../../../api/Platoon/Search?districtId=%DISTRICTID&search=%QUERY',
+            prepare: function (query, settings) {
+                settings.url = settings.url.replace("%DISTRICTID", $("#districtSelect").find("option:selected").val())
+                    .replace("%QUERY", query);
+                return settings;
+            },
             rateLimitWait: 200
         }
     });
@@ -54,30 +58,83 @@
         highlight: true,
         minLength: 0
     }, {
-        name: 'contractors',
-        display: 'name',
-        source: contractors
-    });
+            name: 'contractors',
+            display: 'name',
+            source: contractors,
+            templates: {
+                notFound: [
+                    '<div class="empty-message">',
+                    '没有符合筛选条件的承包商<br />',
+                    '直接填写名称，系统将自动保存为新承包商<br />',
+                    '</div>'
+                ].join('\n'),
+                pending: [
+                    '<div class="empty-message">',
+                    '正在检索…',
+                    '</div>'
+                ].join('\n'),
+                header: [
+                    '<div class="empty-message">',
+                    '选择工单承包商',
+                    '</div>'
+                ].join('\n')
+            }
+        });
 
     $('#ContractorStaffTypeahead').typeahead({
         hint: false,
         highlight: true,
         minLength: 0
     }, {
-        name: 'contractorStaffs',
-        display: 'name',
-        source: contractorStaffs
-    });
+            name: 'contractorStaffs',
+            display: 'name',
+            source: contractorStaffs,
+            templates: {
+                notFound: [
+                    '<div class="empty-message">',
+                    '没有符合筛选条件的联系人<br />',
+                    '直接填写姓名，系统将自动添加至该承包商<br />',
+                    '</div>'
+                ].join('\n'),
+                pending: [
+                    '<div class="empty-message">',
+                    '正在检索…',
+                    '</div>'
+                ].join('\n'),
+                header: [
+                    '<div class="empty-message">',
+                    '选择工单联系人',
+                    '</div>'
+                ].join('\n')
+            }
+        });
 
     $('#PlatoonTypeahead').typeahead({
         hint: false,
         highlight: true,
         minLength: 0
     }, {
-        name: 'platoons',
-        display: 'name',
-        source: platoons
-    });
+            name: 'platoons',
+            display: 'name',
+            source: platoons,
+            templates: {
+                notFound: [
+                    '<div class="empty-message">',
+                    '所选地区没有符合筛选条件的排长<br />',
+                    '</div>'
+                ].join('\n'),
+                pending: [
+                    '<div class="empty-message">',
+                    '正在检索…',
+                    '</div>'
+                ].join('\n'),
+                header: [
+                    '<div class="empty-message">',
+                    '选择工单排长',
+                    '</div>'
+                ].join('\n')
+            }
+        });
 
 
 
@@ -88,9 +145,7 @@
     if ($("#ContractorStaffName").val()) {
         $("#ContractorStaffTypeahead").typeahead('val', $("#ContractorStaffName").val());
     }
-    if ($("#PlatoonName").val()) {
-        $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
-    }
+    
 
     $('#ContractorTypeahead').bind('typeahead:change', function (ev, query) {
         if ($("#ContractorName").val() != query) {
@@ -141,6 +196,7 @@
                     }
                 }
                 $("#PlatoonId").val(null);
+                $("#PlatoonName").val(null);
                 $("#PlatoonTypeahead").typeahead('val', '');
             });
         }
