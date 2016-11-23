@@ -23,9 +23,15 @@ namespace Stb.Platform.Views.Account
         }
 
         // GET: JobCategorie
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _context.JobCategory.ToListAsync());
+            int total = _context.JobCategory.Count();
+            ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
+            ViewBag.Page = page;
+            return View(await _context.JobCategory
+                .Skip((page - 1) * Constants.PageSize)
+                .Take(Constants.PageSize)
+                .ToListAsync());
         }
 
         // GET: JobCategorie/Create

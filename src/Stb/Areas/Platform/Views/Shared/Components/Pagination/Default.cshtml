@@ -1,0 +1,77 @@
+﻿@model Stb.Platform.Models.PaginationViewModel
+
+<div class="row">
+    <nav aria-label="Page navigation" class="text-right col-md-11">
+        <ul class="pagination pagination-sm">
+            @if (Model.Page != 1)
+            {
+                <li title="上一页">
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page-1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="disabled">
+                    <span>
+                        <span aria-hidden="true">&laquo;</span>
+                    </span>
+                </li>
+            }
+            @if (Model.Page - 2 > 0)
+            {
+                <li>
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page-2)">
+                        <span aria-hidden="true">@(Model.Page - 2)</span>
+                    </a>
+                </li>
+            }
+            @if (Model.Page - 1 > 0)
+            {
+                <li>
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page-1)">
+                        <span aria-hidden="true">@(Model.Page - 1)</span>
+                    </a>
+                </li>
+            }
+            <li class="active">
+                <span>
+                    <span aria-hidden="true">@Model.Page</span>
+                </span>
+            </li>
+            @if (Model.Page + 1 <= Model.TotalPage)
+            {
+                <li>
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page+1)">
+                        <span aria-hidden="true">@(Model.Page + 1)</span>
+                    </a>
+                </li>
+            }
+            @if (Model.Page + 2 <= Model.TotalPage)
+            {
+                <li>
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page+2)">
+                        <span aria-hidden="true">@(Model.Page + 2)</span>
+                    </a>
+                </li>
+            }
+            @if (Model.Page < Model.TotalPage)
+            {
+                <li title="下一页">
+                    <a asp-action="@Model.Action" asp-route-page="@(Model.Page+1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="disabled">
+                    <span>
+                        <span aria-hidden="true">&raquo;</span>
+                    </span>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

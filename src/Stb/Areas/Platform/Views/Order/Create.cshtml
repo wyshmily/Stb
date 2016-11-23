@@ -123,8 +123,8 @@
         <div class="form-group">
             <label asp-for="PlatoonId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="PlatoonId" type="text" />
-                <input asp-for="PlatoonName" type="text" />
+                <input asp-for="PlatoonId" type="hidden" />
+                <input asp-for="PlatoonName" type="hidden" />
                 <input id="PlatoonTypeahead" class="form-control" />
                 <span asp-validation-for="PlatoonId" class="text-danger" />
             </div>

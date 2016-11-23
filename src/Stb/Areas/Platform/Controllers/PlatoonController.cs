@@ -32,9 +32,16 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Platoon
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View((await _userManager.Users.ToListAsync()).Select(u => new PlatoonIndexViewModel(u)).ToList());
+            int total = _userManager.Users.Count();
+            ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
+            ViewBag.Page = page;
+            return View((await _userManager.Users
+                 .Skip((page - 1) * Constants.PageSize)
+                 .Take(Constants.PageSize)
+                 .ToListAsync())
+                 .Select(u => new PlatoonIndexViewModel(u)).ToList());
         }
 
         // GET: Platoon/Details/5

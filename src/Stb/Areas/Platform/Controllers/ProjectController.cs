@@ -17,13 +17,19 @@ namespace Stb.Areas.Platform.Controllers
 
         public ProjectController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
 
         // GET: Project
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _context.Project.ToListAsync());
+            int total = _context.Order.Count();
+            ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
+            ViewBag.Page = page;
+            return View(await _context.Project
+                .Skip((page - 1) * Constants.PageSize)
+                .Take(Constants.PageSize)
+                .ToListAsync());
         }
 
         // GET: Project/Details/5
@@ -34,7 +40,7 @@ namespace Stb.Areas.Platform.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.Include(p=>p.Orders).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Project.Include(p => p.Orders).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -73,7 +79,7 @@ namespace Stb.Areas.Platform.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.Include(p=>p.Orders).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Project.Include(p => p.Orders).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -124,7 +130,7 @@ namespace Stb.Areas.Platform.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.Include(p=>p.Orders).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Project.Include(p => p.Orders).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();

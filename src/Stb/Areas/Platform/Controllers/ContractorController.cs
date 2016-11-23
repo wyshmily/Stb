@@ -24,8 +24,12 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Contractors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int total = _context.Contractor.Count();
+            ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
+            ViewBag.Page = page;
+
             return View(
                 await (from c in _context.Contractor
                        join s in _context.ContractorStaff on c.HeadStaffId equals s.Id into temp
@@ -34,7 +38,10 @@ namespace Stb.Platform.Controllers
                        {
                            Contractor = c,
                            HeadStaff = tt
-                       }).ToListAsync());
+                       })
+                       .Skip((page - 1) * Constants.PageSize)
+                       .Take(Constants.PageSize)
+                       .ToListAsync());
         }
 
         // GET: Contractors/Details/5

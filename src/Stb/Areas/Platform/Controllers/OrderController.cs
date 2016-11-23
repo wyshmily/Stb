@@ -24,9 +24,16 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).ToListAsync();
+            int total = _context.Order.Count();
+            ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
+            ViewBag.Page = page;
+            var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff)
+                .Include(p => p.Platoon).Include(p => p.District)
+                .Skip((page - 1) * Constants.PageSize)
+                .Take(Constants.PageSize)
+                .ToListAsync();
             return View(orders.Select(p => new OrderIndexViewModel(p)).ToList());
         }
 
@@ -246,7 +253,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p=>p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();

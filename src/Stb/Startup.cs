@@ -51,7 +51,7 @@ namespace Stb
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("StbConnection")));
+              options.UseSqlServer(Configuration.GetConnectionString("StbConnection"), b => b.UseRowNumberForPaging()));
 
             services.AddIdentity<PlatformUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

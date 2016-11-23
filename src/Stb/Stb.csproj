@@ -118,9 +118,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\Web Deploy.pubxml" />
+    <None Remove="Properties\PublishProfiles\Web.pubxml" />
     <None Remove="Properties\PublishProfiles\WebDeploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>
