@@ -9,9 +9,9 @@ using Stb.Data;
 using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Stb.Platform.Views.Account
+namespace Stb.Platform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class JobCategoryController : Controller
     {

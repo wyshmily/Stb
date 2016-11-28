@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class JobMeasurementController : Controller
     {

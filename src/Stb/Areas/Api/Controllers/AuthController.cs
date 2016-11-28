@@ -69,7 +69,7 @@ namespace Stb.Areas.Api.Controllers
             return Ok(new
             {
                 token = encodedJwt,
-                now = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString()
+                //now = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString()
             });
         }
 

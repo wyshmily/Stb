@@ -43,25 +43,33 @@
                             </li>
                         }
 
-                        <li>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">人员管理<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp- asp-controller="Contractor" asp-action="index">承包商管理</a></li>
-                                <li><a asp- asp-controller="Platoon" asp-action="index">排长管理</a></li>
-                                <li><a asp- asp-controller="Worker" asp-action="index">工人管理</a></li>
-                            </ul>
-                        </li>
+                        @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.CustomerService))
+                        {
+                            <li>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">人员管理<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp- asp-controller="Contractor" asp-action="index">承包商管理</a></li>
+                                    <li><a asp- asp-controller="Platoon" asp-action="index">排长管理</a></li>
+                                    <li><a asp- asp-controller="Worker" asp-action="index">工人管理</a></li>
+                                </ul>
+                            </li>
 
-                        <li><a asp- asp-controller="Project" asp-action="index">项目管理</a></li>
-                        <li><a asp- asp-controller="Order" asp-action="index">工单管理</a></li>
+                            <li><a asp- asp-controller="Project" asp-action="index">项目管理</a></li>
+                            <li><a asp- asp-controller="Order" asp-action="index">工单管理</a></li>
 
-                        <li>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">技能管理<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp- asp-controller="JobCategory" asp-action="index">技能设置</a></li>
-                                <li><a asp- asp-controller="JobCategory" asp-action="preview">技能一览</a></li>
-                            </ul>
-                        </li>
+                            <li>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">技能管理<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp- asp-controller="JobCategory" asp-action="index">技能设置</a></li>
+                                    <li><a asp- asp-controller="JobCategory" asp-action="preview">技能一览</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole(Roles.Platoon))
+                        {
+                            <li><a asp- asp-controller="PlatoonOrder" asp-action="index">工单管理</a></li>
+                        }
                     </ul>
                 }
                 @await Html.PartialAsync("_LoginPartial")

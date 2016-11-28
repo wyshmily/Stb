@@ -23,14 +23,14 @@ namespace Stb.Platform.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<PlatformUser> _userManager;
-        private readonly SignInManager<PlatformUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<PlatformUser> userManager,
-            SignInManager<PlatformUser> signInManager,
+            SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             ILoggerFactory loggerFactory)
         {

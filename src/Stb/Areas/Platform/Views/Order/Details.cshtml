@@ -90,6 +90,10 @@
         </dt>
         <dd>
             <pre>@Html.DisplayFor(model => model.WorkAddress)</pre>
+            @if (Model.WorkLocation != null)
+            {
+                <img alt="img" src="@($"http://restapi.amap.com/v3/staticmap?location={Model.WorkLocation}&zoom=12&size=300*200&markers=mid,,:{Model.WorkLocation}&key=1ff97f3d9068e5e12e21f3c34480096a")" />
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.WorkerNeeded)

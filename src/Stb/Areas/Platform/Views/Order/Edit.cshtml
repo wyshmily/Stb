@@ -95,17 +95,23 @@
             <div class="col-md-10">
                 <div class="form-group">
                     <div class="col-md-10">
-                        <Select id="provinceSelect" asp-for="District.ProvinceAdcode" class="form-control"></Select>
+                        <input type="hidden" asp-for="District.ProvinceAdcode" />
+                        <Select id="provinceSelect" class="form-control"></Select>
+                        <span asp-validation-for="District.ProvinceAdcode" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-10">
-                        <Select id="citySelect" asp-for="District.CityAdcode" class="form-control"></Select>
+                        <input type="hidden" asp-for="District.CityAdcode" />
+                        <Select id="citySelect" class="form-control"></Select>
+                        <span asp-validation-for="District.CityAdcode" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-10">
-                        <Select id="districtSelect" asp-for="District.DistrictAdcode" class="form-control"></Select>
+                        <input type="hidden" asp-for="District.DistrictAdcode" />
+                        <Select id="districtSelect" class="form-control"></Select>
+                        <span asp-validation-for="District.DistrictAdcode" class="text-danger" />
                     </div>
                 </div>
             </div>
@@ -116,6 +122,14 @@
             <div class="col-md-10">
                 <textarea asp-for="WorkAddress" class="form-control"></textarea>
                 <span asp-validation-for="WorkAddress" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WorkLocation" class="col-md-2 control-label"></label>
+            <input type="text" asp-for="WorkLocation" />
+            <div class="col-md-10">
+                <div id="container" style="width:400px;height:300px"></div>
             </div>
         </div>
 
@@ -143,5 +157,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_AmapScriptsPartial");
+    }
 }

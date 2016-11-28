@@ -16,7 +16,7 @@ using Stb.Data.Comparer;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class PlatoonController : Controller
     {

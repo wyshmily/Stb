@@ -1,6 +1,7 @@
 ﻿using Stb.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,14 +9,17 @@ namespace Stb.Platform.Models.DistrictViewModels
 {
     public class DistrictViewModel
     {
+        [Required(ErrorMessage = "请选择施工地区（省）")]
         public int ProvinceAdcode { get; set; }
 
         public string ProvinceName { get; set; }
 
+        [Required(ErrorMessage = "请选择施工地区（市）")]
         public int CityAdcode { get; set; }
 
         public string CityName { get; set; }
 
+        [Required(ErrorMessage = "请选择施工地区（区）")]
         public int DistrictAdcode { get; set; }
 
         public string DistrictName { get; set; }

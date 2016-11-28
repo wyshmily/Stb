@@ -70,6 +70,7 @@ namespace Stb.Platform.Models.OrderViewModels
         [Display(Name = "预计工期天数")]
         public int? ExpectedDays { get; set; }   // 预计天数
 
+        [Display(Name = "坐标")]
         public string WorkLocation { get; set; }    // 施工地点坐标
 
         [Display(Name ="项目")]

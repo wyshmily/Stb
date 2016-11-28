@@ -2,7 +2,13 @@
 
 //
 
-var platoonNameInited = false;
+var districtUtil = {
+    provinceInited: false,
+    cityInited: false,
+    districtInited: false,
+    platoonInited: false,
+};
+
 $(document).ready(function () {
 
     var provinceSelect = $("#provinceSelect");
@@ -12,32 +18,43 @@ $(document).ready(function () {
         $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1")
             .success(function (data) {
                 if (data.status == 1) {
-                    provinceSelect.empty();
+                    $("<option></option>").val(null).text("请选择所在省（直辖市）").appendTo(provinceSelect)
                     $.each(data.districts[0].districts, function (i, district) {
                         $("<option></option>").val(district.adcode).text(district.name).appendTo(provinceSelect);
                     });
 
-                    getCityList();
+                    if (!districtUtil.provinceInited) {
+                        districtUtil.provinceInited = true;
+                        var province = $("#District_ProvinceAdcode");
+                        if (province.val()) {
+                            provinceSelect.find("option[value=" + province.val() + "]").attr("selected", true);
+                            getCityList();
+                        }
+                    }
                 }
             });
 
         provinceSelect.change(function () {
+            $("#District_ProvinceAdcode").val($(this).find("option:selected").val());
+            $("#District_CityAdcode").val(null);
+            $("#District_DistrictAdcode").val(null);
+            $("#citySelect").empty();
+            $("#districtSelect").empty();
+            clearPlatoon();
             getCityList();
         });
 
         citySelect.change(function () {
+            $("#District_CityAdcode").val($(this).find("option:selected").val());
+            $("#districtSelect").empty();
+            clearPlatoon();
             getDistrictList();
         });
 
         districtSelect.change(function () {
-            var platoonTypeahead = $("#PlatoonTypeahead");
-            if (platoonTypeahead) {
-                var platoon = platoonTypeahead.typeahead('val');
-                platoonTypeahead.typeahead('val', '1');
-                platoonTypeahead.typeahead('val', '');
-                $("#PlatoonId").val(null);
-                $("#PlatoonName").val(null);
-            }
+            $("#District_DistrictAdcode").val($(this).find("option:selected").val());
+
+            clearPlatoon();
         });
 
         $("#selectAllDistrict").click(function () {
@@ -53,41 +70,50 @@ $(document).ready(function () {
 });
 
 
+function clearPlatoon() {
+    var platoonTypeahead = $("#PlatoonTypeahead");
+    if (platoonTypeahead) {
+        $("#PlatoonTypeahead").typeahead('val', "-1");
+        $("#PlatoonTypeahead").typeahead('val', "");
+        $("#PlatoonId").val(null);
+        $("#PlatoonName").val(null);
+    }
+}
 
 function getCityList() {
     var provinceSelect = $("#provinceSelect");
     var citySelect = $("#citySelect");
+    if (!provinceSelect.find("option:selected").val()) {
+        return;
+    }
+
     var districtSelect = $("#districtSelect");
     $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1&level=province&keywords="
         + provinceSelect.val())
         .success(function (data) {
             if (data.status == 1) {
-                citySelect.empty();
 
                 if (data.districts[0].districts.length > 0) {
+                    $("<option></option>").val(null).text("请选择所在城市").appendTo(citySelect)
                     $.each(data.districts[0].districts, function (i, district) {
                         $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
                     });
-                    getDistrictList();
-
                 } else {
                     var district = data.districts[0];
+                    $("#District_CityAdcode").val(district.adcode);
+                    $("#District_DistrictAdcode").val(district.adcode);
                     $("<option></option>").val(district.adcode).text(district.name).appendTo(citySelect);
-                    districtSelect.empty();
                     appendDistrictItem(district, districtSelect.get(0).tagName);
-
-                    if (!platoonNameInited) {
-                        platoonNameInited = true;
-                        if ($("#PlatoonName").val()) {
-                            $("#PlatoonTypeahead").typeahead('val', "-1");
-                            $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
-                        }
-                    } else {
-                        $("#PlatoonTypeahead").typeahead('val', "-1");
-                        $("#PlatoonTypeahead").typeahead('val', "");
-                    }
                 }
 
+                if (!districtUtil.cityInited) {
+                    districtUtil.cityInited = true;
+                    var city = $("#District_CityAdcode");
+                    if (city.val()) {
+                        citySelect.find("option[value=" + city.val() + "]").attr("selected", true);
+                        getDistrictList();
+                    }
+                }
             }
         });
 }
@@ -96,32 +122,58 @@ function getDistrictList() {
     var citySelect = $("#citySelect");
     var districtSelect = $("#districtSelect");
 
+    if (!citySelect.find("option:selected").val()) {
+        return;
+    }
+
 
     $.getJSON("http://restapi.amap.com/v3/config/district?key=1ff97f3d9068e5e12e21f3c34480096a&subdistrict=1&level=city&keywords="
         + citySelect.val())
         .success(function (data) {
             if (data.status == 1) {
-                districtSelect.empty();
+
 
                 if (data.districts[0].districts.length > 0) {
+                    $("<option></option>").val(null).text("请选择所在区（县）").appendTo(districtSelect)
                     $.each(data.districts[0].districts, function (i, district) {
                         appendDistrictItem(district, districtSelect.get(0).tagName);
                     });
                 } else {
                     var district = data.districts[0];
+                    $("#District_DistrictAdcode").val(district.adcode);
                     appendDistrictItem(district, districtSelect.get(0).tagName);
                 }
-                console.log(2);
 
-                if (!platoonNameInited) {
-                    platoonNameInited = true;
-                    if ($("#PlatoonName").val()) {
-                        $("#PlatoonTypeahead").typeahead('val', "-1");
-                        $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
+                if (!districtUtil.districtInited) {
+                    districtUtil.districtInited = true;
+                    var district = $("#District_DistrictAdcode");
+                    if (district.val()) {
+                        console.log(district.val());
+                        districtSelect.find("option[value=" + district.val() + "]").attr("selected", true);
+
+                        if (!districtUtil.platoonInited) {
+                            var platoonTypeahead = $("#PlatoonTypeahead");
+                            if (platoonTypeahead) {
+                                if ($("#PlatoonName").val()) {
+                                    $("#PlatoonTypeahead").typeahead('val', "-1");
+                                    $("#PlatoonTypeahead").typeahead('val', $("#PlatoonName").val());
+                                }
+                            }
+                        }
+                        if (lbs && !lbs.locationInited) {
+                            lbs.locationInited = true;
+                            var workAddress = $("#WorkAddress");
+                            lbs.geocoder.setCity(district.val());
+                            console.log(workAddress.val());
+                            if (workAddress.val()) {
+                                getAddressLocation();
+                            } else if (district.val()) {
+                                lbs.map.setCity(district.val());
+                            } else {
+                                lbs.map.setCity("北京市");
+                            }
+                        }
                     }
-                } else {
-                    $("#PlatoonTypeahead").typeahead('val', "-1");
-                    $("#PlatoonTypeahead").typeahead('val', "");
                 }
             }
         });

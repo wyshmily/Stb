@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize/*(Policy = "AdministratorOnly")*/]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class ContractorStaffController : Controller
     {

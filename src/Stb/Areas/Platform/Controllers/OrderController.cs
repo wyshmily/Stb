@@ -12,7 +12,7 @@ using Stb.Platform.Models.OrderViewModels;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class OrderController : Controller
     {

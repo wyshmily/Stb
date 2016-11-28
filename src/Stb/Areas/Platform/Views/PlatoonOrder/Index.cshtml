@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Stb.Platform.Models.OrderViewModels.OrderIndexViewModel>
+
+@{
+    ViewData["Title"] = "我的工单";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractorStaffName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Contractor" asp-route-id="@item.ContractorId">
+                        @Html.DisplayFor(modelItem => item.ContractorName)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractorStaffName)
+                    <br />
+                    @Html.DisplayFor(modelItem => item.ContractorStaffPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    <a asp-action="Operate" asp-route-id="@item.Id">操作</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Component.InvokeAsync("Pagination", new { Action = "Index", Page = ViewBag.Page, TotalPage = ViewBag.TotalPage })

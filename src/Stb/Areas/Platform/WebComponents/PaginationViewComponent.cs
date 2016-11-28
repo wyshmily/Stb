@@ -11,6 +11,7 @@ namespace Stb.Platform.WebComponents
     {
         public async Task<IViewComponentResult> InvokeAsync(string action, int page, int totalPage)
         {
+            await Task.Run(() => { });
             return View(new PaginationViewModel
             {
                 Action = action,

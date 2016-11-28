@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Stb.Areas.Platform.Controllers
+namespace Stb.Platform.Controllers
 {
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area("Platform")]
     public class ProjectController : Controller
     {

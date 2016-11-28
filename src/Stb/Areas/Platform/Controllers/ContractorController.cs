@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize/*(Policy = Policies.AdministratorOnly)*/]
+    [Authorize(Roles = Roles.PlatformUser)]
     [Area(AreaNames.Platform)]
     public class ContractorController : Controller
     {
@@ -45,6 +45,8 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Contractors/Details/5
+        [Authorize]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

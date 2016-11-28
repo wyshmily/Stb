@@ -53,6 +53,10 @@ namespace Stb
             services.AddDbContext<ApplicationDbContext>(options =>
               options.UseSqlServer(Configuration.GetConnectionString("StbConnection"), b => b.UseRowNumberForPaging()));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddIdentity<PlatformUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -181,7 +185,7 @@ namespace Stb
                 ValidAudience = tokenOptions.Value.Audience,
 
                 // Validate the token expiry
-                ValidateLifetime = true,
+                ValidateLifetime = false,
 
                 // If you want to allow a certain amount of clock drift, set that here:
                 ClockSkew = TimeSpan.FromSeconds(30)
