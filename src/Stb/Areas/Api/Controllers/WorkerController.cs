@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
+using Stb.Platform.Models.WorkerViewModels;
 
 namespace Stb.Areas.Api.Controllers
 {
@@ -23,9 +24,14 @@ namespace Stb.Areas.Api.Controllers
 
         // GET: api/Worker
         [HttpGet]
-        public IEnumerable<Worker> GetWorker()
+        public IEnumerable<WorkerSimpleViewModel> GetWorkers([FromQuery]string search)
         {
-            return _context.Worker;
+            var query = _context.Worker.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(w => w.Name.Contains(search) || w.UserName.Contains(search));
+            }
+            return query.Take(10).ToList().Select(w => new WorkerSimpleViewModel(w));
         }
 
         [HttpGet("Header")]

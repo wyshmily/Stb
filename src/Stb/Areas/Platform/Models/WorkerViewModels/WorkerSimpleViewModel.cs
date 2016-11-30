@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Stb.Platform.Models.WorkerViewModels
 {
-    public class WorkerIndexViewModel
+    public class WorkerSimpleViewModel
     {
         public string Id { get; set; }
 
@@ -19,32 +19,22 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "姓名")]
         public string Name { get; set; }
 
-        [Display(Name = "性别")]
-        public bool Gender { get; set; }  // 性别：true-男；false-女
-
-        [Display(Name = "是否班长")]
         public bool IsHeader { get; set; }
 
-        public string HeaderId { get; set; }
+        public bool IsCandidate { get; set; }
 
-        [Display(Name = "班长")]
-        public string HeaderName { get; set; }
-
-        public WorkerIndexViewModel()
+        public WorkerSimpleViewModel()
         {
 
         }
 
-        public WorkerIndexViewModel(Worker worker)
+        public WorkerSimpleViewModel(Worker worker)
         {
             Id = worker.Id;
             UserName = worker.UserName;
             Name = worker.Name;
-            Gender = worker.Gender;
             IsHeader = worker.IsHeader;
-            HeaderId = worker.HeaderId;
-            if (worker.Header != null)
-                HeaderName = worker.Header.Name;
+            IsCandidate = worker.IsCandidate;
         }
     }
 }

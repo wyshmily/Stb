@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.PlatformUser)]
+    [Authorize]
     [Area(AreaNames.Platform)]
     public class ContractorController : Controller
     {

@@ -18,7 +18,8 @@
       "wwwroot/js/districts.js",
       "wwwroot/js/jobClasses.js",
       "wwwroot/js/worker.js",
-      "wwwroot/js/order.js"
+      "wwwroot/js/order.js",
+      "wwwroot/js/organize.js"
     ],
     "minify": {
       "enabled": true,

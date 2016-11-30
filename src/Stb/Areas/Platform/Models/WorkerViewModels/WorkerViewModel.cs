@@ -66,7 +66,7 @@ namespace Stb.Platform.Models.WorkerViewModels
         public string Alipay { get; set; }  // 支付宝
 
         [Display(Name = "是否班长")]
-        public bool IsHead { get; set; }    // 是否班长
+        public bool IsHeader { get; set; }    // 是否班长
 
         [Display(Name = "候选班长")]
         public bool IsCandidate { get; set; }    // 是否候选班长
@@ -113,7 +113,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Wechat = worker.Wechat;
             Alipay = worker.Alipay;
             Enabled = worker.Enabled;
-            IsHead = worker.IsHeader;
+            IsHeader = worker.IsHeader;
             IsCandidate = worker.IsCandidate;
             HeaderId = worker.HeaderId;
             BestJobClassId = worker.BestJobClassId;
@@ -160,7 +160,7 @@ namespace Stb.Platform.Models.WorkerViewModels
                 Wechat = Wechat,
                 Alipay = Alipay,
                 Enabled = Enabled,
-                IsHeader = IsHead,
+                IsHeader = IsHeader,
                 IsCandidate = IsCandidate,
                 HeaderId = HeaderId,
                 BestJobClassId = BestJobClassId,
@@ -189,7 +189,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             worker.Wechat = Wechat;
             worker.Alipay = Alipay;
             worker.Enabled = Enabled;
-            worker.IsHeader = IsHead;
+            worker.IsHeader = IsHeader;
             worker.IsCandidate = IsCandidate;
             worker.HeaderId = HeaderId;
             worker.BestJobClassId = BestJobClassId;

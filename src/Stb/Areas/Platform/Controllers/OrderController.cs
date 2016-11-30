@@ -12,7 +12,7 @@ using Stb.Platform.Models.OrderViewModels;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.PlatformUser)]
+    [Authorize]
     [Area(AreaNames.Platform)]
     public class OrderController : Controller
     {
@@ -24,6 +24,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Index(int page = 1)
         {
             int total = _context.Order.Count();
@@ -55,6 +56,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Create
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Create()
         {
             ViewBag.Projects = new SelectList(await _context.Project.ToListAsync(), "Id", "Name");
@@ -66,6 +68,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Create(OrderViewModel orderViewModel)
         {
             if (ModelState.IsValid)
@@ -141,6 +144,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Edit/5
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -162,6 +166,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Edit(string id, OrderViewModel orderViewModel)
         {
             if (id != orderViewModel.Id)
@@ -246,6 +251,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Delete/5
+        [Authorize(Roles = Roles.PlatformUser)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -273,6 +279,7 @@ namespace Stb.Platform.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
 
         private bool OrderExists(string id)
         {

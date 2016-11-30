@@ -72,6 +72,8 @@ namespace Stb.Data
 
         public DbSet<Project> Project { get; set; }
 
+        public DbSet<OrderWorker> OrderWorker { get; set; }
+
         //public DbSet<Stb.Data.Models.Program> Program { get; set; }
     }
 }

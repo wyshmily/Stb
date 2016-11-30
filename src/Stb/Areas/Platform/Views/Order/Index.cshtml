@@ -80,7 +80,18 @@
                     @Html.DisplayFor(modelItem => item.ContactDeadline)
                 </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.State)
+                    @if (item.State == 0)
+                    {
+                        <span>准备状态</span>
+                    }
+                    else if (item.State == 1)
+                    {
+                        <span>施工状态</span>
+                    }
+                    else if (item.State == 2)
+                    {
+                        <span>完成</span>
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |

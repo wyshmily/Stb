@@ -33,9 +33,7 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-controller="Contractor" asp-route-id="@item.ContractorId">
-                        @Html.DisplayFor(modelItem => item.ContractorName)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.ContractorName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ContractorStaffName)
@@ -43,10 +41,22 @@
                     @Html.DisplayFor(modelItem => item.ContractorStaffPhone)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.State)
+                    @if (item.State == 0)
+                    {
+                        <span>准备状态</span>
+                    }
+                    else if (item.State == 1)
+                    {
+                        <span>施工状态</span>
+                    }
+                    else if (item.State == 2)
+                    {
+                        <span>完成</span>
+                    }
                 </td>
                 <td>
-                    <a asp-action="Operate" asp-route-id="@item.Id">操作</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">工单信息</a> |
+                    <a asp-action="Organize" asp-route-id="@item.Id">人员组织</a>
                 </td>
             </tr>
         }

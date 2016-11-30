@@ -40,6 +40,40 @@ namespace Stb.Platform.Controllers
             return View(orders.Select(p => new OrderIndexViewModel(p)).ToList());
         }
 
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(new OrderViewModel(order));
+        }
+
+        public async Task<IActionResult> Organize(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.District).Include(p => p.LeadWorker).SingleOrDefaultAsync(m => m.Id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            await _context.OrderWorker.Include(ow=>ow.Worker).Where(ow => ow.OrderId == id && !ow.Removed).LoadAsync();
+
+            return View(new PlatoonOrderViewModel(order));
+        }
+
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);

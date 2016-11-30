@@ -73,14 +73,14 @@
             身份
         </dt>
         <dd>
-            @if (Model.IsHead)
+            @if (Model.IsHeader)
             { <span>班长</span> }
             else if (Model.IsCandidate)
             { <span>候选班长</span> }
             else
             { <span>工人</span> }
         </dd>
-        @if (!Model.IsHead)
+        @if (!Model.IsHeader)
         {
             <dt>
                 @Html.DisplayNameFor(model => model.HeaderName)

@@ -32,7 +32,7 @@ namespace Stb.Platform.Models.OrderViewModels
         public string PlatoonName { get; set; } // 排长姓名
 
         [Display(Name = "施工状态")]
-        public byte State { get; set; } // 工单状态
+        public byte State { get; set; } // 工单状态 0-准备状态；1-施工状态；2-完成
 
         //[Display(Name = "工程描述")]
         //public string Description { get; set; }  // 工程描述

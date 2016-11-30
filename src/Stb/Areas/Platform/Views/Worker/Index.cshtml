@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.Gender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsHead)
+                @Html.DisplayNameFor(model => model.IsHeader)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.HeaderName)
@@ -46,10 +46,10 @@
                     {<span>女</span>}
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsHead)
+                    @Html.DisplayFor(modelItem => item.IsHeader)
                 </td>
                 <td>
-                    @if(item.IsHead)
+                    @if(item.IsHeader)
                     {
                         <span>-</span>
                     }

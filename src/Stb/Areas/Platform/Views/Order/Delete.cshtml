@@ -96,12 +96,6 @@
                 <img alt="img" src="@($"http://restapi.amap.com/v3/staticmap?location={Model.WorkLocation}&zoom=12&size=300*200&markers=mid,,:{Model.WorkLocation}&key=1ff97f3d9068e5e12e21f3c34480096a")" />
             }
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkerNeeded)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.WorkerNeeded)
-        </dd>
     </dl>
     <h4>施工情况</h4>
     <hr />
@@ -110,7 +104,18 @@
             @Html.DisplayNameFor(model => model.State)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.State)
+            @if (Model.State == 0)
+            {
+                <span>准备状态</span>
+            }
+            else if (Model.State == 1)
+            {
+                <span>施工状态</span>
+            }
+            else if (Model.State == 2)
+            {
+                <span>完成</span>
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PlatoonName)

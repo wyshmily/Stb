@@ -16,7 +16,7 @@ using Stb.Data.Comparer;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.PlatformUser)]
+    [Authorize]
     [Area(AreaNames.Platform)]
     public class WorkerController : Controller
     {
@@ -187,7 +187,7 @@ namespace Stb.Platform.Controllers
                 try
                 {
                     var Worker = await _userManager.FindByIdAsync(id);
-                    if(Worker.IsHeader && !WorkerViewModel.IsHead)
+                    if(Worker.IsHeader && !WorkerViewModel.IsHeader)
                     {
                         List<Worker> workers = _context.Worker.Where(w => w.HeaderId == id).ToList();
                         workers.ForEach(w => w.HeaderId = null);
