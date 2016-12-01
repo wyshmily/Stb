@@ -68,6 +68,7 @@
 
                         @if (User.IsInRole(Roles.Platoon))
                         {
+                            <li><a asp- asp-controller="PlatoonWorker" asp-action="index">工人管理</a></li>
                             <li><a asp- asp-controller="PlatoonOrder" asp-action="index">工单管理</a></li>
                         }
                     </ul>

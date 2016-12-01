@@ -28,7 +28,7 @@
         var leaderId;
         var workerIds = $.map(rows, function (tr) {
             var isLeader = $(tr).attr("data-is-leader");
-            if (isLeader && isLeader.toLowerCase() == "true")
+            if (isLeader && isLeader == "true")
                 leaderId = $(tr).attr("data-worker-id");
             return $(tr).attr("data-worker-id");
         });
@@ -51,6 +51,15 @@
     $(".btn-cancel-leader").click(function (event) {
         event.preventDefault();
         if ($(this).text() == "设为本工单班长") {
+            $.each($("#workerList").find("tr[data-is-leader=true]"), function (i, tr) {
+                console.log(tr);
+                $(tr).removeClass("text-success");
+                $(tr).attr("data-is-leader", false);
+                $(tr).children("td").first().children("span").addClass("hidden");
+                $(tr).children("td").last().children("a").last().text("设为本工单班长");
+                $(tr).children("td").last().children("a").last().removeClass("text-success");
+            })
+
             $(this).text("取消本工单班长");
             $(this).addClass("text-success");
             $(this).parents("tr").attr("data-is-leader", true);
@@ -106,6 +115,15 @@ function getWorkerList() {
                         setLeaderBtn.click(function (event) {
                             event.preventDefault();
                             if ($(this).text() == "设为本工单班长") {
+                                $.each($("#workerList").find("tr[data-is-leader=true]"), function (i, tr) {
+                                    console.log(tr);
+                                    $(tr).removeClass("text-success");
+                                    $(tr).attr("data-is-leader", false);
+                                    $(tr).children("td").first().children("span").addClass("hidden");
+                                    $(tr).children("td").last().children("a").last().text("设为本工单班长");
+                                    $(tr).children("td").last().children("a").last().removeClass("text-success");
+                                })
+
                                 $(this).text("取消本工单班长");
                                 $(this).addClass("text-success");
                                 $(this).parents("tr").attr("data-is-leader", true);
@@ -120,8 +138,9 @@ function getWorkerList() {
                         });
                         operateTr.append(" | ").append(setLeaderBtn);
                     }
+                    var title = worker.isCandidate ? "班长(试单)" : "班长";
                     var newWorker = $("<tr></tr>").attr("data-worker-id", worker.id)
-                        .append($("<td><span class=\"text-warning hidden\">班长</span></td>"))
+                        .append($("<td><span class=\"text-warning hidden\">" + title + "</span></td>"))
                         .append($("<td></td>").append(nameBtn.clone()))
                         .append($("<td></td>").text(worker.userName))
                         .append($("<td></td>").text(type))

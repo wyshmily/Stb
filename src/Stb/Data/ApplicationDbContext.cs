@@ -75,5 +75,6 @@ namespace Stb.Data
         public DbSet<OrderWorker> OrderWorker { get; set; }
 
         //public DbSet<Stb.Data.Models.Program> Program { get; set; }
+        public DbSet<Interview> InterView { get; set; }
     }
 }

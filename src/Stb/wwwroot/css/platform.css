@@ -207,7 +207,12 @@ textarea {
 
 .alert-holder {
     position: absolute;
-    width: 100%;
     left: 0;
     top: 0;
+    width:100%;
+}
+
+.table-text-input{
+    max-width:none;
+    width:100%;
 }

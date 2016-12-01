@@ -20,6 +20,9 @@
                 @Html.DisplayNameFor(model => model.ContractorStaffName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.LeadWorkerName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
             <th></th>
@@ -39,6 +42,13 @@
                     @Html.DisplayFor(modelItem => item.ContractorStaffName)
                     <br />
                     @Html.DisplayFor(modelItem => item.ContractorStaffPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeadWorkerName)
+                    @if (item.LeadWorkerIsCandidate == true)
+                    {
+                        <span>(试单)</span>
+                    }
                 </td>
                 <td>
                     @if (item.State == 0)

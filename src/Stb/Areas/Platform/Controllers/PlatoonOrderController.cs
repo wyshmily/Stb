@@ -32,8 +32,11 @@ namespace Stb.Platform.Controllers
             int total = _context.Order.Count(o => o.PlatoonId == user.Id);
             ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
             ViewBag.Page = page;
-            var orders = await _context.Order.Where(o => o.PlatoonId == user.Id).Include(p => p.Contractor).Include(p => p.ContractorStaff)
+            var orders = await _context.Order.Where(o => o.PlatoonId == user.Id)
+                .Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
+                .Include(p=>p.LeadWorker)
+                .OrderByDescending(p => p.Id)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();

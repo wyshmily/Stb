@@ -22,6 +22,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Stb.Api.JwtToken;
 using Microsoft.Extensions.Options;
+using Stb.Api.Services;
+using Swashbuckle.Swagger.Model;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Stb
 {
@@ -81,6 +84,28 @@ namespace Stb
 
             services.AddMvc();
 
+            services.AddSwaggerGen();
+            // Add the detail information for the API.
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "Stb Api",
+                    Description = "师徒帮APP后台接口",
+                    TermsOfService = "None",
+                    Contact = new Contact { Name = "房鹤"/*, Email = "wyshmily@126.com", Url = "http://www.ivmchina.com/platform"*/ },
+                    //License = new License { Name = "Use under LICX", Url = "http://url.com" }
+                });
+
+                //Determine base path for the application.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+
+                //Set the comments path for the swagger json and ui.
+                var xmlPath = System.IO.Path.Combine(basePath, "Stb.xml");
+                options.IncludeXmlComments(xmlPath);
+            });
+
 
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
@@ -129,6 +154,11 @@ namespace Stb
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
+
+            services.AddTransient<PlatoonAuthService>();
+            services.AddTransient<WorkerAuthService>();
+            services.AddTransient<UserService>();
+            services.AddTransient<OrderService>();
         }
 
 
@@ -150,6 +180,13 @@ namespace Stb
             {
                 app.UseExceptionHandler("/platform/Home/Error");
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUi();
+
 
             app.UseStaticFiles();
 

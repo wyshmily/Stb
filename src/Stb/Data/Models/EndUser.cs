@@ -26,7 +26,13 @@ namespace Stb.Data.Models
 
         public string HealthStatus { get; set; }    // 健康状况
 
-        public bool Enabled { get; set; } = true;// 是否启用
+        public bool Enabled { get; set; } = true;   // 是否启用
+
+        public string Portrait { get; set; } // 用户头像
+
+        public string DeviceId { get; set; } // 设备Id
+
+        public string PushId { get; set; }  // 个推Id
 
         public List<EndUserDistrict> EndUserDistricts { get; set; }
 

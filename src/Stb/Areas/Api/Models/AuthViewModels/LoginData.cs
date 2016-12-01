@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Stb.Api.Models.AuthViewModels
 {
-    public class LoginViewModel
+    public class LoginData
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string atoken { get; set; }
+        public UserInfo userInfo { get; set; }
     }
 }

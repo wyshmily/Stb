@@ -21,8 +21,9 @@ namespace Stb.Platform.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
             return View();
         }
 

@@ -31,5 +31,7 @@ namespace Stb.Data.Models
         public List<WorkLoad> WorkLoads { get; set; }
 
         public JobClass BestJobClass { get; set; }
+
+        public List<Interview> Interviews { get; set; }
     }
 }

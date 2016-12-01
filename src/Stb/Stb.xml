@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Stb</name>
+    </assembly>
+    <members>
+        <member name="M:Stb.Api.Controllers.AuthController.LoginAsync(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            App通用：用户登录
+            </summary>
+            <param name="account"></param>
+            <param name="password"></param>
+            <param name="deviceid"></param>
+            <param name="apptype"></param>
+            <returns>token和UserInfo</returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.ContractorController.GetContractor(System.String)">
+            <summary>
+            Web端：搜索承包商
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.ContractorStaffController.Search(System.Int32,System.String)">
+            <summary>
+            Web端：搜索承包商员工
+            </summary>
+            <param name="contractorId"></param>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.JobCategoryController.GetJobCategory">
+            <summary>
+            Web端：获取工作门类列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.JobClassController.GetJobClass(System.Nullable{System.Int32})">
+            <summary>
+            Web端：获取工作门类下的工作种类
+            </summary>
+            <param name="categoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.OrderController.SetWorkers(System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Web端：排长设置或修改工单班长和工人列表
+            </summary>
+            <param name="orderId"></param>
+            <param name="leaderId"></param>
+            <param name="workerIds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonController.Search(System.Int32,System.String)">
+            <summary>
+            Web端：搜索排长
+            </summary>
+            <param name="districtId"></param>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetOrder(System.String)">
+            <summary>
+            App排长端：工单列表
+            </summary>
+            <param name="key">模糊查询</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.UserController.UpdatePushId(System.String)">
+            <summary>
+            App通用：上报个推ID
+            </summary>
+            <param name="pushId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerController.GetWorkers(System.String)">
+            <summary>
+            Web端：搜索工人
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerController.Header(System.String)">
+            <summary>
+            Web端：搜索班长
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.GetOrder(System.String)">
+            <summary>
+            App班长端：工单列表
+            </summary>
+            <param name="key">模糊查询</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

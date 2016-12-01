@@ -25,6 +25,9 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "是否班长")]
         public bool IsHeader { get; set; }
 
+        [Display(Name = "是否候选班长")]
+        public bool IsCandidate { get; set; }
+
         public string HeaderId { get; set; }
 
         [Display(Name = "班长")]
@@ -42,6 +45,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Name = worker.Name;
             Gender = worker.Gender;
             IsHeader = worker.IsHeader;
+            IsCandidate = worker.IsCandidate;
             HeaderId = worker.HeaderId;
             if (worker.Header != null)
                 HeaderName = worker.Header.Name;

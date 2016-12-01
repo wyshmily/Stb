@@ -1,0 +1,247 @@
+﻿@using Stb.Platform.Models.PlatoonWorkerViewModels;
+@model  Stb.Data.Models.Interview
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "候选班长面试";
+    RemoteInterviewViewModel RemoteInterview = new RemoteInterviewViewModel(Model);
+    if (RemoteInterview.WorkerId == null)
+    {
+        RemoteInterview.WorkerId = ViewBag.WorkerId;
+    }
+
+    FaceInterviewViewModel FaceInterview = new FaceInterviewViewModel(Model);
+
+    TotalInterviewViewModel TotalInterview = new TotalInterviewViewModel(Model);
+    if (TotalInterview.PlatoonId == null)
+    {
+        var curUser = await UserManager.GetUserAsync(User);
+        TotalInterview.PlatoonId = curUser.Id;
+        TotalInterview.PlatoonName = curUser.Name;
+    }
+}
+
+<br />
+<form asp-action="SaveRemoteInterview">
+    <input type="hidden" asp-for="@RemoteInterview.WorkerId" />
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th colspan="3" class="h2 text-center">侯选班长面试记录表</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="3" style="max-width:40px;min-width:40px;vertical-align:middle" class="text-center">电话沟通记录</td>
+                <td class="col-xs-6 form-inline">
+                    <span>沟通时间：</span>
+                    <input asp-for="@RemoteInterview.RemoteInterviewDate" class="form-control table-text-input" style="width:80%">
+                    <div>
+                        <span asp-validation-for="@RemoteInterview.RemoteInterviewDate" class="text-danger"></span>
+                    </div>
+                </td>
+                <td class="col-xs-6 form-inline">
+                    <span>沟通人：</span>
+                    <input asp-for="@RemoteInterview.RemoteInterviewPlatoonName" class="form-control table-text-input" style="width:80%">
+                    <div>
+                        <span asp-validation-for="@RemoteInterview.RemoteInterviewPlatoonName" class="text-danger"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-5 col-md-4">
+                            <input asp-for="@RemoteInterview.NeedRemoteInsight" class="hidden" />
+                            <div class="checkbox">
+                                <input asp-for="@RemoteInterview.RemoteInsight" />
+                                <label asp-for="@RemoteInterview.RemoteInsight"></label>
+                                <div>
+                                    <span asp-validation-for="@RemoteInterview.RemoteInsight" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <input asp-for="@RemoteInterview.NeedRemoteCompanyIntroduce" class="hidden" />
+                            <div class="checkbox">
+                                <input asp-for="@RemoteInterview.RemoteCompanyIntroduce" />
+                                <label asp-for="@RemoteInterview.RemoteCompanyIntroduce"></label>
+                                <div>
+                                    <span asp-validation-for="@RemoteInterview.RemoteCompanyIntroduce" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-5 col-md-4">
+                            <input asp-for="@RemoteInterview.NeedRemoteRequirmentIntroduce" class="hidden" />
+                            <div class="checkbox">
+                                <input asp-for="@RemoteInterview.RemoteRequirmentIntroduce" />
+                                <label asp-for="@RemoteInterview.RemoteRequirmentIntroduce"></label>
+                                <div>
+                                    <span asp-validation-for="@RemoteInterview.RemoteRequirmentIntroduce" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <input asp-for="@RemoteInterview.NeedRemoteCooperationIntroduce" class="hidden" />
+                            <div class="checkbox">
+                                <input asp-for="@RemoteInterview.RemoteCooperationIntroduce" />
+                                <label asp-for="@RemoteInterview.RemoteCooperationIntroduce"></label>
+                                <div>
+                                    <span asp-validation-for="@RemoteInterview.RemoteCooperationIntroduce" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <p>其它信息：</p>
+                    <textarea asp-for="@RemoteInterview.RemoteInterviewRecord" class="form-control table-text-input" placeholder="（其它洽谈内容）"></textarea>
+                    <br />
+                    <p>意见记录：</p>
+                    <textarea asp-for="@RemoteInterview.RemoteOpinion" class="form-control table-text-input" placeholder="（候选班长意见记录）"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>结论：</span>
+                    <label class="radio-inline">
+                        <input type="radio" asp-for="@RemoteInterview.RemoteInterviewResult" value="true"> 合格
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" asp-for="@RemoteInterview.RemoteInterviewResult" value="false"> 不合格
+                    </label>
+                    <div>
+                        <span asp-validation-for="@RemoteInterview.RemoteInterviewResult" class="text-danger"></span>
+                    </div>
+                </td>
+                <td>
+                    @if (Model == null || Model.RemoteInterviewResult == null)
+                    {
+                        <input type="submit" value="保存电话沟通结果" class="form-control btn-primary" />
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<form asp-action="SaveFaceInterview" style="margin-top:-20px">
+    <input type="hidden" asp-for="@FaceInterview.Id" />
+    <input type="hidden" asp-for="@FaceInterview.WorkerId" />
+    <table class="table table-bordered table-responsive">
+        <tbody>
+            <tr>
+                <td rowspan="3" style="max-width:40px;min-width:40px;vertical-align:middle" class="text-center">面谈记录</td>
+                <td class="col-xs-6 form-inline">
+                    <span>沟通时间：</span>
+                    <input asp-for="@FaceInterview.FaceInterviewDate" class="form-control table-text-input" style="width:80%">
+                    <div>
+                        <span asp-validation-for="@FaceInterview.FaceInterviewDate" class="text-danger"></span>
+                    </div>
+                </td>
+                <td class="col-xs-6 form-inline">
+                    <span>沟通人：</span>
+                    <input asp-for="@FaceInterview.FaceInterviewPlatoonName" class="form-control table-text-input" style="width:80%">
+                    <div>
+                        <span asp-validation-for="@FaceInterview.FaceInterviewPlatoonName" class="text-danger"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>面谈记录：</p>
+                    <textarea asp-for="@FaceInterview.FaceInterviewRecord" class="form-control table-text-input" placeholder="（面谈内容记录）"></textarea>
+                    <div>
+                        <span asp-validation-for="@FaceInterview.FaceInterviewRecord" class="text-danger"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>结论：</span>
+                    <label class="radio-inline">
+                        <input type="radio" asp-for="@FaceInterview.FaceInterviewResult" value="true"> 合格
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" asp-for="@FaceInterview.FaceInterviewResult" value="false"> 不合格
+                    </label>
+                    <div>
+                        <span asp-validation-for="@FaceInterview.FaceInterviewResult" class="text-danger"></span>
+                    </div>
+                </td>
+                <td>
+                    @if (Model == null || Model.FaceInterviewResult == null)
+                    {
+                        if (Model == null || Model.RemoteInterviewResult == null)
+                        {
+                            <input type="submit" value="保存面谈结果" class="form-control btn-primary" disabled />
+                        }
+                        else
+                        {
+                            <input type="submit" value="保存面谈结果" class="form-control btn-primary" />
+                        }
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<form asp-action="SaveTotalInterview" style="margin-top:-20px">
+    <input type="hidden" asp-for="@TotalInterview.Id" />
+    <input type="hidden" asp-for="@TotalInterview.WorkerId" />
+    <input type="hidden" asp-for="@TotalInterview.PlatoonId" />
+    <table class="table table-bordered table-responsive">
+        <tbody>
+            <tr>
+                <td rowspan="2" style="max-width:40px;min-width:40px;vertical-align:middle" class="text-center">排长结论</td>
+                <td width="100%" colspan="2">
+                    <div class="form-inline form-group">
+                        <label class="radio">
+                            <input type="radio" asp-for="@TotalInterview.TotalInterviewResult" value="0"> 合格，可以安排试单工作
+                        </label>
+                    </div>
+                    <div class="form-inline form-group">
+                        <label class="radio">
+                            <input type="radio" asp-for="@TotalInterview.TotalInterviewResult" value="1"> 不合格，不能进行试单
+                        </label>
+                    </div>
+                    <div class="form-inline form-group">
+                        <label class="radio">
+                            <input type="radio" asp-for="@TotalInterview.TotalInterviewResult" value="2"> 其它
+                        </label>
+                        <input asp-for="OtherResult" placeholder="填写其它结论" class="form-control table-text-input" style="width:80%" />
+                    </div>
+                    <div>
+                        <span asp-validation-for="@TotalInterview.TotalInterviewResult" class="text-danger"></span>
+                    </div>
+                    @if (Model == null || Model.TotalInterviewResult == null)
+                    {
+                        <br />
+                        if (Model == null || Model.FaceInterviewResult == null)
+                        {
+                            <input type="submit" value="保存排长结论" class="form-control btn-primary" disabled />
+                        }
+                        else
+                        {
+                            <input type="submit" value="保存排长结论" class="form-control btn-primary" />
+                        }
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right">
+                    <strong>排长：@TotalInterview.PlatoonName</strong>&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<div>
+    <a asp-action="Index">返回工人列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -307,7 +307,7 @@ namespace Stb.Platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            Worker worker = await _userManager.Users.Include(u=>u.Workers).Include(u=>u.LeadOrders).Include(u=>u.LeadOrders).SingleOrDefaultAsync(m => m.Id == id);
+            Worker worker = await _userManager.Users.Include(u=>u.Workers).Include(u=>u.LeadOrders).Include(u=>u.LeadOrders).Include(u=>u.Interviews).SingleOrDefaultAsync(m => m.Id == id);
             foreach(var subWorker in worker.Workers)
             {
                 subWorker.HeaderId = null;

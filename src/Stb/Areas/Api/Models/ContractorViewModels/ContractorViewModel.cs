@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stb.Areas.Api.Models.ContractorViewModels
+namespace Stb.Api.Models.ContractorViewModels
 {
     public class ContractorViewModel
     {

@@ -32,6 +32,7 @@ namespace Stb.Platform.Controllers
             ViewBag.Page = page;
             var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
+                .OrderByDescending(p=>p.Id)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();

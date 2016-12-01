@@ -14,89 +14,58 @@ using Stb.Api.JwtToken;
 using System.Security.Principal;
 using Stb.Api.Models.AuthViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Stb.Api.Services;
+using Stb.Api.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Stb.Areas.Api.Controllers
+namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Auth")]
     [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+    [ApiExceptionFilter]
     public class AuthController : Controller
     {
-        private readonly UserManager<EndUser> _userManager;
-        private readonly SignInManager<EndUser> _signInManager;
-        private readonly ApplicationDbContext _context;
-        private readonly TokenProviderOptions _options;
+        private readonly PlatoonAuthService _platoonAuthService;
+        private readonly WorkerAuthService _workerAuthService;
 
-        public AuthController(UserManager<EndUser> userManager, SignInManager<EndUser> signInManager, ApplicationDbContext context, IOptions<TokenProviderOptions> options)
+        public AuthController(PlatoonAuthService platoonAuthService, WorkerAuthService workerAuthService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _context = context;
-            _options = options.Value;
+            _platoonAuthService = platoonAuthService;
+            _workerAuthService = workerAuthService;
         }
 
-        [Route("Login")]
+        /// <summary>
+        /// App通用：用户登录
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="password"></param>
+        /// <param name="deviceid"></param>
+        /// <param name="apptype"></param>
+        /// <returns>token和UserInfo</returns>
+        [HttpGet("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel loginViewModel)
+        public async Task<ApiOutput<LoginData>> LoginAsync([FromQuery]string account, [FromQuery]string password, [FromQuery]string deviceid, [FromQuery]int apptype)
         {
-            string username = loginViewModel.Username;
-            string password = loginViewModel.Password;
-            var identity = await GetIdentity(username, password);
-            if (identity == null)
+            if (account == null)
+                throw new ApiException("用户名不能为空");
+            if (deviceid == null)
+                throw new ApiException("设备ID不能为空");
+
+            if (apptype == 2) // 排长端登录
             {
-                return BadRequest("用户名或密码错误。");
+                LoginData loginData = await _platoonAuthService.LoginAsync(account, password, deviceid);
+                return new ApiOutput<LoginData>(loginData);
+            }
+            else if(apptype == 3) // 班长端登录
+            {
+                LoginData loginData = await _workerAuthService.LoginAsync(account, password, deviceid);
+                return new ApiOutput<LoginData>(loginData);
             }
 
-            DateTime now = DateTime.UtcNow;
-
-            var claims = new Claim[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64)
-            };
-
-            var jwt = new JwtSecurityToken(
-               issuer: _options.Issuer,
-               audience: _options.Audience,
-               claims: claims,
-               notBefore: now,
-               expires: now.Add(_options.Expiration),
-               signingCredentials: _options.SigningCredentials);
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            return Ok(new
-            {
-                token = encodedJwt,
-                //now = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString()
-            });
+            throw new ApiException("登录设备类型错误。");
         }
 
 
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
-        {
-            if (username == null)
-                return null;
-            var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
-            if (result.Succeeded)
-            {
-                var user = await _userManager.FindByNameAsync(username);
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                return new ClaimsIdentity(new GenericIdentity(username, "Token"), claims);
-            }
-
-            // Credentials are invalid, or account doesn't exist
-            return null;
-        }
-
-        public static long ToUnixEpochDate(DateTime date) => new DateTimeOffset(date).ToUniversalTime().ToUnixTimeSeconds();
-
-        [Route("TestToken")]
-        public IActionResult TestToken()
-        {
-            return Ok("Token Is Valid");
-        }
     }
 }

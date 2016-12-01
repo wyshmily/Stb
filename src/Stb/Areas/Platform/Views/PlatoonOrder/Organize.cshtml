@@ -90,15 +90,30 @@
                 <tbody id="workerList">
                     @foreach (var worker in Model.Workers)
                     {
-                        <tr data-worker-id="@worker.Id" data-is-leader="@(worker.Id == Model.LeaderWorkerId)">
+                        var isLeader = worker.Id == Model.LeaderWorkerId ? "true" : "false";
+                        <tr data-worker-id="@worker.Id" data-is-leader="@isLeader">
                             <td>
                                 @if (worker.Id == Model.LeaderWorkerId)
                                 {
-                                    <span class="text-warning">班长</span>
+                                    if (worker.IsCandidate)
+                                    {
+                                        <span class="text-warning">班长(试单)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-warning">班长</span>
+                                    }
                                 }
                                 else
                                 {
-                                    <span class="text-warning hidden">班长</span>
+                                    if (worker.IsCandidate)
+                                    {
+                                        <span class="text-warning hidden">班长(试单)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-warning hidden">班长</span>
+                                    }
                                 }
                             </td>
                             <td>
@@ -128,7 +143,7 @@
                                 else if (worker.IsHeader || worker.IsCandidate)
                                 {
                                     <span> |</span>
-                                    <a asp-action="Details" asp-route-id="@worker.Id">设为本工单班长</a>
+                                    <a asp-action="Details" asp-route-id="@worker.Id" class="btn-cancel-leader">设为本工单班长</a>
                                 }
                             </td>
                         </tr>
@@ -164,11 +179,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
-            @*<div class="modal fade in" id="alert_worker_in_list" role="dialog" tabindex="-1">
-                    <div class="alert alert-warning">
-                        <strong>提示</strong> 该工人已经在列表中
-                    </div>
-                </div>*@
         </div>
     </div>
 </div>

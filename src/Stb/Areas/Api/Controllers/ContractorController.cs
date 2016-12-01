@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
-using Stb.Areas.Api.Models.ContractorViewModels;
+using Stb.Api.Models.ContractorViewModels;
 
-namespace Stb.Areas.Api.Controllers
+namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Contractor")]
@@ -22,15 +22,14 @@ namespace Stb.Areas.Api.Controllers
             _context = context;
         }
 
-        // GET: api/Contractor
-        [HttpGet]
-        public IEnumerable<Contractor> GetContractor()
-        {
-            return _context.Contractor;
-        }
-
+       
+        /// <summary>
+        /// Web¶Ë£ºËÑË÷³Ð°üÉÌ
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         [HttpGet("Search")]
-        public IEnumerable<ContractorViewModel> GetContractor(string search)
+        public IEnumerable<ContractorViewModel> GetContractor([FromQuery]string search)
         {
             if (search == null)
                 search = "";
@@ -52,117 +51,6 @@ namespace Stb.Areas.Api.Controllers
                 HeadStaffName = c.header == null ? null : c.header.Name,
                 HeadStaffPhone = c.header == null ? null : c.header.Phone
             });
-        }
-
-        // GET: api/Contractor/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetContractor([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Contractor contractor = await _context.Contractor.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (contractor == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(contractor);
-        }
-
-        // PUT: api/Contractor/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutContractor([FromRoute] int id, [FromBody] Contractor contractor)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != contractor.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(contractor).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContractorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Contractor
-        [HttpPost]
-        public async Task<IActionResult> PostContractor([FromBody] Contractor contractor)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Contractor.Add(contractor);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ContractorExists(contractor.Id))
-                {
-                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetContractor", new { id = contractor.Id }, contractor);
-        }
-
-        // DELETE: api/Contractor/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContractor([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Contractor contractor = await _context.Contractor.Include(c => c.Orders).SingleOrDefaultAsync(m => m.Id == id);
-            if (contractor == null)
-            {
-                return NotFound();
-            }
-
-            foreach (var order in contractor.Orders)
-                order.ContractorId = null;
-            _context.Contractor.Remove(contractor);
-            await _context.SaveChangesAsync();
-
-            return Ok(contractor);
-        }
-
-        private bool ContractorExists(int id)
-        {
-            return _context.Contractor.Any(e => e.Id == id);
         }
     }
 }

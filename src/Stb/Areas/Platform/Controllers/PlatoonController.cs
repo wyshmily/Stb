@@ -298,8 +298,13 @@ namespace Stb.Platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            foreach(var interview in _context.InterView.Where(i=>i.PlatoonId == id))
+            {
+                interview.PlatoonId = null;
+            }
             var platoon = await _userManager.Users.SingleOrDefaultAsync(m => m.Id == id);
             await _userManager.DeleteAsync(platoon);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

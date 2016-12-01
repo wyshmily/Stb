@@ -5,9 +5,7 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-<p>
-    <a asp-action="Create">新增工人</a>
-</p>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -54,25 +52,28 @@
                     { <span>工人</span>}
                 </td>
                 <td>
-                    @if(item.IsHeader)
+                    @if (item.IsHeader)
                     {
                         <span>-</span>
                     }
                     else if (item.HeaderId != null)
                     {
-                    <a asp-action="Details" asp-route-id="@item.HeaderId">
-                        @Html.DisplayFor(modelItem => item.HeaderName)
-                    </a>
+                        <a asp-action="Details" asp-route-id="@item.HeaderId">
+                            @Html.DisplayFor(modelItem => item.HeaderName)
+                        </a>
                     }
                     else
-                    { 
+                    {
                         <span class="text-warning">没有班长</span>
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">详情</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">详情</a>
+                    @if (!item.IsHeader && !item.IsCandidate)
+                    {
+                        <span> |</span>
+                        <a asp-action="Interview" asp-route-id="@item.Id">面试</a>
+                    }
                 </td>
             </tr>
         }

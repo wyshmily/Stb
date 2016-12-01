@@ -8,9 +8,10 @@ using Stb.Data;
 namespace Stb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161130172013_AddTableInterview")]
+    partial class AddTableInterview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -599,8 +600,6 @@ namespace Stb.Data.Migrations
 
                     b.Property<DateTime?>("Birthday");
 
-                    b.Property<string>("DeviceId");
-
                     b.Property<bool>("Enabled");
 
                     b.Property<bool>("Gender");
@@ -610,10 +609,6 @@ namespace Stb.Data.Migrations
                     b.Property<string>("IdCardNumber");
 
                     b.Property<string>("NativePlace");
-
-                    b.Property<string>("Portrait");
-
-                    b.Property<string>("PushId");
 
                     b.Property<string>("QQ");
 

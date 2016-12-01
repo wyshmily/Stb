@@ -34,6 +34,10 @@ namespace Stb.Platform.Models.OrderViewModels
         [Display(Name = "施工状态")]
         public byte State { get; set; } // 工单状态 0-准备状态；1-施工状态；2-完成
 
+        [Display(Name ="班长")]
+        public string LeadWorkerName { get; set; }
+
+        public bool? LeadWorkerIsCandidate { get; set; }
         //[Display(Name = "工程描述")]
         //public string Description { get; set; }  // 工程描述
 
@@ -62,6 +66,8 @@ namespace Stb.Platform.Models.OrderViewModels
             PlatoonId = order.PlatoonId;
             PlatoonName = order.Platoon?.Name;
             State = order.State;
+            LeadWorkerName = order.LeadWorker?.Name;
+            LeadWorkerIsCandidate = order.LeadWorker?.IsCandidate;
             //Description = order.Description;
             //WorkAddress = order.WorkAddress;
             //ContactDeadline = order.ContactDeadline;

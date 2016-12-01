@@ -30,7 +30,7 @@
         }, delay);
     });
 
-    $('#IsHead').click(function () {
+    $('#IsHeader').click(function () {
         TriggerHeaderDisplay();
     });
 
@@ -38,7 +38,7 @@
 });
 
 function TriggerHeaderDisplay() {
-    if ($('#IsHead').prop("checked")) {
+    if ($('#IsHeader').prop("checked")) {
         $("#HeaderSearchDiv").slideUp();
     } else {
         $("#HeaderSearchDiv").slideDown();
