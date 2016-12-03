@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Stb.Data.Models;
+using Stb.Util;
 
 namespace Stb.Api.Models.MessageViewModels
 {
@@ -17,6 +18,11 @@ namespace Stb.Api.Models.MessageViewModels
         /// 工单Id
         /// </summary>
         public string OrderId { get; set; }
+
+        /// <summary>
+        /// 消息时间
+        /// </summary>
+        public long Time { get; set; }
 
         /// <summary>
         /// 消息类型：1-平台下单（排长端）；2-排长下单（班长端）；3-班长签到（排长端）；4-施工问题（排长端）
@@ -38,14 +44,21 @@ namespace Stb.Api.Models.MessageViewModels
         /// </summary>
         public bool IsRead { get; set; }
 
+        /// <summary>
+        /// 签到还是签退：true-签到；false-签退
+        /// </summary>
+        public bool InOut { get; set; }
+
         public MessageData(Message message)
         {
             Id = message.Id;
             OrderId = message.OrderId;
+            Time = message.Time.ToUnixEpochDate();
             Type = message.Type;
             Title = message.Title;
             Text = message.Text;
             IsRead = message.IsRead;
+            InOut = message.InOut;
         }
     }
 }

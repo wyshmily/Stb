@@ -90,12 +90,30 @@ namespace Stb.Api.Services
             return true;
         }
 
-        
+
         // 今日排长是否签到
         public async Task<bool> IsPlatoonSignInAsync(string userId, string orderId)
         {
             DateTime now = DateTime.Now;
             return await _context.Signment.AnyAsync(s => s.OrderId == orderId && s.EndUserId == userId && s.Time.Date == now.Date);
+        }
+
+        public async Task<ProgressData> GetOrderProgressAsync(string orderId)
+        {
+            var progressData = new ProgressData();
+
+            var signmentQuery = _context.Signment.Where(s => s.OrderId == orderId && s.Type == 2).OrderByDescending(s => s.Id);
+
+            progressData.SignmentCount = await signmentQuery.CountAsync();
+            if (progressData.SignmentCount > 0)
+                progressData.Signment = new SignmentData(await signmentQuery.FirstAsync());
+
+            var issueQuery = _context.Issue.Where(i => i.OrderId == orderId).OrderByDescending(i => i.Id);
+            progressData.IssueCount = await issueQuery.CountAsync();
+            if (progressData.IssueCount > 0)
+                progressData.Issue = new IssueData(await issueQuery.FirstAsync());
+
+            return progressData;
         }
 
         // 班长签到、签退
@@ -124,11 +142,33 @@ namespace Stb.Api.Services
                 Time = now,
             };
             _context.Add(signment);
+
+            // 添加消息
+            Worker worker = await _context.Worker.FindAsync(userId);
+            if (worker != null)
+            {
+                Message message = new Message
+                {
+                    EndUserId = userId,
+                    IsRead = false,
+                    OrderId = orderId,
+                    Title = $"{(inOut ? "签到" : "签退")}消息",
+                    Text = $"工单{orderId}有来自{worker.Name}的{(inOut ? "签到" : "签退")}消息",
+                    Time = DateTime.Now,
+                    Type = 3,
+                    InOut = inOut,
+                };
+                _context.Message.Add(message);
+            }
+
+            // todo 推送通知
+            // 
+
             await _context.SaveChangesAsync();
             return true;
         }
 
-       
+
 
         // 今日班长是否签到状态：0-无签到信息；1-已签到；2-已签退
         public async Task<int> WorkerSignStateAsync(string userId, string orderId)
@@ -140,7 +180,7 @@ namespace Stb.Api.Services
             return signments.Count;
         }
 
-       
+
         // 班长当日签到数据
         public async Task<WorkerSignmentData> GetWorkerSignmentsAsync(string orderId, string userId)
         {
@@ -163,7 +203,7 @@ namespace Stb.Api.Services
 
             return list.Select(s => new SignmentData(s)).ToList();
         }
-       
+
 
         // 班长记录问题
         public async Task<bool> WorkerReportIssueAsync(string userId, string orderId, int issueType, int solutionType, string pics, string audios)
@@ -179,6 +219,27 @@ namespace Stb.Api.Services
             };
 
             _context.Issue.Add(issue);
+
+            // 添加消息
+            Worker worker = await _context.Worker.FindAsync(userId);
+            if (worker != null)
+            {
+                Message message = new Message
+                {
+                    EndUserId = userId,
+                    IsRead = false,
+                    OrderId = orderId,
+                    Title = "新消息",
+                    Text = $"工单{orderId}有来自{worker.Name}的施工问题消息",
+                    Time = DateTime.Now,
+                    Type = 4,
+                };
+                _context.Message.Add(message);
+            }
+
+            // todo 推送通知
+            // 
+
             await _context.SaveChangesAsync();
 
             return true;

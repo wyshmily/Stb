@@ -116,6 +116,13 @@
             <param name="orderId">Required - 工单Id</param>
             <returns></returns>
         </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetOrderProgressAsync(System.String)">
+            <summary>
+            App排长端：工单进度
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
         <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetWorkerSignmentsAsync(System.String)">
             <summary>
             App排长端：工人签到列表
@@ -297,6 +304,11 @@
             工单Id
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Time">
+            <summary>
+            消息时间
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Type">
             <summary>
             消息类型：1-平台下单（排长端）；2-排长下单（班长端）；3-班长签到（排长端）；4-施工问题（排长端）
@@ -317,6 +329,11 @@
             是否已读：true-已读；false-未读
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.InOut">
+            <summary>
+            签到还是签退：true-签到；false-签退
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.OrderId">
             <summary>
             工单编号
@@ -335,6 +352,26 @@
         <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.State">
             <summary>
             工单状态 0-准备状态；1-施工状态；2-完成
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.ProgressData.SignmentCount">
+            <summary>
+            工单工人签到和签退记录总数
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.ProgressData.Signment">
+            <summary>
+            最新工人签到或签退记录
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.ProgressData.IssueCount">
+            <summary>
+            工单工人记录问题总数
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.ProgressData.Issue">
+            <summary>
+            最新工人记录问题
             </summary>
         </member>
         <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Time">

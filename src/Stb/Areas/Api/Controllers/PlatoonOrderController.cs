@@ -1,14 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Stb.Data;
-using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using Stb.Api.Models.OrderViewModels;
 using Stb.Api.Models;
 using Stb.Api.Services;
@@ -66,6 +59,17 @@ namespace Stb.Api.Controllers
         public async Task<ApiOutput<bool>> IsSignInAsync([RequiredFromQuery]string orderId)
         {
             return new ApiOutput<bool>(await _orderService.IsPlatoonSignInAsync(this.UserId(), orderId));
+        }
+
+        /// <summary>
+        /// App排长端：工单进度
+        /// </summary>
+        /// <param name="orderId">Required - 工单Id</param>
+        /// <returns></returns>
+        [HttpGet("Progress")]
+        public async Task<ApiOutput<ProgressData>> GetOrderProgressAsync([RequiredFromQuery]string orderId)
+        {
+            return new ApiOutput<ProgressData>(await _orderService.GetOrderProgressAsync(orderId));
         }
 
         /// <summary>

@@ -136,6 +136,23 @@ namespace Stb.Platform.Controllers
                 }
 
                 _context.Add(order);
+
+                // 添加消息
+                Message message = new Message
+                {
+                    EndUserId = order.PlatoonId,
+                    IsRead = false,
+                    OrderId = order.Id,
+                    Title = "新消息",
+                    Text = $"工单{order.Id}已由平台下发",
+                    Time = DateTime.Now,
+                    Type = 1,
+                };
+                _context.Message.Add(message);
+
+                // todo 推送通知
+                // 
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

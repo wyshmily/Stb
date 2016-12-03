@@ -51,7 +51,26 @@ namespace Stb.Api.Controllers
                 return BadRequest("参数错误");
             }
 
-            order.LeadWorkerId = leaderId;
+            if (order.LeadWorkerId != leaderId)
+            {
+                order.LeadWorkerId = leaderId;
+
+                // 添加消息
+                Message message = new Message
+                {
+                    EndUserId = leaderId,
+                    IsRead = false,
+                    OrderId = order.Id,
+                    Title = "收到新工单",
+                    Text = $"工单{order.Id}已下发",
+                    Time = DateTime.Now,
+                    Type = 2,
+                };
+                _context.Message.Add(message);
+
+                // todo 推送通知
+                // 
+            }
 
             List<OrderWorker> curOrderWorkers = await _context.OrderWorker.Where(ow => ow.OrderId == orderId).ToListAsync();
 
