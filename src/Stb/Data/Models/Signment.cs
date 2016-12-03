@@ -16,12 +16,22 @@ namespace Stb.Data.Models
         public string OrderId { get; set; }
 
         [Required]
-        public string WorkerId { get; set; }
+        public string EndUserId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime Time { get; set; } // 签到时间
 
         public Order Order { get; set; }
 
-        public Worker Worker { get; set; }
+        public EndUser EndUser { get; set; }
+
+        public bool InOut { get; set; } // 签到还是签退：true-签到，false-签退
+
+        public string Pics { get; set; } // 签到图片，逗号分隔
+
+        public string Location { get; set; } // 签到地点坐标
+
+        public string Address { get; set; } // 签到地点地址
+
+        public int Type { get; set; }   // 签到类型：1-排长签到；2-工人签到
     }
 }

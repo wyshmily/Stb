@@ -37,5 +37,7 @@ namespace Stb.Data.Models
         public List<EndUserDistrict> EndUserDistricts { get; set; }
 
         public List<EndUserJobClass> EndUserJobClasses { get; set; }
+
+        public List<Signment> Signments { get; set; }
     }
 }

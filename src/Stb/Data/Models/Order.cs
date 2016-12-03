@@ -38,6 +38,8 @@ namespace Stb.Data.Models
 
         public string LeadWorkerId { get; set; }  // 选定的班长ID
 
+        public string AcceptWorkerId { get; set; }  // 接受工单的班长ID
+
         public byte State { get; set; } // 施工状态
 
         public int? ProjectId { get; set; } // 项目Id

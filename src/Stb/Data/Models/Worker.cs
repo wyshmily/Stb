@@ -26,8 +26,6 @@ namespace Stb.Data.Models
 
         public List<OrderWorker> OrderWorkers { get; set; } // 作为工人参与的项目
 
-        public List<Signment> Signments { get; set; }
-
         public List<WorkLoad> WorkLoads { get; set; }
 
         public JobClass BestJobClass { get; set; }

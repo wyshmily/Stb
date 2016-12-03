@@ -8,9 +8,10 @@ using Stb.Data;
 namespace Stb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161202102806_AlterSignment")]
+    partial class AlterSignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -350,34 +351,6 @@ namespace Stb.Data.Migrations
                     b.ToTable("InterView");
                 });
 
-            modelBuilder.Entity("Stb.Data.Models.Issue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Audios");
-
-                    b.Property<string>("EndUserId")
-                        .IsRequired();
-
-                    b.Property<int>("IssueType");
-
-                    b.Property<string>("OrderId")
-                        .IsRequired();
-
-                    b.Property<string>("Pics");
-
-                    b.Property<int>("SolutionType");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EndUserId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Issue");
-                });
-
             modelBuilder.Entity("Stb.Data.Models.JobCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -432,40 +405,10 @@ namespace Stb.Data.Migrations
                     b.ToTable("JobMeasurement");
                 });
 
-            modelBuilder.Entity("Stb.Data.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EndUserId")
-                        .IsRequired();
-
-                    b.Property<bool>("IsRead");
-
-                    b.Property<string>("OrderId")
-                        .IsRequired();
-
-                    b.Property<string>("Text");
-
-                    b.Property<string>("Title");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EndUserId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Message");
-                });
-
             modelBuilder.Entity("Stb.Data.Models.Order", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AcceptWorkerId");
 
                     b.Property<DateTime?>("ContactDeadline");
 
@@ -626,8 +569,6 @@ namespace Stb.Data.Migrations
                     b.Property<string>("Pics");
 
                     b.Property<DateTime>("Time");
-
-                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
@@ -840,19 +781,6 @@ namespace Stb.Data.Migrations
                         .HasForeignKey("WorkerId");
                 });
 
-            modelBuilder.Entity("Stb.Data.Models.Issue", b =>
-                {
-                    b.HasOne("Stb.Data.Models.EndUser", "EndUser")
-                        .WithMany()
-                        .HasForeignKey("EndUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Stb.Data.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Stb.Data.Models.JobClass", b =>
                 {
                     b.HasOne("Stb.Data.Models.JobCategory", "JobCategory")
@@ -866,19 +794,6 @@ namespace Stb.Data.Migrations
                     b.HasOne("Stb.Data.Models.JobClass", "JobClass")
                         .WithMany("JobMeasurements")
                         .HasForeignKey("JobClassId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Stb.Data.Models.Message", b =>
-                {
-                    b.HasOne("Stb.Data.Models.EndUser", "EndUser")
-                        .WithMany()
-                        .HasForeignKey("EndUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Stb.Data.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

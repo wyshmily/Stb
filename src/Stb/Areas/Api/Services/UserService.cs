@@ -23,7 +23,8 @@ namespace Stb.Api.Services
             _userManager = userManager;
         }
 
-        public async Task UpdatePushId(ClaimsPrincipal user, string pushId)
+        // 上传个推Id
+        public async Task<bool> UpdatePushIdAsync(ClaimsPrincipal user, string pushId)
         {
             var endUser = await _userManager.GetUserAsync(user);
             if (endUser == null)
@@ -31,8 +32,19 @@ namespace Stb.Api.Services
 
             endUser.PushId = pushId;
             await _userManager.UpdateAsync(endUser);
+            return true;
         }
 
+        // 更改头像
+        public async Task<bool> UpdatePortraitAsync(ClaimsPrincipal user, string portrait)
+        {
+            var endUser = await _userManager.GetUserAsync(user);
+            if (endUser == null)
+                throw new ApiException("用户不存在");
 
+            endUser.Portrait = portrait;
+            await _userManager.UpdateAsync(endUser);
+            return true;
+        }
     }
 }

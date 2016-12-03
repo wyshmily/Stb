@@ -136,7 +136,13 @@
     <None Remove="Properties\PublishProfiles\WebDeploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Stb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

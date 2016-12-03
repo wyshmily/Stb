@@ -30,7 +30,7 @@ namespace Stb.Api.Controllers
         /// <param name="workerIds"></param>
         /// <returns></returns>
         [HttpPost("Workers")]
-        public async Task<IActionResult> SetWorkers([FromForm]string orderId, [FromForm]string leaderId, [FromForm]List<string> workerIds)
+        public async Task<IActionResult> SetWorkersAsync([FromForm]string orderId, [FromForm]string leaderId, [FromForm]List<string> workerIds)
         {
             Order order = await _context.Order.SingleOrDefaultAsync(o => o.Id == orderId);
             if (order == null)

@@ -7,12 +7,24 @@ namespace Stb.Api.Models.AuthViewModels
 {
     public class UserInfo
     {
-        public string uid { get; set; } // 用户id
+        /// <summary>
+        /// 用户Id string类型（uuid）
+        /// </summary>
+        public string UserId { get; set; }
 
-        public string account { get; set; } // 用户账号
+        /// <summary>
+        /// 用户账号（手机号）
+        /// </summary>
+        public string Account { get; set; }
 
-        public string name { get; set; }    // 用户姓名
+        /// <summary>
+        /// 用户姓名
+        /// </summary>
+        public string Name { get; set; }
 
-        public string portrait { get; set; }    // 用户头像
+        /// <summary>
+        /// 用户头像url
+        /// </summary>
+        public string Portrait { get; set; }
     }
 }

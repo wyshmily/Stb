@@ -76,5 +76,9 @@ namespace Stb.Data
 
         //public DbSet<Stb.Data.Models.Program> Program { get; set; }
         public DbSet<Interview> InterView { get; set; }
+
+        public DbSet<Message> Message { get; set; }
+
+        public DbSet<Issue> Issue { get; set; }
     }
 }

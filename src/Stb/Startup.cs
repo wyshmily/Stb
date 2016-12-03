@@ -159,6 +159,7 @@ namespace Stb
             services.AddTransient<WorkerAuthService>();
             services.AddTransient<UserService>();
             services.AddTransient<OrderService>();
+            services.AddTransient<MessageService>();
         }
 
 

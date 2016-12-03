@@ -38,34 +38,45 @@ namespace Stb.Api.Controllers
         /// <summary>
         /// App通用：用户登录
         /// </summary>
-        /// <param name="account"></param>
-        /// <param name="password"></param>
-        /// <param name="deviceid"></param>
-        /// <param name="apptype"></param>
-        /// <returns>token和UserInfo</returns>
+        /// <param name="account">Required - 账号（手机号）</param>
+        /// <param name="password">Required - 密码（明文）</param>
+        /// <param name="deviceId">Required - 设备唯一Id</param>
+        /// <param name="appType">Required - App类型：2-排长端；3-班长端</param>
+        /// <returns>返回JWT Token和用户信息</returns>
         [HttpGet("Login")]
         [AllowAnonymous]
-        public async Task<ApiOutput<LoginData>> LoginAsync([FromQuery]string account, [FromQuery]string password, [FromQuery]string deviceid, [FromQuery]int apptype)
+        public async Task<ApiOutput<LoginData>> LoginAsync([RequiredFromQuery]string account, [RequiredFromQuery]string password, [RequiredFromQuery]string deviceId, [RequiredFromQuery]int appType)
         {
-            if (account == null)
-                throw new ApiException("用户名不能为空");
-            if (deviceid == null)
-                throw new ApiException("设备ID不能为空");
-
-            if (apptype == 2) // 排长端登录
+            if (appType == 2) // 排长端登录
             {
-                LoginData loginData = await _platoonAuthService.LoginAsync(account, password, deviceid);
+                LoginData loginData = await _platoonAuthService.LoginAsync(account, password, deviceId, appType);
                 return new ApiOutput<LoginData>(loginData);
             }
-            else if(apptype == 3) // 班长端登录
+            else if (appType == 3) // 班长端登录
             {
-                LoginData loginData = await _workerAuthService.LoginAsync(account, password, deviceid);
+                LoginData loginData = await _workerAuthService.LoginAsync(account, password, deviceId, appType);
                 return new ApiOutput<LoginData>(loginData);
             }
 
             throw new ApiException("登录设备类型错误。");
         }
 
+        /// <summary>
+        /// App通用：修改密码
+        /// </summary>
+        /// <param name="oldPwd">Required - 当前密码</param>
+        /// <param name="newPwd">Required - 新密码</param>
+        /// <returns></returns>
+        [HttpGet("ChangePwd")]
+        public async Task<ApiOutput<bool>> ChangedPwdAsync([RequiredFromQuery]string oldPwd, [RequiredFromQuery]string newPwd)
+        {
+            int appType = this.AppType();
+            if (appType == 2)
+                return new ApiOutput<bool>(await _platoonAuthService.ChangePwdAsync(this.UserId(), oldPwd, newPwd));
+            else if (appType == 3)
+                return new ApiOutput<bool>(await _workerAuthService.ChangePwdAsync(this.UserId(), oldPwd, newPwd));
 
+            throw new ApiException("登录设备类型错误。");
+        }
     }
 }

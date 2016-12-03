@@ -29,7 +29,8 @@ namespace Stb.Api.Services
             _options = options.Value;
         }
 
-        public async Task<LoginData> LoginAsync(string username, string password, string deviceId)
+        // 排长登录
+        public async Task<LoginData> LoginAsync(string username, string password, string deviceId, int appType)
         {
             var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
@@ -39,9 +40,10 @@ namespace Stb.Api.Services
             var claims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
             claims.Add(new Claim(ClaimTypes.Role, roles.FirstOrDefault()));
+            claims.Add(new Claim("AppType", appType.ToString()));
             //claims.Add(new Claim("DeviceId", deviceId));
 
-            if(user.DeviceId != deviceId)
+            if (user.DeviceId != deviceId)
             {
                 user.DeviceId = deviceId;
                 await _userManager.UpdateAsync(user);
@@ -54,13 +56,22 @@ namespace Stb.Api.Services
 
             UserInfo userInfo = new UserInfo
             {
-                account = username,
-                name = user.Name,
-                portrait = user.Portrait,
-                uid = user.Id,
+                Account = username,
+                Name = user.Name,
+                Portrait = user.Portrait,
+                UserId = user.Id,
             };
 
-            return new LoginData { atoken = token, userInfo = userInfo };
+            return new LoginData { Token = token, UserInfo = userInfo };
+        }
+
+        public async Task<bool> ChangePwdAsync(string userId, string oldPwd, string newPwd)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.ChangePasswordAsync(user, oldPwd, newPwd);
+            if (!result.Succeeded)
+                throw new ApiException(result.Errors.FirstOrDefault()?.Description);
+            return true;
         }
     }
 }

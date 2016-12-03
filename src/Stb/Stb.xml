@@ -8,11 +8,19 @@
             <summary>
             App通用：用户登录
             </summary>
-            <param name="account"></param>
-            <param name="password"></param>
-            <param name="deviceid"></param>
-            <param name="apptype"></param>
-            <returns>token和UserInfo</returns>
+            <param name="account">Required - 账号（手机号）</param>
+            <param name="password">Required - 密码（明文）</param>
+            <param name="deviceId">Required - 设备唯一Id</param>
+            <param name="appType">Required - App类型：2-排长端；3-班长端</param>
+            <returns>返回JWT Token和用户信息</returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.AuthController.ChangedPwdAsync(System.String,System.String)">
+            <summary>
+            App通用：修改密码
+            </summary>
+            <param name="oldPwd">Required - 当前密码</param>
+            <param name="newPwd">Required - 新密码</param>
+            <returns></returns>
         </member>
         <member name="M:Stb.Api.Controllers.ContractorController.GetContractor(System.String)">
             <summary>
@@ -42,7 +50,28 @@
             <param name="categoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.OrderController.SetWorkers(System.String,System.String,System.Collections.Generic.List{System.String})">
+        <member name="M:Stb.Api.Controllers.MessageController.GetMsgCountAsync(System.Int32)">
+            <summary>
+            App通用：未读消息数量
+            </summary>
+            <param name="type">Required - 消息类型：1-平台下单（排长端）；2-排长下单（班长端）；3-班长签到（排长端）；4-施工问题（排长端）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.MessageController.GetMessageAsync(System.Int32)">
+            <summary>
+            App通用：消息列表
+            </summary>
+            <param name="type">Required - 消息类型：1-平台下单（排长端）；2-排长下单（班长端）；3-班长签到（排长端）；4-施工问题（排长端）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.MessageController.SetMessageReadAsync(System.Int32)">
+            <summary>
+            App通用：设置消息已读
+            </summary>
+            <param name="msgId">Required - 消息Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.OrderController.SetWorkersAsync(System.String,System.String,System.Collections.Generic.List{System.String})">
             <summary>
             Web端：排长设置或修改工单班长和工人列表
             </summary>
@@ -59,18 +88,74 @@
             <param name="search"></param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetOrder(System.String)">
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetOrderAsync(System.String)">
             <summary>
             App排长端：工单列表
             </summary>
-            <param name="key">模糊查询</param>
+            <remarks>
+            只返回状态为0（准备状态）和1（施工状态）的工单
+            目前key只对工单号进行查询
+            </remarks>
+            <param name="key">Optional - 工单查询关键字</param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.UserController.UpdatePushId(System.String)">
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.SignInAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            App排长端：排长签到
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <param name="pics">Required - 签到照片，逗号分隔</param>
+            <param name="location">Required - 签到地点坐标 lng,lat</param>
+            <param name="address">Required - 签到地点地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.IsSignInAsync(System.String)">
+            <summary>
+            App排长端：排长当日此工单是否已签到
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetWorkerSignmentsAsync(System.String)">
+            <summary>
+            App排长端：工人签到列表
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetOrderIssueAsync(System.String)">
+            <summary>
+            App排长端：工人记录问题列表
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.GetPlatoonSignmentAsync(System.String)">
+            <summary>
+            App排长端：工单排长签到列表
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.PlatoonOrderController.FinishOrderWorkAsync(System.String)">
+            <summary>
+            App排长端：完成施工
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.UserController.UpdatePushIdAsync(System.String)">
             <summary>
             App通用：上报个推ID
             </summary>
-            <param name="pushId"></param>
+            <param name="pushId">Required - 个推Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.UserController.UpdatePortraitAsync(System.String)">
+            <summary>
+            App通用：更新用户头像
+            </summary>
+            <param name="portrait">Required - 头像url</param>
             <returns></returns>
         </member>
         <member name="M:Stb.Api.Controllers.WorkerController.GetWorkers(System.String)">
@@ -87,12 +172,235 @@
             <param name="search"></param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.WorkerOrderController.GetOrder(System.String)">
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.GetOrderAsync(System.String)">
             <summary>
             App班长端：工单列表
             </summary>
-            <param name="key">模糊查询</param>
+            <remarks>
+            只返回状态为1（施工状态）的工单
+            目前key只对工单号进行查询
+            </remarks>
+            <param name="key">Optional - 工单查询关键字</param>
             <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.AcceptOrderAsync(System.String)">
+            <summary>
+            App班长端：接受工单
+            </summary>
+            <param name="orderId">工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.SignInAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            App班长端：班长签到
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <param name="pics">Required - 签到照片，逗号分隔</param>
+            <param name="location">Required - 签到地点坐标 lng,lat</param>
+            <param name="address">Required - 签到地点地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.SignOutAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            App班长端：班长签退
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <param name="pics">Required - 签到照片，逗号分隔</param>
+            <param name="location">Required - 签到地点坐标 lng,lat</param>
+            <param name="address">Required - 签到地点地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.SignStateAsync(System.String)">
+            <summary>
+            App班长端：今日签到状态
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.SignmentsAsync(System.String)">
+            <summary>
+            App班长端：今日签到信息
+            </summary>
+            <param name="orderId">Required - 工单Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.ReportIssueAsync(System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            App班长端：记录问题
+            </summary>
+            <param name="orderId">Required - 工单id</param>
+            <param name="issueType">Required - 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力</param>
+            <param name="solutionType">Required - 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号</param>
+            <param name="pics">Optional - 图片链接，逗号分隔</param>
+            <param name="audios">Optional - 录音链接，逗号分隔</param>
+            <returns></returns>
+        </member>
+        <member name="P:Stb.Api.Models.ApiOutput`1.Code">
+            <summary>
+            返回代码<br />
+            Api本身调用成功时（HttpStatusCode = 200）<br />
+            <ul>
+                <li>A0000 - 执行成功，没有错误</li>
+                <li>B0000 - 已知错误，Msg包含错误信息</li>
+                <li>E0000 - 未知错误，Msg包含错误信息，但可读性较低，并且是英文</li>
+            </ul>
+            在一些情况下Api可能返回其它状态码，包括<br />
+            <ul>
+                <li>501 - UnAuthorized，权限认证失败时返回UnAuthorized</li>
+                <li>404 - NotFound，没有此接口或者遗漏必须的调用参数时返回NotFound</li>
+                <li>其它 - 如果有的话再补充</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.ApiOutput`1.Msg">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.ApiOutput`1.Data">
+            <summary>
+            返回数据
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.AuthViewModels.LoginData.Token">
+            <summary>
+            Jwt Token
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.AuthViewModels.UserInfo.UserId">
+            <summary>
+            用户Id string类型（uuid）
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.AuthViewModels.UserInfo.Account">
+            <summary>
+            用户账号（手机号）
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.AuthViewModels.UserInfo.Name">
+            <summary>
+            用户姓名
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.AuthViewModels.UserInfo.Portrait">
+            <summary>
+            用户头像url
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Id">
+            <summary>
+            消息Id
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.OrderId">
+            <summary>
+            工单Id
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Type">
+            <summary>
+            消息类型：1-平台下单（排长端）；2-排长下单（班长端）；3-班长签到（排长端）；4-施工问题（排长端）
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Title">
+            <summary>
+            消息标题
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.Text">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.IsRead">
+            <summary>
+            是否已读：true-已读；false-未读
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.OrderId">
+            <summary>
+            工单编号
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.Contactor">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.Phone">
+            <summary>
+            联系电话
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.State">
+            <summary>
+            工单状态 0-准备状态；1-施工状态；2-完成
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Time">
+            <summary>
+            签到、签退时间
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Location">
+            <summary>
+            签到、签退地点坐标
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Address">
+            <summary>
+            签到地点地址
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Pics">
+            <summary>
+            签到照片，逗号分隔
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.InOut">
+            <summary>
+            签到还是签退：true-签到；false-签退
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.OrderId">
+            <summary>
+            工单编号
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.Contactor">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.Phone">
+            <summary>
+            联系电话
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.State">
+            <summary>
+            工单状态 0-准备状态；1-施工状态；2-完成
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.Accepted">
+            <summary>
+            是否已接受
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerSignmentData.State">
+            <summary>
+            签到状态：0-无签到信息；1-已签到；2-已签退
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerSignmentData.SignIn">
+            <summary>
+            签到数据
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerSignmentData.SignOut">
+            <summary>
+            签退数据
+            </summary>
         </member>
     </members>
 </doc>

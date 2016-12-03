@@ -7,7 +7,10 @@ namespace Stb.Api.Models.AuthViewModels
 {
     public class LoginData
     {
-        public string atoken { get; set; }
-        public UserInfo userInfo { get; set; }
+        /// <summary>
+        /// Jwt Token
+        /// </summary>
+        public string Token { get; set; }
+        public UserInfo UserInfo { get; set; }
     }
 }
