@@ -334,6 +334,11 @@
             签到还是签退：true-签到；false-签退
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.MessageViewModels.MessageData.RootUserName">
+            <summary>
+            产生消息的用户姓名
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.OrderViewModels.PlatoonOrderData.OrderId">
             <summary>
             工单编号

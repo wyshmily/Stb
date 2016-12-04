@@ -14,6 +14,8 @@ namespace Stb.Data.Models
         [Required]
         public string EndUserId { get; set; }   // 用户Id
 
+        public string RootUserName { get; set; } // 产生消息的用户姓名
+
         [Required]
         public string OrderId { get; set; } // 工单Id
 

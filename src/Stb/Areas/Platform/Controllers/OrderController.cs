@@ -147,6 +147,7 @@ namespace Stb.Platform.Controllers
                     Text = $"工单{order.Id}已由平台下发",
                     Time = DateTime.Now,
                     Type = 1,
+                    RootUserName = "平台",
                 };
                 _context.Message.Add(message);
 

@@ -8,18 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Order")]
+    [Authorize(Roles = Roles.Platoon)]
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Platoon> _userManager;
 
-        public OrderController(ApplicationDbContext context)
+        public OrderController(ApplicationDbContext context, UserManager<Platoon>userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -56,6 +60,7 @@ namespace Stb.Api.Controllers
                 order.LeadWorkerId = leaderId;
 
                 // 添加消息
+                Platoon platoon = await _userManager.GetUserAsync(User);
                 Message message = new Message
                 {
                     EndUserId = leaderId,
@@ -65,6 +70,7 @@ namespace Stb.Api.Controllers
                     Text = $"工单{order.Id}已下发",
                     Time = DateTime.Now,
                     Type = 2,
+                    RootUserName = platoon?.Name,
                 };
                 _context.Message.Add(message);
 

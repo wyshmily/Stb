@@ -23,10 +23,10 @@ namespace Stb.Api.Services
             return await _context.Message.CountAsync(m => m.EndUserId == userId && m.Type == type && m.IsRead == false);
         }
 
-        // 工人
+        // 消息列表
         public async Task<List<MessageData>> GetMessageAsync(string userId, int type)
         {
-            var list = await _context.Message.Where(m => m.EndUserId == userId && m.Type == type).OrderByDescending(m => m.Id).ToListAsync();
+            var list = await _context.Message.Include(m=>m.EndUser).Where(m => m.EndUserId == userId && m.Type == type).OrderByDescending(m => m.Id).ToListAsync();
 
             return list.Select(m => new MessageData(m)).ToList();
         }

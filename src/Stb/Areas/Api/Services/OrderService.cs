@@ -119,6 +119,10 @@ namespace Stb.Api.Services
         // 班长签到、签退
         public async Task<bool> WorkerSignInAsync(string userId, string orderId, string pics, string location, string address, bool inOut)
         {
+            Order order = await _context.Order.FindAsync(orderId);
+            if (order == null)
+                throw new ApiException("工单不存在");
+
             // todo：比对签到地点和施工地点
             // 
 
@@ -149,7 +153,7 @@ namespace Stb.Api.Services
             {
                 Message message = new Message
                 {
-                    EndUserId = userId,
+                    EndUserId = order.PlatoonId,
                     IsRead = false,
                     OrderId = orderId,
                     Title = $"{(inOut ? "签到" : "签退")}消息",
@@ -157,6 +161,7 @@ namespace Stb.Api.Services
                     Time = DateTime.Now,
                     Type = 3,
                     InOut = inOut,
+                    RootUserName = worker.Name,
                 };
                 _context.Message.Add(message);
             }
@@ -208,6 +213,10 @@ namespace Stb.Api.Services
         // 班长记录问题
         public async Task<bool> WorkerReportIssueAsync(string userId, string orderId, int issueType, int solutionType, string pics, string audios)
         {
+            Order order = await _context.Order.FindAsync(orderId);
+            if (order == null)
+                throw new ApiException("工单不存在");
+
             Issue issue = new Issue
             {
                 EndUserId = userId,
@@ -226,13 +235,14 @@ namespace Stb.Api.Services
             {
                 Message message = new Message
                 {
-                    EndUserId = userId,
+                    EndUserId = order.PlatoonId,
                     IsRead = false,
                     OrderId = orderId,
                     Title = "新消息",
                     Text = $"工单{orderId}有来自{worker.Name}的施工问题消息",
                     Time = DateTime.Now,
                     Type = 4,
+                    RootUserName = worker.Name,
                 };
                 _context.Message.Add(message);
             }

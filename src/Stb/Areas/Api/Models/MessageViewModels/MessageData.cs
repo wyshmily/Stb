@@ -48,6 +48,11 @@ namespace Stb.Api.Models.MessageViewModels
         /// 签到还是签退：true-签到；false-签退
         /// </summary>
         public bool InOut { get; set; }
+        
+        /// <summary>
+        /// 产生消息的用户姓名
+        /// </summary>
+        public string RootUserName { get; set; }
 
         public MessageData(Message message)
         {
@@ -59,6 +64,7 @@ namespace Stb.Api.Models.MessageViewModels
             Text = message.Text;
             IsRead = message.IsRead;
             InOut = message.InOut;
+            RootUserName = message.RootUserName;
         }
     }
 }
