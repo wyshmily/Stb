@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Stb.Api.JwtToken;
-using Stb.Api.Models.AuthViewModels;
+﻿using Microsoft.EntityFrameworkCore;
 using Stb.Api.Models.OrderViewModels;
 using Stb.Data;
 using Stb.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Stb.Api.Services
@@ -28,7 +21,7 @@ namespace Stb.Api.Services
         // 排长工单列表
         public async Task<List<PlatoonOrderData>> GetPlatoonOrdersAsync(string userId, string key)
         {
-            var query = _context.Order.Include(o => o.ContractorStaff).Where(o => o.PlatoonId == userId && o.State <= 1);
+            var query = _context.Order.Include(o => o.ContractorStaff).Include(o => o.LeadWorker).Where(o => o.PlatoonId == userId && o.State <= 1);
 
             if (!string.IsNullOrWhiteSpace(key))
                 query = query.Where(o => o.Id.Contains(key));
@@ -41,7 +34,7 @@ namespace Stb.Api.Services
         // 班长工单列表
         public async Task<List<WorkerOrderData>> GetWorkerOrdersAsync(string userId, string key)
         {
-            var query = _context.Order.Include(o => o.ContractorStaff).Where(o => o.LeadWorkerId == userId && o.State == 1);
+            var query = _context.Order.Include(o => o.ContractorStaff).Include(o => o.District).Include(o => o.Platoon).Where(o => o.LeadWorkerId == userId && o.State == 1);
 
             if (!string.IsNullOrWhiteSpace(key))
                 query = query.Where(o => o.Id.Contains(key));
@@ -84,6 +77,7 @@ namespace Stb.Api.Services
                 Address = address,
                 InOut = true,
                 Time = now,
+                Type = 1,
             };
             _context.Add(signment);
             await _context.SaveChangesAsync();
@@ -102,13 +96,13 @@ namespace Stb.Api.Services
         {
             var progressData = new ProgressData();
 
-            var signmentQuery = _context.Signment.Where(s => s.OrderId == orderId && s.Type == 2).OrderByDescending(s => s.Id);
+            var signmentQuery = _context.Signment.Include(s => s.EndUser).Where(s => s.OrderId == orderId && s.Type == 2).OrderByDescending(s => s.Id);
 
             progressData.SignmentCount = await signmentQuery.CountAsync();
             if (progressData.SignmentCount > 0)
                 progressData.Signment = new SignmentData(await signmentQuery.FirstAsync());
 
-            var issueQuery = _context.Issue.Where(i => i.OrderId == orderId).OrderByDescending(i => i.Id);
+            var issueQuery = _context.Issue.Include(i => i.EndUser).Where(i => i.OrderId == orderId).OrderByDescending(i => i.Id);
             progressData.IssueCount = await issueQuery.CountAsync();
             if (progressData.IssueCount > 0)
                 progressData.Issue = new IssueData(await issueQuery.FirstAsync());
@@ -144,6 +138,7 @@ namespace Stb.Api.Services
                 Address = address,
                 InOut = inOut,
                 Time = now,
+                Type = 2,
             };
             _context.Add(signment);
 
@@ -191,7 +186,7 @@ namespace Stb.Api.Services
         {
             DateTime now = DateTime.Now;
 
-            var signments = await _context.Signment.Where(s => s.OrderId == orderId && s.EndUserId == userId && s.Time.Date == now.Date).ToListAsync();
+            var signments = await _context.Signment.Include(s => s.EndUser).Where(s => s.OrderId == orderId && s.EndUserId == userId && s.Time.Date == now.Date).ToListAsync();
 
             var signmentData = new WorkerSignmentData { State = signments.Count };
             if (signmentData.State >= 1)
@@ -204,7 +199,7 @@ namespace Stb.Api.Services
         // 工人签到列表
         public async Task<List<SignmentData>> GetWorkerSignmentsAsync(string orderId)
         {
-            var list = await _context.Signment.Where(s => s.OrderId == orderId && s.Type == 2).OrderByDescending(s => s.Id).ToListAsync();
+            var list = await _context.Signment.Include(s => s.EndUser).Where(s => s.OrderId == orderId && s.Type == 2).OrderByDescending(s => s.Id).ToListAsync();
 
             return list.Select(s => new SignmentData(s)).ToList();
         }
@@ -217,10 +212,12 @@ namespace Stb.Api.Services
             if (order == null)
                 throw new ApiException("工单不存在");
 
+            DateTime now = DateTime.Now;
             Issue issue = new Issue
             {
                 EndUserId = userId,
                 OrderId = orderId,
+                Time = now,
                 IssueType = issueType,
                 SolutionType = solutionType,
                 Pics = pics,
@@ -240,7 +237,7 @@ namespace Stb.Api.Services
                     OrderId = orderId,
                     Title = "新消息",
                     Text = $"工单{orderId}有来自{worker.Name}的施工问题消息",
-                    Time = DateTime.Now,
+                    Time = now,
                     Type = 4,
                     RootUserName = worker.Name,
                 };
@@ -258,14 +255,14 @@ namespace Stb.Api.Services
         // 工单问题列表
         public async Task<List<IssueData>> GetIssueAsync(string orderId)
         {
-            var list = await _context.Issue.Where(i => i.OrderId == orderId).ToListAsync();
+            var list = await _context.Issue.Include(s => s.EndUser).Where(i => i.OrderId == orderId).ToListAsync();
             return list.Select(i => new IssueData(i)).ToList();
         }
 
         // 工单排长签到列表
         public async Task<List<SignmentData>> GetPlatoonSignmentAsync(string orderId)
         {
-            var list = await _context.Signment.Where(s => s.OrderId == orderId && s.Type == 1).OrderByDescending(s => s.Id).ToListAsync();
+            var list = await _context.Signment.Include(s => s.EndUser).Where(s => s.OrderId == orderId && s.Type == 1).OrderByDescending(s => s.Id).ToListAsync();
 
             return list.Select(s => new SignmentData(s)).ToList();
         }

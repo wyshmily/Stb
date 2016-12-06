@@ -13,6 +13,8 @@ namespace Stb.Api.Models.OrderViewModels
             OrderId = order.Id;
             Contactor = order.ContractorStaff?.Name;
             Phone = order.ContractorStaff?.Phone;
+            LeadWorkerName = order.LeadWorker?.Name;
+            LeadWorkerName = order.LeadWorker?.UserName;
             State = order.State;
         }
 
@@ -32,8 +34,19 @@ namespace Stb.Api.Models.OrderViewModels
         public string Phone { get; set; }
 
         /// <summary>
+        /// 工单班长姓名
+        /// </summary>
+        public string LeadWorkerName { get; set; }
+
+        /// <summary>
+        /// 工单班长手机号
+        /// </summary>
+        public string LeadWorkerPhone { get; set; }
+
+        /// <summary>
         /// 工单状态 0-准备状态；1-施工状态；2-完成
         /// </summary>
         public int State { get; set; } 
+
     }
 }

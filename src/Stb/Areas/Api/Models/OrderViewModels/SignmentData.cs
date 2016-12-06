@@ -10,6 +10,16 @@ namespace Stb.Api.Models.OrderViewModels
     public class SignmentData
     {
         /// <summary>
+        /// 签到用户Id
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// 签到用户姓名
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
         /// 签到、签退时间
         /// </summary>
         public long Time { get; set; }
@@ -36,6 +46,8 @@ namespace Stb.Api.Models.OrderViewModels
 
         public SignmentData(Signment signment)
         {
+            UserId = signment.EndUserId;
+            UserName = signment.EndUser?.Name;
             Time = signment.Time.ToUnixEpochDate();
             Location = signment.Location;
             Address = signment.Address;

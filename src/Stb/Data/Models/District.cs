@@ -28,5 +28,12 @@ namespace Stb.Data.Models
         public List<EndUserDistrict> EndUserDistricts { get; set; }
 
         public List<Order> Orders { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return $"{ProvinceName} {CityName} {Name}";
+            }
+        }
     }
 }

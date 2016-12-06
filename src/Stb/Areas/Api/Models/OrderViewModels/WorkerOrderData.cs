@@ -15,6 +15,13 @@ namespace Stb.Api.Models.OrderViewModels
             Phone = order.ContractorStaff?.Phone;
             State = order.State;
             Accepted = order.LeadWorkerId == order.AcceptWorkerId;
+            District = order.District?.FullName;
+            Address = order.WorkAddress;
+            Location = order.WorkLocation;
+            Description = order.Description;
+            ExpectedDays = order.ExpectedDays;
+            PlatoonName = order.Platoon?.Name;
+            PlatoonPhone = order.Platoon?.UserName;
         }
 
         /// <summary>
@@ -36,6 +43,41 @@ namespace Stb.Api.Models.OrderViewModels
         /// 工单状态 0-准备状态；1-施工状态；2-完成
         /// </summary>
         public int State { get; set; }
+
+        /// <summary>
+        /// 施工区域
+        /// </summary>
+        public string District { get; set; }
+        
+        /// <summary>
+        /// 施工地址
+        /// </summary>
+        public string Address { get; set; }
+      
+        /// <summary>
+        /// 施工地点坐标
+        /// </summary>
+        public string Location { get; set; }
+
+        /// <summary>
+        /// 施工描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 预计施工天数
+        /// </summary>
+        public int? ExpectedDays { get; set; }
+
+        /// <summary>
+        /// 工单排长姓名
+        /// </summary>
+        public string PlatoonName { get; set; }
+
+        /// <summary>
+        /// 工单班长手机
+        /// </summary>
+        public string PlatoonPhone { get; set; }
 
         /// <summary>
         /// 是否已接受
