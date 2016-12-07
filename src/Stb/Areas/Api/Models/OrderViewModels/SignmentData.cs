@@ -48,7 +48,7 @@ namespace Stb.Api.Models.OrderViewModels
         {
             UserId = signment.EndUserId;
             UserName = signment.EndUser?.Name;
-            Time = signment.Time.ToUnixEpochDate();
+            Time = signment.Time.ToUnixSeconds();
             Location = signment.Location;
             Address = signment.Address;
             Pics = signment.Pics;

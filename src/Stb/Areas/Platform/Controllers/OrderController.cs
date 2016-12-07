@@ -9,6 +9,7 @@ using Stb.Data;
 using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Stb.Platform.Models.OrderViewModels;
+using Stb.Api.Services.Push;
 
 namespace Stb.Platform.Controllers
 {
@@ -17,10 +18,12 @@ namespace Stb.Platform.Controllers
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPushService _pushService;
 
-        public OrderController(ApplicationDbContext context)
+        public OrderController(ApplicationDbContext context, IPushService pushService)
         {
             _context = context;
+            _pushService = pushService;
         }
 
         // GET: Order
@@ -151,10 +154,22 @@ namespace Stb.Platform.Controllers
                 };
                 _context.Message.Add(message);
 
-                // todo 推送通知
-                // 
+                // 推送通知
+                Platoon platoon = _context.Platoon.Find(order.PlatoonId);
+                if (platoon?.PushId != null)
+                {
+                    await _pushService.PushToSingleAsync(platoon.PushId,
+                        new
+                        {
+                            orderid = message.OrderId,
+                            title = message.Title,
+                            text = message.Text,
+                            msgtype = message.Type,
+                        });
+                }
 
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Stb.Api.Models.OrderViewModels;
+using Stb.Api.Services.Push;
 using Stb.Data;
 using Stb.Data.Models;
 using System;
@@ -12,10 +13,12 @@ namespace Stb.Api.Services
     public class OrderService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPushService _pushService;
 
-        public OrderService(ApplicationDbContext context)
+        public OrderService(ApplicationDbContext context, IPushService pushService)
         {
             _context = context;
+            _pushService = pushService;
         }
 
         // 排长工单列表
@@ -159,10 +162,21 @@ namespace Stb.Api.Services
                     RootUserName = worker.Name,
                 };
                 _context.Message.Add(message);
-            }
 
-            // todo 推送通知
-            // 
+                // 推送通知
+                Platoon platoon = await _context.Platoon.FindAsync(order.PlatoonId);
+                if (platoon?.PushId != null)
+                {
+                    await _pushService.PushToSingleAsync(worker.PushId,
+                            new
+                            {
+                                orderid = message.OrderId,
+                                title = message.Title,
+                                text = message.Text,
+                                msgtype = message.Type,
+                            });
+                }
+            }
 
             await _context.SaveChangesAsync();
             return true;
@@ -242,10 +256,21 @@ namespace Stb.Api.Services
                     RootUserName = worker.Name,
                 };
                 _context.Message.Add(message);
-            }
 
-            // todo 推送通知
-            // 
+                // 推送通知
+                Platoon platoon = await _context.Platoon.FindAsync(order.PlatoonId);
+                if (platoon?.PushId != null)
+                {
+                    await _pushService.PushToSingleAsync(worker.PushId,
+                            new
+                            {
+                                orderid = message.OrderId,
+                                title = message.Title,
+                                text = message.Text,
+                                msgtype = message.Type,
+                            });
+                }
+            }
 
             await _context.SaveChangesAsync();
 

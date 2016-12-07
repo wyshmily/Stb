@@ -58,7 +58,7 @@ namespace Stb.Api.Models.MessageViewModels
         {
             Id = message.Id;
             OrderId = message.OrderId;
-            Time = message.Time.ToUnixEpochDate();
+            Time = message.Time.ToUnixSeconds();
             Type = message.Type;
             Title = message.Title;
             Text = message.Text;

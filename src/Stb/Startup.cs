@@ -25,6 +25,7 @@ using Microsoft.Extensions.Options;
 using Stb.Api.Services;
 using Swashbuckle.Swagger.Model;
 using Microsoft.Extensions.PlatformAbstractions;
+using Stb.Api.Services.Push;
 
 namespace Stb
 {
@@ -160,6 +161,8 @@ namespace Stb
             services.AddTransient<UserService>();
             services.AddTransient<OrderService>();
             services.AddTransient<MessageService>();
+
+            services.AddTransient<IPushService, GetuiService>();
         }
 
 

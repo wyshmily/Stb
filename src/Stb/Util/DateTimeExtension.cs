@@ -7,6 +7,8 @@ namespace Stb.Util
 {
     public static class DateTimeExtension
     {
-        public static long ToUnixEpochDate(this DateTime date) => new DateTimeOffset(date).ToUniversalTime().ToUnixTimeSeconds();
+        public static long ToUnixSeconds(this DateTime date) => new DateTimeOffset(date).ToUniversalTime().ToUnixTimeSeconds();
+
+        public static long ToUnixMilliSeconds(this DateTime date) => new DateTimeOffset(date).ToUniversalTime().ToUnixTimeMilliseconds();
     }
 }

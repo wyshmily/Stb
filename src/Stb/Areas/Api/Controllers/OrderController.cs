@@ -9,6 +9,7 @@ using Stb.Data;
 using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Stb.Api.Services.Push;
 
 namespace Stb.Api.Controllers
 {
@@ -19,11 +20,13 @@ namespace Stb.Api.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Platoon> _userManager;
+        private readonly IPushService _pushService;
 
-        public OrderController(ApplicationDbContext context, UserManager<Platoon>userManager)
+        public OrderController(ApplicationDbContext context, UserManager<Platoon>userManager, IPushService pushService)
         {
             _context = context;
             _userManager = userManager;
+            _pushService = pushService;
         }
 
         /// <summary>
@@ -74,8 +77,19 @@ namespace Stb.Api.Controllers
                 };
                 _context.Message.Add(message);
 
-                // todo 推送通知
-                // 
+                // 推送通知
+                Worker worker = await _context.Worker.FindAsync(leaderId);
+                if(worker?.PushId != null)
+                {
+                    await _pushService.PushToSingleAsync(worker.PushId,
+                        new
+                        {
+                            orderid = message.OrderId,
+                            title = message.Title,
+                            text = message.Text,
+                            msgtype = message.Type,
+                        });
+                }
             }
 
             List<OrderWorker> curOrderWorkers = await _context.OrderWorker.Where(ow => ow.OrderId == orderId).ToListAsync();

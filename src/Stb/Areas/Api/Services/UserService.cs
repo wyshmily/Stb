@@ -17,10 +17,12 @@ namespace Stb.Api.Services
     public class UserService
     {
         private readonly UserManager<EndUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public UserService(UserManager<EndUser> userManager)
+        public UserService(UserManager<EndUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         // 上传个推Id
@@ -32,6 +34,14 @@ namespace Stb.Api.Services
 
             endUser.PushId = pushId;
             await _userManager.UpdateAsync(endUser);
+
+            var users = _context.EndUser.Where(u => u.Id != endUser.Id && u.PushId == pushId).ToList();
+            foreach (var other in users)
+            {
+                other.PushId = null;
+            }
+            await _context.SaveChangesAsync();
+
             return true;
         }
 

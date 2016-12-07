@@ -17,6 +17,9 @@
     <EmbeddedResource Include="compiler\resources\**\*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="flurl.http">
+      <Version>1.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Tools">
       <Version>1.1.0-preview4-final</Version>
     </PackageReference>

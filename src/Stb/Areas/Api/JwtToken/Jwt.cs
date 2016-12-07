@@ -19,7 +19,7 @@ namespace Stb.Api.JwtToken
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, now.ToUnixEpochDate().ToString(), ClaimValueTypes.Integer64)
+                new Claim(JwtRegisteredClaimNames.Iat, now.ToUnixSeconds().ToString(), ClaimValueTypes.Integer64)
             };
 
             foreach (var claim in identity.Claims)
