@@ -25,14 +25,14 @@
                 @Html.DisplayNameFor(model => model.PlatoonName)
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContactDeadline)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WorkAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContactDeadline)
+                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
@@ -62,23 +62,23 @@
                     </a>
                 </td>
                 @*<td>
-                    <pre>@Html.DisplayFor(modelItem => item.Description)</pre>
-                </td>
-                <td>
-                    @if (item.District != null)
-                    {
-                        @Html.DisplayFor(modelItem => item.District.ProvinceName)
-                        <span> </span>
-                        @Html.DisplayFor(modelItem => item.District.CityName)
-                        <span> </span>
-                        @Html.DisplayFor(modelItem => item.District.DistrictName)
-                        <br />
-                    }
-                    <pre>@Html.DisplayFor(modelItem => item.WorkAddress)</pre>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContactDeadline)
-                </td>*@
+                        <pre>@Html.DisplayFor(modelItem => item.Description)</pre>
+                    </td>
+                    <td>
+                        @if (item.District != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.District.ProvinceName)
+                            <span> </span>
+                            @Html.DisplayFor(modelItem => item.District.CityName)
+                            <span> </span>
+                            @Html.DisplayFor(modelItem => item.District.DistrictName)
+                            <br />
+                        }
+                        <pre>@Html.DisplayFor(modelItem => item.WorkAddress)</pre>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContactDeadline)
+                    </td>*@
                 <td>
                     @if (item.State == 0)
                     {
@@ -94,9 +94,22 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">修改</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">详情</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">详情</a>
+                    @if (item.State <= 1)
+                    {
+                        <span> |</span>
+                        <a asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                    }
+                    @if (item.State == 0)
+                    {
+                        <span> |</span>
+                        <a asp-action="Delete" ifp-route-id="@item.Id">删除</a>
+                    }
+                    @if (item.State == 2)
+                    {
+                        <span> |</span>
+                        <a asp-action="Evaluate" ifp-route-id="@item.Id">客户评价</a>
+                    }
                 </td>
             </tr>
         }

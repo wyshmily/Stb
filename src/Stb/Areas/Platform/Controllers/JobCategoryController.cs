@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.PlatformUser)]
+    [Authorize(Roles = Roles.AdminAndCustomerService)]
     [Area(AreaNames.Platform)]
     public class JobCategoryController : Controller
     {

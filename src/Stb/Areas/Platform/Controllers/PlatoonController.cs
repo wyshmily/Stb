@@ -32,6 +32,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Platoon
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Index(int page = 1)
         {
             int total = _userManager.Users.Count();
@@ -66,6 +67,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Platoon/Create
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public IActionResult Create()
         {
             return View(new PlatoonViewModel(new Platoon()));
@@ -76,6 +78,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Create(PlatoonViewModel platoonViewModel)
         {
             if (ModelState.IsValid)
@@ -149,6 +152,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Platoon/Edit/5
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -174,6 +178,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id, PlatoonViewModel platoonViewModel)
         {
             if (id != platoonViewModel.Id)
@@ -272,6 +277,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Platoon/Delete/5
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -296,9 +302,10 @@ namespace Stb.Platform.Controllers
         // POST: Platoon/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            foreach(var interview in _context.InterView.Where(i=>i.PlatoonId == id))
+            foreach (var interview in _context.InterView.Where(i => i.PlatoonId == id))
             {
                 interview.PlatoonId = null;
             }

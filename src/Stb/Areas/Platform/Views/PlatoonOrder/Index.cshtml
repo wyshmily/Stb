@@ -65,8 +65,23 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">工单信息</a> |
-                    <a asp-action="Organize" asp-route-id="@item.Id">人员组织</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">工单信息</a>
+                    @if (item.State <= 1)
+                    {
+                        <span> |</span>
+                        <a asp-action="Organize" asp-route-id="@item.Id">人员组织</a>
+                    }
+                    @if (item.State == 2)
+                    {
+                        <span> |</span>
+                        <a asp-action="OrderEvaluate" asp-route-id="@item.Id">工单评价</a>
+
+                        @if (item.LeadWorkerIsCandidate == true)
+                        {
+                            <span> |</span>
+                            <a asp-action="TrailEvaluate" asp-route-id="@item.Id">试单评价</a>
+                        }
+                    }
                 </td>
             </tr>
         }

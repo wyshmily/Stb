@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Stb.Platform.Controllers
 {
     [Authorize]
-    [Area(AreaNames.Platform)]
+    [Authorize(Roles = Roles.AdminAndCustomerService)]
     public class ContractorStaffController : Controller
     {
         private readonly ApplicationDbContext _context;

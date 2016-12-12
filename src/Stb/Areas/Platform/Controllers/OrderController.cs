@@ -10,6 +10,8 @@ using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Stb.Platform.Models.OrderViewModels;
 using Stb.Api.Services.Push;
+using Stb.Api.Services;
+using Stb.Data.Comparer;
 
 namespace Stb.Platform.Controllers
 {
@@ -27,7 +29,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Index(int page = 1)
         {
             int total = _context.Order.Count();
@@ -35,7 +37,7 @@ namespace Stb.Platform.Controllers
             ViewBag.Page = page;
             var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
-                .OrderByDescending(p=>p.Id)
+                .OrderByDescending(p => p.Id)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();
@@ -60,7 +62,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Create
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Create()
         {
             ViewBag.Projects = new SelectList(await _context.Project.ToListAsync(), "Id", "Name");
@@ -72,7 +74,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Create(OrderViewModel orderViewModel)
         {
             if (ModelState.IsValid)
@@ -83,7 +85,7 @@ namespace Stb.Platform.Controllers
                 await _context.SaveChangesAsync();
 
                 Order order = orderViewModel.ToOrder();
-                order.Id = $"pb{DateTime.Today:yyyyMMdd}{(indexer.Id + 10000):D5}";
+                order.Id = $"{DateTime.Today:yyMMdd}{(indexer.Id + 10000):D5}";
 
 
                 if (order.ContractorId == null)
@@ -140,6 +142,15 @@ namespace Stb.Platform.Controllers
 
                 _context.Add(order);
 
+                if (orderViewModel.WorkLoads != null)
+                {
+                    foreach (var workLoadViewModel in orderViewModel.WorkLoads)
+                    {
+                        WorkLoad workLoad = workLoadViewModel.ToWorkLoad();
+                        _context.Add(workLoad);
+                    }
+                }
+
                 // ÃÌº”œ˚œ¢
                 Message message = new Message
                 {
@@ -178,7 +189,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Edit/5
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -186,7 +197,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
@@ -200,7 +211,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id, OrderViewModel orderViewModel)
         {
             if (id != orderViewModel.Id)
@@ -265,6 +276,13 @@ namespace Stb.Platform.Controllers
                         }
                     }
                     _context.Update(order);
+
+                    List<WorkLoad> curWorkLoads = await _context.WorkLoad.Where(w => w.OrderId == id && w.WorkerId == null).ToListAsync();
+                    List<WorkLoad> workLoads = orderViewModel.WorkLoads.Select(w => w.ToWorkLoad()).ToList();
+
+                    _context.WorkLoad.RemoveRange(curWorkLoads.Except(workLoads, new WorkLoadComparer()));
+                    _context.WorkLoad.AddRange(workLoads.Except(curWorkLoads, new WorkLoadComparer()));
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -285,7 +303,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Delete/5
-        [Authorize(Roles = Roles.PlatformUser)]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -312,6 +330,31 @@ namespace Stb.Platform.Controllers
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> Evaluate(string id)
+        {
+            OrderEvaluate_Customer evaluate = await _context.OrderEvaluate_Customer.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
+
+            ViewBag.OrderId = id;
+            return View(evaluate);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEvaluate(OrderEvaluate_Customer evaluate)
+        {
+            if (ModelState.IsValid)
+            {
+                evaluate.Type = 4;
+                evaluate.EvaluateUserId = this.UserId();
+                evaluate.Time = DateTime.Now;
+
+                _context.OrderEvaluate_Customer.Add(evaluate);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Evaluate", new { id = evaluate.OrderId });
         }
 
 

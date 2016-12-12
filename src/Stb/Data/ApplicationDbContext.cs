@@ -80,5 +80,19 @@ namespace Stb.Data
         public DbSet<Message> Message { get; set; }
 
         public DbSet<Issue> Issue { get; set; }
+
+        public DbSet<Evaluate> Evaluate { get; set; }
+
+        public DbSet<OrderEvaluate> OrderEvaluate { get; set; }
+
+        public DbSet<OrderEvaluate_QualityControl> OrderEvaluate_QualityControl { get; set; }
+
+        public DbSet<OrderEvaluate_Customer> OrderEvaluate_Customer { get; set; }
+
+        public DbSet<OrderEvaluate_Platoon> OrderEvaluate_Platoon { get; set; }
+
+        public DbSet<WorkerEvaluate> WorkerEvaluate { get; set; }
+
+        public DbSet<TrailEvaluate> TrailEvaluate { get; set; }
     }
 }

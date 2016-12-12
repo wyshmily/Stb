@@ -1,5 +1,6 @@
 ﻿using Stb.Data.Models;
 using Stb.Platform.Models.DistrictViewModels;
+using Stb.Platform.Models.WorkLoadViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -81,6 +82,9 @@ namespace Stb.Platform.Models.OrderViewModels
 
         public DistrictViewModel District { get; set; } // 施工所在地区
 
+        [Display(Name = "工作量")]
+        public List<WorkLoadViewModel> WorkLoads { get; set; }
+
         public OrderViewModel()
         {
         }
@@ -107,6 +111,8 @@ namespace Stb.Platform.Models.OrderViewModels
             ProjectName = order.Project?.Name;
             if (order.District != null)
                 District = new DistrictViewModel(order.District);
+            if (order.WorkLoads != null)
+                WorkLoads = order.WorkLoads.Select(w => new WorkLoadViewModel(w)).ToList();
         }
 
         public Order ToOrder()

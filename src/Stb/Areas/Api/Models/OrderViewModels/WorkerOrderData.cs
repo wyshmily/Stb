@@ -19,9 +19,12 @@ namespace Stb.Api.Models.OrderViewModels
             Address = order.WorkAddress;
             Location = order.WorkLocation;
             Description = order.Description;
+            ExpectedStartTime = order.ExpectedStartTime?.ToString("yyyy年M月d日");
             ExpectedDays = order.ExpectedDays;
             PlatoonName = order.Platoon?.Name;
             PlatoonPhone = order.Platoon?.UserName;
+
+            Workers = order.OrderWorkers?.Where(ow => ow.WorkerId != order.LeadWorkerId).Select(ow => new WorkerData(ow.Worker)).ToList();
         }
 
         /// <summary>
@@ -65,6 +68,11 @@ namespace Stb.Api.Models.OrderViewModels
         public string Description { get; set; }
 
         /// <summary>
+        /// 项目预计开始时间
+        /// </summary>
+        public string ExpectedStartTime { get; set; }
+
+        /// <summary>
         /// 预计施工天数
         /// </summary>
         public int? ExpectedDays { get; set; }
@@ -83,5 +91,10 @@ namespace Stb.Api.Models.OrderViewModels
         /// 是否已接受
         /// </summary>
         public bool Accepted { get; set; }
+
+        /// <summary>
+        /// 工单工人列表
+        /// </summary>
+        public List<WorkerData> Workers { get; set; }
     }
 }

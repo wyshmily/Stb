@@ -44,6 +44,10 @@ namespace Stb.Data.Models
 
         public int? ProjectId { get; set; } // 项目Id
 
+        public bool IsWorkerWorkLoadSet { get; set; }   // 是否已经确认了工人工作量
+
+        public DateTime? WorkerWorkLoadSetTime { get; set; } // 确认时间
+
         public Contractor Contractor { get; set; }
 
         public ContractorStaff ContractorStaff { get; set; }
@@ -61,5 +65,7 @@ namespace Stb.Data.Models
         public List<Signment> Signments { get; set; }
 
         public Project Project { get; set; }
+
+        public List<WorkLoad> WorkLoads { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Stb.Data.Models;
+using Stb.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Stb.Api.Models.OrderViewModels
         /// <summary>
         /// 记录时间
         /// </summary>
-        public DateTime Time { get; set; }
+        public long Time { get; set; }
 
         /// <summary>
         /// 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力
@@ -59,7 +60,7 @@ namespace Stb.Api.Models.OrderViewModels
             WorkerId = issue.EndUserId;
             WorkerName = issue.EndUser?.Name;
             OrderId = issue.OrderId;
-            Time = issue.Time;
+            Time = issue.Time.ToUnixSeconds();
             IssueType = issue.IssueType;
             SolutionType = issue.SolutionType;
             Pics = issue.Pics;

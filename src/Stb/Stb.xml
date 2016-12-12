@@ -50,6 +50,13 @@
             <param name="categoryId"></param>
             <returns></returns>
         </member>
+        <member name="M:Stb.Api.Controllers.JobMeasurementController.GetJobMeasurement(System.Nullable{System.Int32})">
+            <summary>
+            Web端：获取工作种类下的工作量项目
+            </summary>
+            <param name="classId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Stb.Api.Controllers.MessageController.GetMsgCountAsync(System.Int32)">
             <summary>
             App通用：未读消息数量
@@ -454,6 +461,11 @@
             签到、签退地点坐标
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.LocationUrl">
+            <summary>
+            签到地点坐标静态图url
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Address">
             <summary>
             签到地点地址
@@ -509,6 +521,11 @@
             施工描述
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.ExpectedStartTime">
+            <summary>
+            项目预计开始时间
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.ExpectedDays">
             <summary>
             预计施工天数
@@ -527,6 +544,11 @@
         <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.Accepted">
             <summary>
             是否已接受
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.WorkerOrderData.Workers">
+            <summary>
+            工单工人列表
             </summary>
         </member>
         <member name="P:Stb.Api.Models.OrderViewModels.WorkerSignmentData.State">

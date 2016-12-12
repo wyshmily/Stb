@@ -30,6 +30,11 @@ namespace Stb.Api.Models.OrderViewModels
         public string Location { get; set; }
 
         /// <summary>
+        /// 签到地点坐标静态图url
+        /// </summary>
+        public string LocationUrl { get; set; }
+
+        /// <summary>
         /// 签到地点地址
         /// </summary>
         public string Address { get; set; }
@@ -50,6 +55,7 @@ namespace Stb.Api.Models.OrderViewModels
             UserName = signment.EndUser?.Name;
             Time = signment.Time.ToUnixSeconds();
             Location = signment.Location;
+            LocationUrl = $"http://restapi.amap.com/v3/staticmap?location={signment.Location}&zoom=12&size=300*200&markers=mid,,:{signment.Location}&key=1ff97f3d9068e5e12e21f3c34480096a";
             Address = signment.Address;
             Pics = signment.Pics;
             InOut = signment.InOut;

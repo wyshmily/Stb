@@ -9,6 +9,7 @@ using Stb.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stb.Platform.Models.OrderViewModels;
+using Stb.Api.Services;
 
 namespace Stb.Platform.Controllers
 {
@@ -35,7 +36,7 @@ namespace Stb.Platform.Controllers
             var orders = await _context.Order.Where(o => o.PlatoonId == user.Id)
                 .Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
-                .Include(p=>p.LeadWorker)
+                .Include(p => p.LeadWorker)
                 .OrderByDescending(p => p.Id)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
@@ -72,9 +73,59 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            await _context.OrderWorker.Include(ow=>ow.Worker).Where(ow => ow.OrderId == id && !ow.Removed).LoadAsync();
+            await _context.OrderWorker.Include(ow => ow.Worker).Where(ow => ow.OrderId == id && !ow.Removed).LoadAsync();
 
             return View(new PlatoonOrderViewModel(order));
+        }
+
+        public async Task<IActionResult> OrderEvaluate(string id)
+        {
+            OrderEvaluate_Platoon evaluate = await _context.OrderEvaluate_Platoon.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
+
+            ViewBag.OrderId = id;
+            return View(evaluate);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveOrderEvaluate(OrderEvaluate_Platoon evaluate)
+        {
+            if (ModelState.IsValid)
+            {
+                evaluate.Type = 1;
+                evaluate.EvaluateUserId = this.UserId();
+                evaluate.Time = DateTime.Now;
+
+                _context.OrderEvaluate_Platoon.Add(evaluate);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("OrderEvaluate", new { id = evaluate.OrderId });
+        }
+
+        public async Task<IActionResult> TrailEvaluate(string id)
+        {
+            TrailEvaluate evaluate = await _context.TrailEvaluate.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
+
+            ViewBag.OrderId = id;
+            return View(evaluate);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveTrailEvaluate(TrailEvaluate evaluate)
+        {
+            if (ModelState.IsValid)
+            {
+                Order order = await _context.Order.FindAsync(evaluate.OrderId);
+                evaluate.Type = 2;
+                evaluate.EvaluateUserId = this.UserId();
+                evaluate.Time = DateTime.Now;
+                evaluate.LeadWorkerId = order?.LeadWorkerId;
+
+                _context.TrailEvaluate.Add(evaluate);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("TrailEvaluate", new { id = evaluate.OrderId });
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

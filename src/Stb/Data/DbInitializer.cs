@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Stb.Data;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Stb.Data.Models
 {
@@ -15,16 +10,16 @@ namespace Stb.Data.Models
         {
             context.Database.EnsureCreated();
 
-
             if (context.Roles.Any())
                 return;
 
             var roles = new IdentityRole[]
             {
                 new IdentityRole { Name="系统管理员" },
-                new IdentityRole {Name = "运营客服" },
-                new IdentityRole {Name = "排长" },
-                new IdentityRole {Name = "工人" },
+                new IdentityRole { Name = "运营客服" },
+                new IdentityRole { Name = "质控员" },
+                new IdentityRole { Name = "排长" },
+                new IdentityRole { Name = "工人" },
             };
 
             foreach (var role in roles)

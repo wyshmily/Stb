@@ -19,7 +19,8 @@
       "wwwroot/js/jobClasses.js",
       "wwwroot/js/worker.js",
       "wwwroot/js/order.js",
-      "wwwroot/js/organize.js"
+      "wwwroot/js/organize.js",
+      "wwwroot/js/workLoads.js"
     ],
     "minify": {
       "enabled": true,

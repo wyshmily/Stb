@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Stb.Api.Models.OrderViewModels;
 using Stb.Api.Models;
 using Stb.Api.Services;
+using Stb.Data;
 
 namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Platoon/Order")]
-    [Authorize(ActiveAuthenticationSchemes = "Bearer", Roles = "≈≈≥§")]
+    [Authorize(ActiveAuthenticationSchemes = "Bearer", Roles = Roles.Platoon)]
     [ApiExceptionFilter]
     public class PlatoonOrderController : Controller
     {

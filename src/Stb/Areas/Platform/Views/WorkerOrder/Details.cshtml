@@ -1,0 +1,129 @@
+﻿@model Stb.Platform.Models.OrderViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "工单详情";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<div>
+    <h4>客户信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorStaffName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorStaffName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContractorStaffPhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractorStaffPhone)
+        </dd>
+    </dl>
+    <h4>工程概况</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            <pre>@Html.DisplayFor(model => model.Description)</pre>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkerNeeded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkerNeeded)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedStartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedStartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedDays)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedDays)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactDeadline)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactDeadline)
+        </dd>
+    </dl>
+    <h4>施工地点</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            施工地区
+        </dt>
+        <dd>
+            @if (Model.District != null)
+            {
+                @Html.DisplayFor(model => model.District.ProvinceName)
+                <span> </span>
+                @Html.DisplayFor(model => model.District.CityName)
+                <span> </span>
+                @Html.DisplayFor(model => model.District.DistrictName)
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkAddress)
+        </dt>
+        <dd>
+            <pre>@Html.DisplayFor(model => model.WorkAddress)</pre>
+            @if (Model.WorkLocation != null)
+            {
+                <img alt="img" src="@($"http://restapi.amap.com/v3/staticmap?location={Model.WorkLocation}&zoom=12&size=300*200&markers=mid,,:{Model.WorkLocation}&key=1ff97f3d9068e5e12e21f3c34480096a")" />
+            }
+        </dd>
+    </dl>
+    <h4>施工情况</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd>
+            @if (Model.State == 0)
+            {
+                <span>准备状态</span>
+            }
+            else if (Model.State == 1)
+            {
+                <span>施工状态</span>
+            }
+            else if (Model.State == 2)
+            {
+                <span>完成</span>
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlatoonName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlatoonName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">返回</a>
+</div>

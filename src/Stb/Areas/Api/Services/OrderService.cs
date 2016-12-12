@@ -37,7 +37,7 @@ namespace Stb.Api.Services
         // 班长工单列表
         public async Task<List<WorkerOrderData>> GetWorkerOrdersAsync(string userId, string key)
         {
-            var query = _context.Order.Include(o => o.ContractorStaff).Include(o => o.District).Include(o => o.Platoon).Where(o => o.LeadWorkerId == userId && o.State == 1);
+            var query = _context.Order.Include(o => o.ContractorStaff).Include(o => o.District).Include(o => o.Platoon).Include(o => o.OrderWorkers).ThenInclude(ow => ow.Worker).Where(o => o.LeadWorkerId == userId && o.State == 1);
 
             if (!string.IsNullOrWhiteSpace(key))
                 query = query.Where(o => o.Id.Contains(key));
@@ -167,7 +167,7 @@ namespace Stb.Api.Services
                 Platoon platoon = await _context.Platoon.FindAsync(order.PlatoonId);
                 if (platoon?.PushId != null)
                 {
-                    await _pushService.PushToSingleAsync(worker.PushId,
+                    await _pushService.PushToSingleAsync(platoon.PushId,
                             new
                             {
                                 orderid = message.OrderId,
@@ -261,7 +261,7 @@ namespace Stb.Api.Services
                 Platoon platoon = await _context.Platoon.FindAsync(order.PlatoonId);
                 if (platoon?.PushId != null)
                 {
-                    await _pushService.PushToSingleAsync(worker.PushId,
+                    await _pushService.PushToSingleAsync(platoon.PushId,
                             new
                             {
                                 orderid = message.OrderId,

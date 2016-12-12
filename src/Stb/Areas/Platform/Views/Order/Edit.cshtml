@@ -1,4 +1,5 @@
-﻿@model Stb.Platform.Models.OrderViewModels.OrderViewModel
+﻿@using Stb.Platform.Models.WorkLoadViewModels;
+@model Stb.Platform.Models.OrderViewModels.OrderViewModel
 
 @{
     ViewData["Title"] = "修改工单";
@@ -9,7 +10,7 @@
 <form asp-action="Edit">
     <div class="form-horizontal">
         <div asp-validation-summary="All" class="text-danger"></div>
-        <input asp-for="Id" type="hidden" />
+        <input asp-for="Id" type="hidden"/>
         <h4>客户信息</h4>
         <hr />
         <div class="form-group">
@@ -87,6 +88,58 @@
                 <span asp-validation-for="ContactDeadline" class="text-danger" />
             </div>
         </div>
+
+        <h4>施工内容</h4>
+        <hr />
+        <div class="form-group">
+            <label asp-for="WorkLoads" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <div class="col-sm-11 col-md-7 col-lg-6 no-padding-left">
+                    <ul class="form-control ul-form-control" id="WorkLoads">
+                        @for (int i = 0; i < Model.WorkLoads.Count; i++)
+                        {
+                            WorkLoadViewModel workLoad = Model.WorkLoads[i];
+                            <li id="@($"li_{workLoad.JobMeasurementId}")">
+                                @*<input type="hidden" name="@($"WorkLoads[{i}].JobCategoryId")" value="@workLoad.JobCategoryId" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].JobCategoryName")" value="@workLoad.JobCategoryName" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].JobClassId")" value="@workLoad.JobClassId" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].JobClassName")" value="@workLoad.JobClassName" />*@
+                                <input type="hidden" name="@($"WorkLoads[{i}].JobMeasurementId")" value="@workLoad.JobMeasurementId" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].JobMeasurementName")" value="@workLoad.JobMeasurementName" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].OrderId")" value="@workLoad.OrderId" />
+                                <input type="hidden" name="@($"WorkLoads[{i}].WorkerId")" value="@workLoad.WorkerId" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">@workLoad.JobMeasurementName</span>
+                                    <input class="form-control" type="text" name="@($"WorkLoads[{i}].Amount")" value="@workLoad.Amount" />
+                                    <span class="input-group-addon">@workLoad.Unit</span>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default remove-workload" value="@workLoad.JobMeasurementId" type="button">&times;</button>
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-5 col-lg-5 no-padding-left">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <Select id="workLoadJobCategorySelect" class="form-control"></Select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <Select id="workLoadJobClassSelect" class="form-control"></Select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <ul id="workLoadJobMeasurementSelect" class="form-control ul-form-control"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h4>施工地点</h4>
         <hr />
 

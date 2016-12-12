@@ -1,0 +1,148 @@
+﻿@model  Stb.Platform.Models.EvaluateViewModels.OrderWorkerEvaluatesViewModel
+
+@{
+    ViewData["Title"] = "工单评价";
+    int count = Model.WorkerEvaluates.Count;
+}
+
+<br />
+<form asp-action="SaveEvaluate">
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th colspan="7" class="h2 text-center">工单评价表（班长）</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="@(count*2+2)" style="max-width:80px;min-width:80px;vertical-align:middle" class="text-center">班长对工人的评价</td>
+                <td rowspan="@(count+1)" style="max-width:100px;min-width:100px;vertical-align:middle" class="text-center">施工质量评价</td>
+                <td style="max-width:80px;min-width:80px;vertical-align:middle">徒弟姓名</td>
+                <td class="col-md-12" colspan="4">
+                    施工成绩
+                </td>
+            </tr>
+            @for (int i = 0; i < count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => Model.WorkerEvaluates[i].WorkerName)
+                    </td>
+                    <td colspan="4">
+                        <input type="hidden" asp-for="@Model.WorkerEvaluates[i].Evaluate.OrderId" value="@ViewBag.OrderId" />
+                        <input type="hidden" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerId" value="@Model.WorkerEvaluates[i].WorkerId" />
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkScore" value="0"> 优秀
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkScore" value="1"> 合格
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkScore" value="2"> 不合格
+                        </label>
+                        <div>
+                            <span asp-validation-for="@Model.WorkerEvaluates[i].Evaluate.WorkScore" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td rowspan="@(count+1)" style="max-width:100px;min-width:100px;vertical-align:middle" class="text-center">综合能力评价</td>
+                <td style="max-width:60px;min-width:60px;vertical-align:middle">徒弟姓名</td>
+                <td class="col-md-3">
+                    能否看懂图纸
+                </td>
+                <td class="col-md-3">
+                    有无建设性的施工意见
+                </td>
+                <td class="col-md-3">
+                    是否参与协调
+                </td>
+                <td class="col-md-3">
+                    有无设计能力
+                </td>
+            </tr>
+            @for (int i = 0; i < count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => Model.WorkerEvaluates[i].WorkerName)
+                    </td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanReadDrawings" value="true"> 能
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanReadDrawings" value="false"> 否
+                        </label>
+                        <div>
+                            <span asp-validation-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanReadDrawings" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerGiveAdvices" value="true"> 有
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerGiveAdvices" value="false"> 无
+                        </label>
+                        <div>
+                            <span asp-validation-for="@Model.WorkerEvaluates[i].Evaluate.WorkerGiveAdvices" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCooperates" value="true"> 是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCooperates" value="false"> 否
+                        </label>
+                        <div>
+                            <span asp-validation-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCooperates" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanDesign" value="true"> 有
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" asp-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanDesign" value="false"> 无
+                        </label>
+                        <div>
+                            <span asp-validation-for="@Model.WorkerEvaluates[i].Evaluate.WorkerCanDesign" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="7" class="text-right">
+                    @if (count != 0)
+                    {
+                        if (Model.WorkerEvaluates[0].Evaluate == null)
+                        {
+                            <input type="submit" value="保存评价表" class="form-control btn-primary" />
+                        }
+                        else
+                        {
+                            <span>评价人：</span>@Html.DisplayFor(model => Model.WorkerEvaluates[0].Evaluate.EvaluateUser.Name)
+                            <span>&nbsp;&nbsp;</span>
+                            @Html.DisplayFor(model => Model.WorkerEvaluates[0].Evaluate.Time)
+                        }
+                    }
+                    else
+                    {
+                        <span>该工单没有其它工人</span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<div>
+    <a asp-action="Index">返回工单列表</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

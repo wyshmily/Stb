@@ -302,6 +302,33 @@ namespace Stb.Data.Migrations
                     b.ToTable("EndUserJobClass");
                 });
 
+            modelBuilder.Entity("Stb.Data.Models.Evaluate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("EvaluateUserId");
+
+                    b.Property<string>("OrderId");
+
+                    b.Property<DateTime>("Time");
+
+                    b.Property<byte>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EvaluateUserId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Evaluate");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Evaluate");
+                });
+
             modelBuilder.Entity("Stb.Data.Models.Interview", b =>
                 {
                     b.Property<int>("Id")
@@ -489,6 +516,8 @@ namespace Stb.Data.Migrations
 
                     b.Property<DateTime?>("ExpectedStartTime");
 
+                    b.Property<bool>("IsWorkerWorkLoadSet");
+
                     b.Property<string>("LeadWorkerId");
 
                     b.Property<byte>("OrderType");
@@ -506,6 +535,8 @@ namespace Stb.Data.Migrations
                     b.Property<string>("WorkLocation");
 
                     b.Property<int?>("WorkerNeeded");
+
+                    b.Property<DateTime?>("WorkerWorkLoadSetTime");
 
                     b.HasKey("Id");
 
@@ -655,12 +686,16 @@ namespace Stb.Data.Migrations
 
                     b.Property<int>("JobMeasurementId");
 
-                    b.Property<string>("WorkerId")
+                    b.Property<string>("OrderId")
                         .IsRequired();
+
+                    b.Property<string>("WorkerId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("JobMeasurementId");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("WorkerId");
 
@@ -710,6 +745,137 @@ namespace Stb.Data.Migrations
                     b.HasDiscriminator().HasValue("PlatformUser");
                 });
 
+            modelBuilder.Entity("Stb.Data.Models.OrderEvaluate", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.Evaluate");
+
+                    b.Property<byte>("WorkAttitude");
+
+                    b.Property<byte>("WorkEfficiency");
+
+                    b.Property<byte>("WorkQuality");
+
+                    b.ToTable("OrderEvaluate");
+
+                    b.HasDiscriminator().HasValue("OrderEvaluate");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.TrailEvaluate", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.Evaluate");
+
+                    b.Property<bool>("AllocationProblem");
+
+                    b.Property<bool>("CanExplainShutdown");
+
+                    b.Property<bool>("CanStrain");
+
+                    b.Property<bool>("ClearThinking");
+
+                    b.Property<byte>("Communicate");
+
+                    b.Property<byte>("Customer");
+
+                    b.Property<byte>("CustomerJudgement");
+
+                    b.Property<bool>("GoodAdvice");
+
+                    b.Property<byte>("HandleConflits");
+
+                    b.Property<bool>("HandleContradictions");
+
+                    b.Property<bool>("HandleProblemClear");
+
+                    b.Property<bool>("HandleProblemInTime");
+
+                    b.Property<bool>("HandleProblemResonable");
+
+                    b.Property<byte>("HandleProblems");
+
+                    b.Property<bool>("HandleWorkChange");
+
+                    b.Property<byte>("HandleWorkerChange");
+
+                    b.Property<bool>("HandleWorkerChangeWell");
+
+                    b.Property<bool>("KnowRelation");
+
+                    b.Property<bool>("KnowSafty");
+
+                    b.Property<bool>("KnowTask");
+
+                    b.Property<string>("LeadWorkerId");
+
+                    b.Property<bool>("MasterTrend");
+
+                    b.Property<bool>("NiceAttitude");
+
+                    b.Property<byte>("ObayPlatform");
+
+                    b.Property<string>("ObayPlatformJudgement");
+
+                    b.Property<bool>("ObeyOrder");
+
+                    b.Property<byte>("PersonalAbility");
+
+                    b.Property<string>("PersonalAbilityJudgement");
+
+                    b.Property<bool>("ProblemDueToWorkers");
+
+                    b.Property<bool>("ProblemNegativeEffect");
+
+                    b.Property<bool>("ReportInTime");
+
+                    b.Property<bool>("ReportNoHide");
+
+                    b.Property<bool>("RequireWorkers");
+
+                    b.Property<bool>("RightForAll");
+
+                    b.Property<byte>("Situation");
+
+                    b.Property<bool>("TrailResult");
+
+                    b.Property<byte>("WorkForce");
+
+                    b.Property<byte>("WorkPlaceOrder");
+
+                    b.Property<byte>("WorkQuality");
+
+                    b.Property<bool>("WorkShutdown");
+
+                    b.Property<byte>("WorkTime");
+
+                    b.HasIndex("LeadWorkerId");
+
+                    b.ToTable("TrailEvaluate");
+
+                    b.HasDiscriminator().HasValue("TrailEvaluate");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.WorkerEvaluate", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.Evaluate");
+
+                    b.Property<byte>("WorkScore");
+
+                    b.Property<bool>("WorkerCanDesign");
+
+                    b.Property<bool>("WorkerCanReadDrawings");
+
+                    b.Property<bool>("WorkerCooperates");
+
+                    b.Property<bool>("WorkerGiveAdvices");
+
+                    b.Property<string>("WorkerId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("WorkerEvaluate");
+
+                    b.HasDiscriminator().HasValue("WorkerEvaluate");
+                });
+
             modelBuilder.Entity("Stb.Data.Models.Platoon", b =>
                 {
                     b.HasBaseType("Stb.Data.Models.EndUser");
@@ -748,6 +914,57 @@ namespace Stb.Data.Migrations
                     b.ToTable("Worker");
 
                     b.HasDiscriminator().HasValue("Worker");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.OrderEvaluate_Customer", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.OrderEvaluate");
+
+                    b.Property<byte>("HaveCase");
+
+                    b.Property<byte>("LeaderCanCooperate");
+
+                    b.Property<byte>("LeaderDoReport");
+
+                    b.Property<byte>("LeaderLeaveCard");
+
+                    b.ToTable("OrderEvaluate_Customer");
+
+                    b.HasDiscriminator().HasValue("OrderEvaluate_Customer");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.OrderEvaluate_Platoon", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.OrderEvaluate");
+
+                    b.Property<byte>("LeaderAbilityLevel");
+
+                    b.Property<byte>("LeaderCanCooperate");
+
+                    b.Property<byte>("LeaderCanDoDesign");
+
+                    b.Property<byte>("LeaderCanReadDrawings");
+
+                    b.Property<byte>("LeaderDoReport");
+
+                    b.Property<byte>("WorkerJudgement");
+
+                    b.ToTable("OrderEvaluate_Platoon");
+
+                    b.HasDiscriminator().HasValue("OrderEvaluate_Platoon");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.OrderEvaluate_QualityControl", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.OrderEvaluate");
+
+                    b.Property<string>("ComplaintSettlement");
+
+                    b.Property<byte>("LeaderAbility");
+
+                    b.ToTable("OrderEvaluate_QualityControl");
+
+                    b.HasDiscriminator().HasValue("OrderEvaluate_QualityControl");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -835,6 +1052,17 @@ namespace Stb.Data.Migrations
                         .WithMany("EndUserJobClasses")
                         .HasForeignKey("JobClassId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.Evaluate", b =>
+                {
+                    b.HasOne("Stb.Data.Models.ApplicationUser", "EvaluateUser")
+                        .WithMany()
+                        .HasForeignKey("EvaluateUserId");
+
+                    b.HasOne("Stb.Data.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("Stb.Data.Models.Interview", b =>
@@ -963,10 +1191,28 @@ namespace Stb.Data.Migrations
                         .HasForeignKey("JobMeasurementId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Stb.Data.Models.Order", "Order")
+                        .WithMany("WorkLoads")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Stb.Data.Models.Worker", "Worker")
                         .WithMany("WorkLoads")
-                        .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WorkerId");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.TrailEvaluate", b =>
+                {
+                    b.HasOne("Stb.Data.Models.Worker", "LeadWorker")
+                        .WithMany()
+                        .HasForeignKey("LeadWorkerId");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.WorkerEvaluate", b =>
+                {
+                    b.HasOne("Stb.Data.Models.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId");
                 });
 
             modelBuilder.Entity("Stb.Data.Models.Worker", b =>

@@ -17,7 +17,7 @@ using Stb.Data.Comparer;
 namespace Stb.Platform.Controllers
 {
     [Authorize]
-    [Area(AreaNames.Platform)]
+    [Area("Platform")]
     public class WorkerController : Controller
     {
         private readonly UserManager<Worker> _userManager;
@@ -32,6 +32,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Worker
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Index(int page=1)
         {
             int total = _userManager.Users.Count();
@@ -66,6 +67,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Worker/Create
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public IActionResult Create()
         {
             return View(new WorkerViewModel(new Worker()));
@@ -76,6 +78,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Create(WorkerViewModel WorkerViewModel)
         {
             if (ModelState.IsValid)
@@ -150,6 +153,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Worker/Edit/5
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -175,6 +179,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Edit(string id, WorkerViewModel WorkerViewModel)
         {
             if (id != WorkerViewModel.Id)
@@ -281,6 +286,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Worker/Delete/5
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -305,6 +311,7 @@ namespace Stb.Platform.Controllers
         // POST: Worker/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.AdminAndCustomerService)]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             Worker worker = await _userManager.Users.Include(u=>u.Workers).Include(u=>u.LeadOrders).Include(u=>u.LeadOrders).Include(u=>u.Interviews).SingleOrDefaultAsync(m => m.Id == id);

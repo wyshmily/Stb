@@ -137,7 +137,7 @@ namespace Stb.Platform.Controllers
         {
             AccountEditViewModel viewModel = new AccountEditViewModel
             {
-                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService, Roles.QualityControl })
             };
 
             return View(viewModel);
@@ -172,7 +172,7 @@ namespace Stb.Platform.Controllers
             AccountEditViewModel viewModel = new AccountEditViewModel
             {
                 User = user,
-                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService, Roles.QualityControl })
             };
             return View(viewModel);
         }
@@ -195,7 +195,7 @@ namespace Stb.Platform.Controllers
             return View(new AccountEditViewModel
             {
                 User = await GetAppUserViewModel(appUser),
-                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService, Roles.QualityControl })
             });
         }
 
@@ -248,7 +248,7 @@ namespace Stb.Platform.Controllers
             return View(new AccountEditViewModel
             {
                 User = user,
-                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService })
+                Roles = new SelectList(new[] { Roles.Administrator, Roles.CustomerService, Roles.QualityControl })
             });
         }
 

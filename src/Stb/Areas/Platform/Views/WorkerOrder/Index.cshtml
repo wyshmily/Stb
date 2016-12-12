@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Stb.Platform.Models.OrderViewModels.OrderIndexViewModel>
+
+@{
+    ViewData["Title"] = "我的工单";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractorStaffName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlatoonName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractorStaffName)
+                    <br />
+                    @Html.DisplayFor(modelItem => item.ContractorStaffPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlatoonName)
+                </td>
+                <td>
+                    @if (item.State == 0)
+                    {
+                        <span>准备状态</span>
+                    }
+                    else if (item.State == 1)
+                    {
+                        <span>施工状态</span>
+                    }
+                    else if (item.State == 2)
+                    {
+                        <span>完成</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">工单信息</a>
+                    @if (item.State == 2)
+                    {
+                        <span> |</span>
+                        <a asp-action="Evaluate" asp-route-id="@item.Id">工人评价</a>
+                        <span> |</span>
+                        <a asp-action="WorkLoad" asp-route-id="@item.Id">工作量</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Component.InvokeAsync("Pagination", new { Action = "Index", Page = ViewBag.Page, TotalPage = ViewBag.TotalPage })

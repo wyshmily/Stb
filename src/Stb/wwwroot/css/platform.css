@@ -216,3 +216,14 @@ textarea {
     max-width:none;
     width:100%;
 }
+
+#WorkLoads {
+    max-width: 450px;
+    min-height: 300px;
+    margin-bottom: 10px;
+}
+
+    #WorkLoads input {
+        max-width: 315px;
+        cursor: default;
+    }
