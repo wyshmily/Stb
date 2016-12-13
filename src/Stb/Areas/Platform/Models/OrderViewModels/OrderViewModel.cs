@@ -1,5 +1,8 @@
-﻿using Stb.Data.Models;
+﻿using Stb.Api.Models.OrderViewModels;
+using Stb.Data.Models;
 using Stb.Platform.Models.DistrictViewModels;
+using Stb.Platform.Models.EvaluateViewModels;
+using Stb.Platform.Models.WorkerViewModels;
 using Stb.Platform.Models.WorkLoadViewModels;
 using System;
 using System.Collections.Generic;
@@ -85,11 +88,23 @@ namespace Stb.Platform.Models.OrderViewModels
         [Display(Name = "工作量")]
         public List<WorkLoadViewModel> WorkLoads { get; set; }
 
+        public ProgressData ProgressData { get; set; }
+
+        [Display(Name = "工人")]
+        public List<WorkerSimpleViewModel> Workers { get; set; }
+
+        public List<EvaluateSimpleViewModel> Evaluates { get; set; }
+
+        public bool IsWokerWorkLoadSet { get; set; }
+
+        public string LeadWorkerId { get; set; }
+
+
         public OrderViewModel()
         {
         }
 
-        public OrderViewModel(Order order)
+        public OrderViewModel(Order order, ProgressData progressData = null)
         {
             Id = order.Id;
             ContractorId = order.ContractorId;
@@ -109,10 +124,18 @@ namespace Stb.Platform.Models.OrderViewModels
             WorkLocation = order.WorkLocation;
             ProjectId = order.ProjectId;
             ProjectName = order.Project?.Name;
+            LeadWorkerId = order.LeadWorkerId;
+            IsWokerWorkLoadSet = order.IsWorkerWorkLoadSet;
             if (order.District != null)
                 District = new DistrictViewModel(order.District);
             if (order.WorkLoads != null)
                 WorkLoads = order.WorkLoads.Select(w => new WorkLoadViewModel(w)).ToList();
+            if (order.OrderWorkers != null)
+                Workers = order.OrderWorkers.Select(ow => new WorkerSimpleViewModel(ow.Worker)).ToList();
+            if (order.Evaluates != null)
+                Evaluates = order.Evaluates.Select(e => new EvaluateSimpleViewModel(e)).ToList();
+
+            ProgressData = progressData;
         }
 
         public Order ToOrder()

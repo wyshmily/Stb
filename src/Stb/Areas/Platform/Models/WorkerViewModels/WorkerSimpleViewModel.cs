@@ -30,6 +30,8 @@ namespace Stb.Platform.Models.WorkerViewModels
 
         public WorkerSimpleViewModel(Worker worker)
         {
+            if (worker == null)
+                return;
             Id = worker.Id;
             UserName = worker.UserName;
             Name = worker.Name;

@@ -68,6 +68,22 @@
         <dd>
             @Html.DisplayFor(model => model.ContactDeadline)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkLoads)
+        </dt>
+        <dd>
+            @{
+                var orderWorkLoads = Model.WorkLoads.Where(w => w.WorkerId == null).ToList();
+                foreach (var workLoad in orderWorkLoads)
+                {
+                    <div>
+                        <span>@workLoad.JobMeasurementName：</span>
+                        <span>@workLoad.Amount</span>
+                        <span>@workLoad.Unit</span>
+                    </div>
+                }
+            }
+        </dd>
     </dl>
     <h4>施工地点</h4>
     <hr />
@@ -122,7 +138,230 @@
         <dd>
             @Html.DisplayFor(model => model.PlatoonName)
         </dd>
+        @if (Model.State > 0)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Workers)
+            </dt>
+            <dd>
+                <table class="table" style="max-width:500px">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>姓名</th>
+                            <th>手机</th>
+                            <th>身份</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workerList">
+                        @foreach (var worker in Model.Workers)
+                        {
+                            <tr data-worker-id="@worker.Id">
+                                <td>
+                                    @if (worker.Id == Model.LeadWorkerId)
+                                    {
+                                        if (worker.IsCandidate)
+                                        {
+                                            <span class="text-warning">班长(试单)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning">班长</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (worker.IsCandidate)
+                                        {
+                                            <span class="text-warning hidden">班长(试单)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning hidden">班长</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-controller="Worker" asp-route-id="@worker.Id" title="@worker.UserName" target="_blank">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        @Html.DisplayFor(model => worker.Name)
+                                    </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => worker.UserName)
+                                </td>
+                                <td>
+                                    @if (worker.IsHeader)
+                                    { <span>班长</span> }
+                                    else if (worker.IsCandidate)
+                                    { <span>候选班长</span> }
+                                    else
+                                    { <span>工人</span> }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </dd>
+            <dt>
+                工人签到
+            </dt>
+            <dd>
+                @if (Model.ProgressData==null || Model.ProgressData.SignmentCount == 0)
+                {
+                    <span>暂无数据</span>
+                }
+                else
+                {
+                    <span>签到次数：@Model.ProgressData.SignmentCount</span>
+                    <div>
+                        <span>
+                            最新：@Model.ProgressData.Signment.UserName &nbsp;&nbsp;
+                            @if (Model.ProgressData.Signment.InOut)
+                            {
+                                <span>签到</span>
+                            }
+                            else
+                            {
+                                <span>签退</span>
+                            }
+                        </span>
+                        &nbsp;&nbsp;
+                        @Html.DisplayFor(model => model.ProgressData.Signment.DateTime)
+                        &nbsp;&nbsp;
+                        <a target="_blank" asp-action="Signments" asp-route-id="@Model.Id" class="btn btn-link">更多</a>
+                    </div>
+                }
+            </dd>
+            <dt>
+                工人记录问题
+            </dt>
+            <dd>
+                @if (Model.ProgressData == null || Model.ProgressData.IssueCount == 0)
+                {
+                    <span>暂无数据</span>
+                }
+                else
+                {
+                    <span>问题数量：@Model.ProgressData.IssueCount</span>
+                    <div>
+                        <span>
+                            最新：@Model.ProgressData.Issue.WorkerName &nbsp;&nbsp;
+                        </span>
+                        &nbsp;&nbsp;
+                        @Html.DisplayFor(model => model.ProgressData.Issue.DateTime)
+                        &nbsp;&nbsp;
+                        <a target="_blank" asp-action="Issues" asp-route-id="@Model.Id" class="btn btn-link">更多</a>
+                    </div>
+                }
+            </dd>
+        }
     </dl>
+    @if (Model.State == 2)
+    {
+        <h4>施工评价</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                排长评价
+            </dt>
+            <dd>
+                @{
+                    var evaluate1 = Model.Evaluates.FirstOrDefault(e => e.Type == 1);
+                    if (evaluate1 == null)
+                    {
+                        <span>无</span>
+                    }
+                    else
+                    {
+                        <a asp-action="OrderEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    }
+                }
+            </dd>
+            <dt>
+                试单评价
+            </dt>
+            <dd>
+                @{
+                    var evaluate2 = Model.Evaluates.FirstOrDefault(e => e.Type == 2);
+                    if (evaluate2 == null)
+                    {
+                        <span>无</span>
+                    }
+                    else
+                    {
+                        <a asp-action="TrailEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    }
+                }
+            </dd>
+            <dt>
+                品控评价
+            </dt>
+            <dd>
+                @{
+                    var evaluate3 = Model.Evaluates.FirstOrDefault(e => e.Type == 3);
+                    if (evaluate3 == null)
+                    {
+                        <span>无</span>
+                    }
+                    else
+                    {
+                        <a asp-action="Evaluate" asp-controller="QualityControlOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    }
+                }
+            </dd>
+            <dt>
+                客户评价
+            </dt>
+            <dd>
+                @{
+                    var evaluate4 = Model.Evaluates.FirstOrDefault(e => e.Type == 4);
+                    if (evaluate4 == null)
+                    {
+                        <span>无</span>
+                    }
+                    else
+                    {
+                        <a asp-action="Evaluate" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    }
+                }
+            </dd>
+            <dt>
+                班长评价
+            </dt>
+            <dd>
+                @{
+                    var evaluate5 = Model.Evaluates.FirstOrDefault(e => e.Type == 5);
+                    if (evaluate5 == null)
+                    {
+                        <span>无</span>
+                    }
+                    else
+                    {
+                        <a asp-action="Evaluate" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    }
+                }
+            </dd>
+        </dl>
+        <h4>工人工作量</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                工作量
+            </dt>
+            <dd>
+                @if (Model.IsWokerWorkLoadSet)
+                {
+                    <a asp-action="WorkLoad" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                }
+                else
+                {
+                    <span>无</span>
+                }
+            </dd>
+        </dl>
+    }
 </div>
 <div>
     <a asp-action="Index">返回</a>

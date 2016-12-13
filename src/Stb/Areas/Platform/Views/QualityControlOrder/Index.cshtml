@@ -67,7 +67,7 @@
                     @if (item.State == 2)
                     {
                         <span> |</span>
-                        <a asp-action="Evaluate" ifp-route-id="@item.Id">评价</a>
+                        <a asp-action="Evaluate" asp-route-id="@item.Id">评价</a>
                     }
                 </td>
             </tr>

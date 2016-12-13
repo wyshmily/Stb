@@ -13,7 +13,7 @@ namespace Stb.Platform.Models.WorkLoadViewModels
         {
             WorkLoadViewModel workLoad = (WorkLoadViewModel)validationContext.ObjectInstance;
 
-            if (workLoad.Amount != null && workLoad.Amount.Value > workLoad.OrderAmount)
+            if (workLoad.Amount != null && workLoad.OrderAmount != 0 && workLoad.Amount.Value > workLoad.OrderAmount)
             {
                 return new ValidationResult(ErrorMessage);
             }

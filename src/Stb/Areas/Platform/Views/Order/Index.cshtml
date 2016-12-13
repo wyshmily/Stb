@@ -103,12 +103,12 @@
                     @if (item.State == 0)
                     {
                         <span> |</span>
-                        <a asp-action="Delete" ifp-route-id="@item.Id">删除</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
                     }
                     @if (item.State == 2)
                     {
                         <span> |</span>
-                        <a asp-action="Evaluate" ifp-route-id="@item.Id">客户评价</a>
+                        <a asp-action="Evaluate" asp-route-id="@item.Id">客户评价</a>
                     }
                 </td>
             </tr>

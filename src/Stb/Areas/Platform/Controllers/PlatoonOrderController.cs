@@ -10,23 +10,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stb.Platform.Models.OrderViewModels;
 using Stb.Api.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Stb.Data.Comparer;
+using Stb.Api.Models.OrderViewModels;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.Platoon)]
+    [Authorize]
     [Area("Platform")]
     public class PlatoonOrderController : Controller
     {
 
         private ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
+        private OrderService _orderService;
 
-        public PlatoonOrderController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PlatoonOrderController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, OrderService orderService)
         {
             _context = context;
             _userManager = userManager;
+            _orderService = orderService;
         }
 
+        [Authorize(Roles = Roles.Platoon)]
         public async Task<IActionResult> Index(int page = 1)
         {
             ApplicationUser user = await GetCurrentUserAsync();
@@ -37,13 +43,14 @@ namespace Stb.Platform.Controllers
                 .Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
                 .Include(p => p.LeadWorker)
-                .OrderByDescending(p => p.Id)
+                .OrderByDescending(p => p.CreateTime)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();
             return View(orders.Select(p => new OrderIndexViewModel(p)).ToList());
         }
 
+        [Authorize(Roles = Roles.Platoon)]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -51,15 +58,135 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
             }
 
+            ProgressData progressData = null;
+            if (order.State != 0)
+            {
+                progressData = await _orderService.GetOrderProgressAsync(id);
+            }
+            return View(new OrderViewModel(order, progressData));
+        }
+
+        // GET: Order/Edit/5
+        [Authorize(Roles = Roles.Platoon)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Projects = new SelectList(await _context.Project.ToListAsync(), "Id", "Name");
             return View(new OrderViewModel(order));
         }
 
+        // POST: Order/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Platoon)]
+        public async Task<IActionResult> Edit(string id, OrderViewModel orderViewModel)
+        {
+            if (id != orderViewModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Order order = orderViewModel.ToOrder();
+                    if (order.ContractorId == null)
+                    {
+                        Contractor contractor = new Contractor
+                        {
+                            Enabled = true,
+                            Name = orderViewModel.ContractorName,
+                        };
+                        _context.Add(contractor);
+
+                        ContractorStaff contractorStaff = new ContractorStaff
+                        {
+                            Contractor = contractor,
+                            Name = orderViewModel.ContractorStaffName,
+                            Phone = orderViewModel.ContractorStaffPhone,
+                        };
+                        _context.Add(contractorStaff);
+
+                        await _context.SaveChangesAsync();
+
+                        contractor.HeadStaffId = contractorStaff.Id;
+
+                        order.ContractorId = contractor.Id;
+                        order.ContractorStaffId = contractorStaff.Id;
+                    }
+                    else
+                    {
+                        Contractor contractor = await _context.Contractor.SingleAsync(c => c.Id == order.ContractorId);
+                        if (contractor.Name != orderViewModel.ContractorName)
+                            contractor.Name = orderViewModel.ContractorName;
+                        if (order.ContractorStaffId == null)
+                        {
+                            ContractorStaff contractorStaff = new ContractorStaff
+                            {
+                                Contractor = contractor,
+                                Name = orderViewModel.ContractorStaffName,
+                                Phone = orderViewModel.ContractorStaffPhone,
+                            };
+                            _context.Add(contractorStaff);
+
+                            order.ContractorStaff = contractorStaff;
+                        }
+                        else
+                        {
+                            ContractorStaff contractorStaff = await _context.ContractorStaff.SingleAsync(c => c.Id == order.ContractorStaffId);
+
+                            if (contractorStaff.Name != orderViewModel.ContractorStaffName)
+                                contractorStaff.Name = orderViewModel.ContractorStaffName;
+                            if (contractorStaff.Phone != orderViewModel.ContractorStaffPhone)
+                                contractorStaff.Phone = orderViewModel.ContractorStaffPhone;
+                        }
+                    }
+                    _context.Update(order);
+
+                    List<WorkLoad> curWorkLoads = await _context.WorkLoad.Where(w => w.OrderId == id && w.WorkerId == null).ToListAsync();
+                    List<WorkLoad> workLoads = orderViewModel.WorkLoads.Select(w => w.ToWorkLoad()).ToList();
+
+                    _context.WorkLoad.RemoveRange(curWorkLoads.Except(workLoads, new WorkLoadComparer()));
+                    _context.WorkLoad.AddRange(workLoads.Except(curWorkLoads, new WorkLoadComparer()));
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrderExists(orderViewModel.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            ViewBag.Projects = new SelectList(await _context.Project.ToListAsync(), "Id", "Name");
+            return View(orderViewModel);
+        }
+
+        [Authorize(Roles = Roles.Platoon)]
         public async Task<IActionResult> Organize(string id)
         {
             if (id == null)
@@ -88,6 +215,7 @@ namespace Stb.Platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Platoon)]
         public async Task<IActionResult> SaveOrderEvaluate(OrderEvaluate_Platoon evaluate)
         {
             if (ModelState.IsValid)
@@ -112,6 +240,7 @@ namespace Stb.Platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Platoon)]
         public async Task<IActionResult> SaveTrailEvaluate(TrailEvaluate evaluate)
         {
             if (ModelState.IsValid)
@@ -128,9 +257,26 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("TrailEvaluate", new { id = evaluate.OrderId });
         }
 
+        [Authorize(Roles = Roles.Platoon)]
+        public async Task<IActionResult> Signments(string id)
+        {
+            return View(await _orderService.GetWorkerSignmentsAsync(id));
+        }
+
+        [Authorize(Roles = Roles.Platoon)]
+        public async Task<IActionResult> Issues(string id)
+        {
+            return View(await _orderService.GetIssueAsync(id));
+        }
+
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        private bool OrderExists(string id)
+        {
+            return _context.Order.Any(e => e.Id == id);
         }
     }
 }

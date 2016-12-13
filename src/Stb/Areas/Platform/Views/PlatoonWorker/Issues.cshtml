@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Stb.Api.Models.OrderViewModels.IssueData>
+
+@{
+    ViewData["Title"] = "工人记录问题";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+@foreach (var issue in Model)
+{
+    <div>
+        <div>
+            <span>汇报人：@issue.WorkerName </span>
+            &nbsp;&nbsp;@Html.DisplayFor(model => issue.DateTime)
+        </div>
+        <div>
+            <span>问题类型：</span>
+            @switch (issue.IssueType)
+            {
+                case 1:
+                    <span>设计问题</span>
+                    break;
+                case 2:
+                    <span>业主要求</span>
+                    break;
+                case 3:
+                    <span>现场环境不具备施工条件</span>
+                    break;
+                case 4:
+                    <span>不可抗力</span>
+                    break;
+            }
+        </div>
+        <div>
+            <span>解决方法：</span>
+            @switch (issue.SolutionType)
+            {
+                case 1:
+                    <span>重新施工</span>
+                    break;
+                case 2:
+                    <span>推迟施工</span>
+                    break;
+                case 3:
+                    <span>修改设计</span>
+                    break;
+                case 4:
+                    <span>更换设备型号</span>
+                    break;
+            }
+        </div>
+        <div>
+            @if (issue.Pics != null)
+            {
+                var piclist = issue.Pics.Split(new[] { ',' }).ToList();
+                if (piclist.Count > 0)
+                {
+                    <p>汇报图片</p>
+                    <div class="row">
+                        @foreach (var img in piclist)
+                        {
+                            <img src="@img" style="margin:3px" class="col-xs-6 col-sm-4 col-md-3" />
+                        }
+                    </div>
+                }
+            }
+        </div>
+        <div>
+            @if (issue.Audios != null)
+            {
+                var audioList = issue.Audios.Split(new[] { ',' }).ToList();
+                if (audioList.Count > 0)
+                {
+                    <p>汇报录音</p>
+                    <div class="row">
+                        @foreach (var audio in audioList)
+                        {
+                            <Audio src="@audio" preload="auto" controls="controls" style="margin:3px" class="col-xs-6 col-sm-4 col-md-3">
+                                音频
+                            </Audio>
+                        }
+                    </div>
+                }
+            }
+        </div>
+        <br />
+    </div>
+}

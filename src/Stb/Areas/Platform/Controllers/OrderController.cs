@@ -12,6 +12,7 @@ using Stb.Platform.Models.OrderViewModels;
 using Stb.Api.Services.Push;
 using Stb.Api.Services;
 using Stb.Data.Comparer;
+using Stb.Api.Models.OrderViewModels;
 
 namespace Stb.Platform.Controllers
 {
@@ -21,11 +22,13 @@ namespace Stb.Platform.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IPushService _pushService;
+        private readonly OrderService _orderService;
 
-        public OrderController(ApplicationDbContext context, IPushService pushService)
+        public OrderController(ApplicationDbContext context, IPushService pushService, OrderService orderService)
         {
             _context = context;
             _pushService = pushService;
+            _orderService = orderService;
         }
 
         // GET: Order
@@ -37,7 +40,7 @@ namespace Stb.Platform.Controllers
             ViewBag.Page = page;
             var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
-                .OrderByDescending(p => p.Id)
+                .OrderByDescending(p => p.CreateTime)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();
@@ -52,13 +55,19 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(new OrderViewModel(order));
+
+            ProgressData progressData = null;
+            if (order.State != 0)
+            {
+                progressData = await _orderService.GetOrderProgressAsync(id);
+            }
+            return View(new OrderViewModel(order, progressData));
         }
 
         // GET: Order/Create
@@ -86,6 +95,7 @@ namespace Stb.Platform.Controllers
 
                 Order order = orderViewModel.ToOrder();
                 order.Id = $"{DateTime.Today:yyMMdd}{(indexer.Id + 10000):D5}";
+                order.CreateTime = DateTime.Now;
 
 
                 if (order.ContractorId == null)
@@ -147,6 +157,7 @@ namespace Stb.Platform.Controllers
                     foreach (var workLoadViewModel in orderViewModel.WorkLoads)
                     {
                         WorkLoad workLoad = workLoadViewModel.ToWorkLoad();
+                        workLoad.OrderId = order.Id;
                         _context.Add(workLoad);
                     }
                 }
@@ -357,6 +368,16 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("Evaluate", new { id = evaluate.OrderId });
         }
 
+
+        public async Task<IActionResult> Signments(string id)
+        {
+            return View(await _orderService.GetWorkerSignmentsAsync(id));
+        }
+
+        public async Task<IActionResult> Issues(string id)
+        {
+            return View(await _orderService.GetIssueAsync(id));
+        }
 
         private bool OrderExists(string id)
         {

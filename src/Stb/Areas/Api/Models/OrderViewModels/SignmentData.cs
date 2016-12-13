@@ -20,6 +20,11 @@ namespace Stb.Api.Models.OrderViewModels
         public string UserName { get; set; }
 
         /// <summary>
+        /// 签到、签退时间，web用
+        /// </summary>
+        public DateTime DateTime { get; set; }
+
+        /// <summary>
         /// 签到、签退时间
         /// </summary>
         public long Time { get; set; }
@@ -53,6 +58,7 @@ namespace Stb.Api.Models.OrderViewModels
         {
             UserId = signment.EndUserId;
             UserName = signment.EndUser?.Name;
+            DateTime = signment.Time;
             Time = signment.Time.ToUnixSeconds();
             Location = signment.Location;
             LocationUrl = $"http://restapi.amap.com/v3/staticmap?location={signment.Location}&zoom=12&size=300*200&markers=mid,,:{signment.Location}&key=1ff97f3d9068e5e12e21f3c34480096a";

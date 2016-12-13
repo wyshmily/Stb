@@ -35,6 +35,11 @@ namespace Stb.Api.Models.OrderViewModels
         public long Time { get; set; }
 
         /// <summary>
+        /// 记录时间，web用
+        /// </summary>
+        public DateTime DateTime { get; set; }
+
+        /// <summary>
         /// 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力
         /// </summary>
         public int IssueType { get; set; }
@@ -61,6 +66,7 @@ namespace Stb.Api.Models.OrderViewModels
             WorkerName = issue.EndUser?.Name;
             OrderId = issue.OrderId;
             Time = issue.Time.ToUnixSeconds();
+            DateTime = issue.Time;
             IssueType = issue.IssueType;
             SolutionType = issue.SolutionType;
             Pics = issue.Pics;

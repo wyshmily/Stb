@@ -371,6 +371,11 @@
             记录时间
             </summary>
         </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.IssueData.DateTime">
+            <summary>
+            记录时间，web用
+            </summary>
+        </member>
         <member name="P:Stb.Api.Models.OrderViewModels.IssueData.IssueType">
             <summary>
             问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力
@@ -449,6 +454,11 @@
         <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.UserName">
             <summary>
             签到用户姓名
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.DateTime">
+            <summary>
+            签到、签退时间，web用
             </summary>
         </member>
         <member name="P:Stb.Api.Models.OrderViewModels.SignmentData.Time">

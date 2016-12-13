@@ -70,6 +70,8 @@
                     {
                         <span> |</span>
                         <a asp-action="Organize" asp-route-id="@item.Id">人员组织</a>
+                        <span> |</span>
+                        <a asp-action="Edit" asp-route-id="@item.Id">修改</a>
                     }
                     @if (item.State == 2)
                     {

@@ -12,21 +12,25 @@ using Stb.Platform.Models.OrderViewModels;
 using Stb.Api.Services;
 using Stb.Platform.Models.EvaluateViewModels;
 using Stb.Platform.Models.WorkLoadViewModels;
+using Stb.Api.Models.OrderViewModels;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize(Roles = Roles.Worker)]
+    [Authorize]
     [Area("Platform")]
     public class WorkerOrderController : Controller
     {
 
         private ApplicationDbContext _context;
+        private OrderService _orderService;
 
-        public WorkerOrderController(ApplicationDbContext context)
+        public WorkerOrderController(ApplicationDbContext context, OrderService orderService)
         {
             _context = context;
+            _orderService = orderService;
         }
 
+        [Authorize(Roles = Roles.Worker)]
         public async Task<IActionResult> Index(int page = 1)
         {
             string userId = this.UserId();
@@ -37,13 +41,14 @@ namespace Stb.Platform.Controllers
                 .Include(p => p.Contractor).Include(p => p.ContractorStaff)
                 .Include(p => p.Platoon).Include(p => p.District)
                 .Include(p => p.LeadWorker)
-                .OrderByDescending(p => p.Id)
+                .OrderByDescending(p => p.CreateTime)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
                 .ToListAsync();
             return View(orders.Select(p => new OrderIndexViewModel(p)).ToList());
         }
 
+        [Authorize(Roles = Roles.Worker)]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -51,13 +56,19 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(new OrderViewModel(order));
+            ProgressData progressData = null;
+            if (order.State != 0)
+            {
+                progressData = await _orderService.GetOrderProgressAsync(id);
+            }
+
+            return View(new OrderViewModel(order, progressData));
         }
 
         public async Task<IActionResult> Evaluate(string id)
@@ -80,6 +91,7 @@ namespace Stb.Platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Worker)]
         public async Task<IActionResult> SaveEvaluate(OrderWorkerEvaluatesViewModel OrderWorkerEvaluatesViewModel)
         {
             if (ModelState.IsValid)
@@ -142,6 +154,7 @@ namespace Stb.Platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Worker)]
         public async Task<IActionResult> SaveWorkLoad(OrderWorkLoadsViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -166,6 +179,18 @@ namespace Stb.Platform.Controllers
 
             ViewBag.UserId = this.UserId();
             return View("WorkLoad", viewModel);
+        }
+
+        [Authorize(Roles = Roles.Worker)]
+        public async Task<IActionResult> Signments(string id)
+        {
+            return View(await _orderService.GetWorkerSignmentsAsync(id));
+        }
+
+        [Authorize(Roles = Roles.Worker)]
+        public async Task<IActionResult> Issues(string id)
+        {
+            return View(await _orderService.GetIssueAsync(id));
         }
     }
 }

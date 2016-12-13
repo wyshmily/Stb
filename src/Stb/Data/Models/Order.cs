@@ -9,6 +9,8 @@ namespace Stb.Data.Models
     public class Order
     {
         public string Id { get; set; }  // 工单号
+        
+        public DateTime CreateTime { get; set; }    // 工单创建时间
 
         public int? PlatformUserId { get; set; }    // 下单人Id
 
@@ -67,5 +69,9 @@ namespace Stb.Data.Models
         public Project Project { get; set; }
 
         public List<WorkLoad> WorkLoads { get; set; }
+
+        public List<Evaluate> Evaluates { get; set; }
+
+        public List<Issue> Issues { get; set; }
     }
 }

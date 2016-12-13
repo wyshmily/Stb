@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Stb.Api.Models.OrderViewModels.SignmentData>
+
+@{
+    ViewData["Title"] = "工单签到记录";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+@foreach(var signment in Model)
+{
+    <div>
+        <div>
+            <span>@signment.UserName </span> &nbsp;&nbsp;
+            @if (signment.InOut)
+            {
+                <span>签到</span>
+            }
+            else
+            {
+                <span>签退</span>
+            }
+            &nbsp;&nbsp;@Html.DisplayFor(model => signment.DateTime)
+        </div>
+        <p>
+            @signment.Address
+        </p>
+        <div>
+            <img class="img-responsive" src="@signment.LocationUrl" />
+        </div>
+        <br />
+    </div>
+}
