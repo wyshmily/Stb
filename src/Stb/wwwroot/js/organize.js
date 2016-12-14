@@ -82,7 +82,7 @@ function getWorkerList() {
             body.empty();
             $.each(data, function (i, worker) {
                 var nameBtn = $("<a target=\"_blank\"></a>")
-                    .attr("href", "/platform/Worker/Details/" + worker.id)
+                    .attr("href", "/platform/Worker/Details/" + worker.id + "?blank=true")
                     .text(worker.name)
                     .prepend("<span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span>");
 

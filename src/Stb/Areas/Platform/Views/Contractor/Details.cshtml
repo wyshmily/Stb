@@ -46,7 +46,10 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Contractor.Id">修改</a> |
-    <a asp-action="Index">返回承包商列表</a>
-</div>
+@if (!ViewBag.Blank)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Contractor.Id">修改</a> |
+        <a asp-action="Index">返回承包商列表</a>
+    </div>
+}

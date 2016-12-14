@@ -66,11 +66,12 @@ namespace Stb.Platform.Controllers
             return View(new OrderViewModel(order, progressData));
         }
 
-        public async Task<IActionResult> Evaluate(string id)
+        public async Task<IActionResult> Evaluate(string id, bool blank=false)
         {
             OrderEvaluate_QualityControl evaluate = await _context.OrderEvaluate_QualityControl.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
 
             ViewBag.OrderId = id;
+            ViewBag.Blank = blank;
             return View(evaluate);
         }
 

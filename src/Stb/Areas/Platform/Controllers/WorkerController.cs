@@ -46,7 +46,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Worker/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, bool blank=false)
         {
             if (id == null)
             {
@@ -63,6 +63,7 @@ namespace Stb.Platform.Controllers
 
             await _context.EndUserJobClass.Include(e => e.JobClass).ThenInclude(c => c.JobCategory).LoadAsync();
 
+            ViewBag.Blank = blank;
             return View(new WorkerViewModel(Worker));
         }
 

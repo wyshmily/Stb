@@ -48,7 +48,7 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, bool blank=false)
         {
             if (id == null)
             {
@@ -67,6 +67,8 @@ namespace Stb.Platform.Controllers
             {
                 progressData = await _orderService.GetOrderProgressAsync(id);
             }
+
+            ViewBag.Blank = blank;
             return View(new OrderViewModel(order, progressData));
         }
 
@@ -344,11 +346,12 @@ namespace Stb.Platform.Controllers
         }
 
 
-        public async Task<IActionResult> Evaluate(string id)
+        public async Task<IActionResult> Evaluate(string id, bool blank=false)
         {
             OrderEvaluate_Customer evaluate = await _context.OrderEvaluate_Customer.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
 
             ViewBag.OrderId = id;
+            ViewBag.Blank = blank;
             return View(evaluate);
         }
 

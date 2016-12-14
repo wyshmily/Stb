@@ -44,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.ContractorStaffPhone)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-controller="Platoon" asp-route-id="@item.PlatoonId">
+                    <a asp-action="Details" asp-controller="Platoon" asp-route-id="@item.PlatoonId" target="_blank" asp-route-blank="true">
                         @Html.DisplayFor(modelItem => item.PlatoonName)
                     </a>
                 </td>

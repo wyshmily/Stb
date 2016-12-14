@@ -205,11 +205,12 @@ namespace Stb.Platform.Controllers
             return View(new PlatoonOrderViewModel(order));
         }
 
-        public async Task<IActionResult> OrderEvaluate(string id)
+        public async Task<IActionResult> OrderEvaluate(string id, bool blank=false)
         {
             OrderEvaluate_Platoon evaluate = await _context.OrderEvaluate_Platoon.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
 
             ViewBag.OrderId = id;
+            ViewBag.Blank = blank;
             return View(evaluate);
         }
 
@@ -230,11 +231,12 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("OrderEvaluate", new { id = evaluate.OrderId });
         }
 
-        public async Task<IActionResult> TrailEvaluate(string id)
+        public async Task<IActionResult> TrailEvaluate(string id, bool blank)
         {
             TrailEvaluate evaluate = await _context.TrailEvaluate.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
 
             ViewBag.OrderId = id;
+            ViewBag.Blank = blank;
             return View(evaluate);
         }
 

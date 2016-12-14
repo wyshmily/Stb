@@ -182,7 +182,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <a asp-action="Details" asp-controller="Worker" asp-route-id="@worker.Id" title="@worker.UserName" target="_blank">
+                                    <a asp-action="Details" asp-controller="Worker" asp-route-id="@worker.Id" title="@worker.UserName" target="_blank" asp-route-blank="true">
                                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                         @Html.DisplayFor(model => worker.Name)
                                     </a>
@@ -230,7 +230,7 @@
                         &nbsp;&nbsp;
                         @Html.DisplayFor(model => model.ProgressData.Signment.DateTime)
                         &nbsp;&nbsp;
-                        <a target="_blank" asp-action="Signments" asp-route-id="@Model.Id" class="btn btn-link">更多</a>
+                        <a target="_blank" asp-action="Signments" asp-route-id="@Model.Id" class="btn btn-link" asp-route-blank="true">更多</a>
                     </div>
                 }
             </dd>
@@ -252,7 +252,7 @@
                         &nbsp;&nbsp;
                         @Html.DisplayFor(model => model.ProgressData.Issue.DateTime)
                         &nbsp;&nbsp;
-                        <a target="_blank" asp-action="Issues" asp-route-id="@Model.Id" class="btn btn-link">更多</a>
+                        <a target="_blank" asp-action="Issues" asp-route-id="@Model.Id" class="btn btn-link" asp-route-blank="true">更多</a>
                     </div>
                 }
             </dd>
@@ -275,7 +275,7 @@
                     }
                     else
                     {
-                        <a asp-action="OrderEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                        <a asp-action="OrderEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                     }
                 }
             </dd>
@@ -291,7 +291,7 @@
                     }
                     else
                     {
-                        <a asp-action="TrailEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                        <a asp-action="TrailEvaluate" asp-controller="PlatoonOrder" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                     }
                 }
             </dd>
@@ -307,7 +307,7 @@
                     }
                     else
                     {
-                        <a asp-action="Evaluate" asp-controller="QualityControlOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                        <a asp-action="Evaluate" asp-controller="QualityControlOrder" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                     }
                 }
             </dd>
@@ -323,7 +323,7 @@
                     }
                     else
                     {
-                        <a asp-action="Evaluate" target="_blank" asp-route-id="@Model.Id">查看</a>
+                        <a asp-action="Evaluate" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                     }
                 }
             </dd>
@@ -339,7 +339,7 @@
                     }
                     else
                     {
-                        <a asp-action="Evaluate" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                        <a asp-action="Evaluate" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                     }
                 }
             </dd>
@@ -353,7 +353,7 @@
             <dd>
                 @if (Model.IsWokerWorkLoadSet)
                 {
-                    <a asp-action="WorkLoad" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id">查看</a>
+                    <a asp-action="WorkLoad" asp-controller="WorkerOrder" target="_blank" asp-route-id="@Model.Id" asp-route-blank="true">查看</a>
                 }
                 else
                 {

@@ -173,7 +173,10 @@
     </dl>
 
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |
-    <a asp-action="Index">返回工人列表</a>
-</div>
+@if (!ViewBag.Blank)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">修改</a> |
+        <a asp-action="Index">返回工人列表</a>
+    </div>
+}

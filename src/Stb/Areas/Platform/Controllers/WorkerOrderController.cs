@@ -71,7 +71,7 @@ namespace Stb.Platform.Controllers
             return View(new OrderViewModel(order, progressData));
         }
 
-        public async Task<IActionResult> Evaluate(string id)
+        public async Task<IActionResult> Evaluate(string id, bool blank = false)
         {
             Order order = await _context.Order.Include(o => o.OrderWorkers).ThenInclude(ow => ow.Worker).SingleOrDefaultAsync(o => o.Id == id);
             order.OrderWorkers.RemoveAll(o => o.WorkerId == order.LeadWorkerId);
@@ -86,6 +86,7 @@ namespace Stb.Platform.Controllers
             };
 
             ViewBag.OrderId = id;
+            ViewBag.Blank = blank;
             return View(viewModel);
         }
 
@@ -109,7 +110,7 @@ namespace Stb.Platform.Controllers
             return RedirectToAction("Evaluate", new { id = OrderWorkerEvaluatesViewModel.WorkerEvaluates[0].Evaluate.OrderId });
         }
 
-        public async Task<IActionResult> WorkLoad(string id)
+        public async Task<IActionResult> WorkLoad(string id, bool blank=false)
         {
             Order order = await _context.Order.Include(o => o.OrderWorkers).ThenInclude(ow => ow.Worker).Include(o => o.WorkLoads).ThenInclude(wl => wl.JobMeasurement).SingleOrDefaultAsync(o => o.Id == id);
 
@@ -148,6 +149,7 @@ namespace Stb.Platform.Controllers
             };
 
             ViewBag.UserId = this.UserId();
+            ViewBag.Blank = blank;
 
             return View(viewModel);
         }

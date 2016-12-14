@@ -47,7 +47,7 @@ namespace Stb.Platform.Controllers
         // GET: Contractors/Details/5
         [Authorize]
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, bool blank=false)
         {
             if (id == null)
             {
@@ -70,6 +70,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
+            ViewBag.Blank = blank;
             return View(viewModel);
         }
 

@@ -567,11 +567,12 @@
         </tbody>
     </table>
 </form>
-
-<div>
-    <a asp-action="Index">返回工单列表</a>
-</div>
-
+@if (!ViewBag.Blank)
+{
+    <div>
+        <a asp-action="Index">返回工单列表</a>
+    </div>
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
