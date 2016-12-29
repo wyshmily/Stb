@@ -76,12 +76,36 @@
                     @if (item.State == 2)
                     {
                         <span> |</span>
-                        <a asp-action="OrderEvaluate" asp-route-id="@item.Id">工单评价</a>
+                        @if (item.IsPlatoonEvaluated)
+                        {
+                            <a asp-action="OrderEvaluate" asp-route-id="@item.Id" class="btn-success">工单评价</a>
+                        }
+                        else
+                        {
+                            <a asp-action="OrderEvaluate" asp-route-id="@item.Id">工单评价</a>
+                        }
 
                         @if (item.LeadWorkerIsCandidate == true)
                         {
                             <span> |</span>
-                            <a asp-action="TrailEvaluate" asp-route-id="@item.Id">试单评价</a>
+                            @if (item.IsTrailEvaluated)
+                            {
+                                <a asp-action="TrailEvaluate" asp-route-id="@item.Id" class="btn-success">试单评价</a>
+                            }
+                            else
+                            {
+                                <a asp-action="TrailEvaluate" asp-route-id="@item.Id">试单评价</a>
+                            }
+                        }
+                        if (item.IsWorkerWorkLoadSet)
+                        {
+                            <span> |</span>
+                            <a asp-action="WorkLoad" asp-route-id="@item.Id" class="btn-success">工作量</a>
+                        }
+                        else
+                        {
+                            <span> |</span>
+                            <a asp-action="WorkLoad" asp-route-id="@item.Id">工作量</a>
                         }
                     }
                 </td>

@@ -28,6 +28,12 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.Portrait)
+        </dt>
+        <dd>
+            <img id="portrait-img" src="@Model.Portrait" />
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>

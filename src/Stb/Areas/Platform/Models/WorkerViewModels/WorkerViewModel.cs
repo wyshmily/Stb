@@ -28,6 +28,9 @@ namespace Stb.Platform.Models.WorkerViewModels
         [Display(Name = "是否启用")]
         public bool Enabled { get; set; }
 
+        [Display(Name = "头像")]
+        public string Portrait { get; set; }
+
         [Display(Name = "姓名")]
         [Required(ErrorMessage = "{0}不能为空")]
         [StringLength(32, MinimumLength = 1, ErrorMessage = "{0}长度为{2}到{1}个字符")]
@@ -103,6 +106,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Id = worker.Id;
             UserName = worker.UserName;
             Password = "Hidden";
+            Portrait = worker.Portrait;
             Name = worker.Name;
             Gender = worker.Gender;
             IdCardNumber = worker.IdCardNumber;
@@ -150,6 +154,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Worker worker = new Worker
             {
                 UserName = UserName,
+                Portrait = Portrait,
                 Name = Name,
                 Gender = Gender,
                 IdCardNumber = IdCardNumber,
@@ -179,6 +184,7 @@ namespace Stb.Platform.Models.WorkerViewModels
         public void Update(ref Worker worker)
         {
             worker.UserName = UserName;
+            worker.Portrait = Portrait;
             worker.Name = Name;
             worker.Gender = Gender;
             worker.IdCardNumber = IdCardNumber;

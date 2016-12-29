@@ -211,6 +211,8 @@ namespace Stb.Data.Migrations
 
                     b.Property<int?>("HeadStaffId");
 
+                    b.Property<string>("HeadUserId");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64);
@@ -506,7 +508,7 @@ namespace Stb.Data.Migrations
 
                     b.Property<int?>("ContractorId");
 
-                    b.Property<int?>("ContractorStaffId");
+                    b.Property<string>("ContractorUserId");
 
                     b.Property<DateTime>("CreateTime");
 
@@ -544,7 +546,7 @@ namespace Stb.Data.Migrations
 
                     b.HasIndex("ContractorId");
 
-                    b.HasIndex("ContractorStaffId");
+                    b.HasIndex("ContractorUserId");
 
                     b.HasIndex("DistrictId");
 
@@ -702,6 +704,19 @@ namespace Stb.Data.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("WorkLoad");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.ContractorUser", b =>
+                {
+                    b.HasBaseType("Stb.Data.Models.ApplicationUser");
+
+                    b.Property<int>("ContractorId");
+
+                    b.HasIndex("ContractorId");
+
+                    b.ToTable("ContractorUser");
+
+                    b.HasDiscriminator().HasValue("ContractorUser");
                 });
 
             modelBuilder.Entity("Stb.Data.Models.EndUser", b =>
@@ -1017,7 +1032,7 @@ namespace Stb.Data.Migrations
             modelBuilder.Entity("Stb.Data.Models.ContractorStaff", b =>
                 {
                     b.HasOne("Stb.Data.Models.Contractor", "Contractor")
-                        .WithMany("Staffs")
+                        .WithMany()
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -1126,9 +1141,9 @@ namespace Stb.Data.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("ContractorId");
 
-                    b.HasOne("Stb.Data.Models.ContractorStaff", "ContractorStaff")
+                    b.HasOne("Stb.Data.Models.ContractorUser", "ContractorUser")
                         .WithMany("Orders")
-                        .HasForeignKey("ContractorStaffId");
+                        .HasForeignKey("ContractorUserId");
 
                     b.HasOne("Stb.Data.Models.District", "District")
                         .WithMany("Orders")
@@ -1201,6 +1216,14 @@ namespace Stb.Data.Migrations
                     b.HasOne("Stb.Data.Models.Worker", "Worker")
                         .WithMany("WorkLoads")
                         .HasForeignKey("WorkerId");
+                });
+
+            modelBuilder.Entity("Stb.Data.Models.ContractorUser", b =>
+                {
+                    b.HasOne("Stb.Data.Models.Contractor", "Contractor")
+                        .WithMany("Users")
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Stb.Data.Models.TrailEvaluate", b =>

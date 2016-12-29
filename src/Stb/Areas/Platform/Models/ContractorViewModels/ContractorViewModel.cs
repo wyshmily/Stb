@@ -1,4 +1,5 @@
 ﻿using Stb.Data.Models;
+using Stb.Platform.Models.ContractorUserViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Stb.Platform.Models.ContractorViewModels
     public class ContractorViewModel
     {
         public Contractor Contractor {get;set;}
-        public ContractorStaff HeadStaff { get; set;}
+        public ContractorUserViewModel HeadUser { get; set;}
     }
 }

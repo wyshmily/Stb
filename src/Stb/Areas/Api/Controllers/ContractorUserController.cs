@@ -8,16 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
 using Stb.Platform.Models.ContractorViewModels;
+using Stb.Api.Models.ContractorUserViewModels;
 
 namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/ContractorStaff")]
-    public class ContractorStaffController : Controller
+    [Route("api/ContractorUser")]
+    public class ContractorUserController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ContractorStaffController(ApplicationDbContext context)
+        public ContractorUserController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -29,14 +30,14 @@ namespace Stb.Api.Controllers
         /// <param name="search"></param>
         /// <returns></returns>
         [HttpGet("Search")]
-        public IEnumerable<ContractorStaff> Search([FromQuery]int contractorId, [FromQuery]string search)
+        public IEnumerable<ContractorUserData> Search([FromQuery]int contractorId, [FromQuery]string search)
         {
-           var query = _context.ContractorStaff.Where(c => c.ContractorId == contractorId);
+           var query = _context.ContractorUser.Where(c => c.ContractorId == contractorId);
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(w => w.Name.Contains(search) || w.Phone.Contains(search));
+                query = query.Where(w => w.Name.Contains(search) || w.UserName.Contains(search));
             }
-            return query.Take(10);
+            return query.Take(10).ToList().Select(u => new ContractorUserData(u));
         }
     }
 }

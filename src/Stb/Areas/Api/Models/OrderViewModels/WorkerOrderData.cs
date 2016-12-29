@@ -11,8 +11,8 @@ namespace Stb.Api.Models.OrderViewModels
         public WorkerOrderData(Order order)
         {
             OrderId = order.Id;
-            Contactor = order.ContractorStaff?.Name;
-            Phone = order.ContractorStaff?.Phone;
+            Contactor = order.ContractorUser?.Name;
+            Phone = order.ContractorUser?.UserName;
             State = order.State;
             Accepted = order.LeadWorkerId == order.AcceptWorkerId;
             District = order.District?.FullName;

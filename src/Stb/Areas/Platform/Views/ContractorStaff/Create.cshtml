@@ -1,16 +1,16 @@
-﻿@model Stb.Data.Models.ContractorStaff
+﻿@model Stb.Platform.Models.ContractorUserViewModels.ContractorUserViewModel
 
 @{
     ViewData["Title"] = "新增员工";
 }
 
-<h2>@ViewData["Title"]  -  @Model.Contractor.Name</h2>
+<h2>@ViewData["Title"]</h2>
 <br />
 <form asp-action="Create">
     <div class="form-horizontal">
         <h4>员工资料</h4>
         <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="ContractorId" />
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
@@ -20,10 +20,17 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Phone" class="col-md-2 control-label"></label>
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger" />
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

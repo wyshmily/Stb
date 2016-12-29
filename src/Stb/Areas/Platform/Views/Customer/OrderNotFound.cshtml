@@ -1,0 +1,19 @@
+﻿@Model string
+@{
+    ViewData["Title"] = "师徒帮平台-工单查询";
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<br />
+<br />
+<br />
+<div>
+    您所查找的工单不存在！
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

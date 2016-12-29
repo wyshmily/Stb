@@ -8,7 +8,7 @@ namespace Stb.Data.Models
 {
     public class WorkerEvaluate : Evaluate
     {
-        public string WorkerId { get; set; }    // 试单班长Id
+        public string WorkerId { get; set; }    // 工人Id
 
         public Worker Worker { get; set; }
 

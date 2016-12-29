@@ -108,7 +108,14 @@
                     @if (item.State == 2)
                     {
                         <span> |</span>
-                        <a asp-action="Evaluate" asp-route-id="@item.Id">客户评价</a>
+                        @if (item.IsCustomerEvaluated)
+                        {
+                            <a asp-action="Evaluate" asp-route-id="@item.Id" class="btn-success">客户评价</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Evaluate" asp-route-id="@item.Id" >客户评价</a>
+                        }
                     }
                 </td>
             </tr>

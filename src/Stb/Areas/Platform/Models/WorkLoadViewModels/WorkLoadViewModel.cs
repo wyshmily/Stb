@@ -16,6 +16,7 @@ namespace Stb.Platform.Models.WorkLoadViewModels
         public string Unit { get; set; }
 
         [NoBiggerThanOrderWorkLoad(ErrorMessage = "工人工作量不能超过工单的对应工作量")]
+        [Range(1,1000000000,ErrorMessage ="请输入合理的工作量数值")]
         public int? Amount { get; set; }
 
         public string WorkerId { get; set; }

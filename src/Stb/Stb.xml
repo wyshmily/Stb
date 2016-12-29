@@ -29,7 +29,7 @@
             <param name="search"></param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.ContractorStaffController.Search(System.Int32,System.String)">
+        <member name="M:Stb.Api.Controllers.ContractorUserController.Search(System.Int32,System.String)">
             <summary>
             Web端：搜索承包商员工
             </summary>

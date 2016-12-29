@@ -11,3 +11,5 @@
 /// <reference path="lib/jquery-validation/dist/jquery.validate.js" />
 /// <reference path="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
 /// <reference path="lib/typeahead.js/dist/typeahead.bundle.js" />
+/// <reference path="lib/plupload/js/plupload.js" />
+/// <reference path="lib/Jcrop/js/Jcrop.js" />

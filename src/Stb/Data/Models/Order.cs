@@ -16,7 +16,9 @@ namespace Stb.Data.Models
 
         public int? ContractorId { get; set; }  // 承包商ID
 
-        public int? ContractorStaffId { get; set; }   // 承包商联系人ID
+        public string ContractorUserId { get; set; }    // 承包商联系人ID
+
+        //public int? ContractorStaffId { get; set; }   // 承包商联系人ID
 
         public int? DistrictId { get; set; } // 施工地点所在区县
 
@@ -52,7 +54,9 @@ namespace Stb.Data.Models
 
         public Contractor Contractor { get; set; }
 
-        public ContractorStaff ContractorStaff { get; set; }
+        //public ContractorStaff ContractorStaff { get; set; }
+
+        public ContractorUser ContractorUser { get; set; }
 
         public District District { get; set; }
 

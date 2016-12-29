@@ -67,7 +67,14 @@
                     @if (item.State == 2)
                     {
                         <span> |</span>
-                        <a asp-action="Evaluate" asp-route-id="@item.Id">评价</a>
+                        @if (item.IsQualityControlEvaluated)
+                        {
+                            <a asp-action="Evaluate" asp-route-id="@item.Id" class="btn-success">评价</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Evaluate" asp-route-id="@item.Id">评价</a>
+                        }
                     }
                 </td>
             </tr>

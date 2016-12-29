@@ -44,6 +44,8 @@ namespace Stb.Data
         // 承包商员工
         public DbSet<ContractorStaff> ContractorStaff { get; set; }
 
+        public DbSet<ContractorUser> ContractorUser { get; set; }
+
         public DbSet<Province> Province { get; set; }
 
         public DbSet<City> City { get; set; }

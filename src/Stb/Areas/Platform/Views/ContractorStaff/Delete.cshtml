@@ -1,10 +1,10 @@
-﻿@model Stb.Data.Models.ContractorStaff
+﻿@model Stb.Platform.Models.ContractorUserViewModels.ContractorUserViewModel
 
 @{
     ViewData["Title"] = "删除员工";
 }
 
-<h2>@ViewData["Title"]  -  @Model.Contractor.Name</h2>
+<h2>@ViewData["Title"]</h2>
 <br />
 <h4 class="text-danger text-center">确认删除承包商员工？</h4>
 <div>
@@ -18,10 +18,10 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Phone)
+            @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Phone)
+            @Html.DisplayFor(model => model.UserName)
         </dd>
     </dl>
 

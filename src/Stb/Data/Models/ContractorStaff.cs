@@ -26,6 +26,6 @@ namespace Stb.Data.Models
 
         public Contractor Contractor { get; set; }
 
-        public List<Order> Orders { get; set; }
+        //public List<Order> Orders { get; set; }
     }
 }

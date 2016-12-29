@@ -1,10 +1,10 @@
-﻿@model Stb.Data.Models.ContractorStaff
+﻿@model Stb.Platform.Models.ContractorUserViewModels.ContractorUserViewModel
 
 @{
     ViewData["Title"] = "修改员工";
 }
 
-<h2>@ViewData["Title"]  -  @Model.Contractor.Name</h2>
+<h2>@ViewData["Title"]</h2>
 <br />
 <form asp-action="Edit">
     <div class="form-horizontal">
@@ -21,10 +21,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Phone" class="col-md-2 control-label"></label>
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger" />
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

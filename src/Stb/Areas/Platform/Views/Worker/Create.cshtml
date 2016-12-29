@@ -37,6 +37,32 @@
         <h4>基本资料</h4>
         <hr />
         <div class="form-group">
+            <label asp-for="Portrait" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Portrait" class="form-control" type="hidden" />
+                <div class="col-md-4">
+                    <img id="portrait-img" alt="头像" src="@Model.Portrait" />
+                </div>
+                <div class="col-md-4">
+                    <div id="container">
+                        <a id="selectfiles" href="javascript:void(0);" class='btn btn-link'>上传头像</a>
+                        @*<a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>*@
+                    </div>
+                    <div id="ossfile">你的浏览器不支持flash,Silverlight或者HTML5！</div>
+                </div>
+            </div>
+        </div>
+        <div id="crop-div" style="display:none">
+            <div class="text-center">
+                <a id="save-crop" href="javascript:void(0);" class='btn btn-link'>剪裁并保存</a>
+                <a id="cancel-crop" href="javascript:void(0);" class='btn btn-link'>取消</a>
+                &nbsp;&nbsp;&nbsp;
+            </div>
+            <div id="crop-container">
+                <img id="portrait-origin" />
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Name" class="form-control" />
@@ -97,7 +123,7 @@
             <div class="col-md-10 dropdown">
                 <input asp-for="HeaderName" class="form-control dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" autocomplete="off" />
                 <input type="hidden" asp-for="HeaderId" />
-                <ul id="HeaderDropDown" class="dropdown-menu form-contorl-margin form-control" aria-labelledby="HeaderName"></ul>
+                <ul id="HeaderDropDown" class="dropdown-menu form-contorl-margin form-control" aria-labelledby="HeaderName" style="min-height:400px"></ul>
             </div>
         </div>
 
@@ -202,4 +228,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_JcropScriptsPartial");}
 }

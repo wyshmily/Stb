@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "工单查询";
+}
+
+<br />
+<br />
+<br />
+<div class="text-center"><span class="text-danger">@ViewBag.Error</span></div>
+<br />
+<br />
+<form asp-action="Details" method="get">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-offset-1 col-xs-10">
+                <input id="Id" name="Id" placeholder="请输入工单号" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-xs-offset-1 col-xs-10">
+                <input type="submit" value="确定" class="form-control btn btn-success" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -8,54 +8,57 @@ using Microsoft.EntityFrameworkCore;
 using Stb.Data;
 using Stb.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Stb.Platform.Models.ContractorUserViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Stb.Platform.Controllers
 {
-    [Authorize]
+    [Area(AreaNames.Platform)]
     [Authorize(Roles = Roles.AdminAndCustomerService)]
     public class ContractorStaffController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ContractorUser> _userManager;
 
-        public ContractorStaffController(ApplicationDbContext context)
+        public ContractorStaffController(ApplicationDbContext context, UserManager<ContractorUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ContractorStaff
         public async Task<IActionResult> Index(int id)
         {
             ViewData["Contractor"] = _context.Contractor.Single(c => c.Id == id);
-            return View(await _context.ContractorStaff.Include(s => s.Contractor).Where(s => s.ContractorId == id).ToListAsync());
+            return View((await _context.ContractorUser./*Include(s => s.Contractor).*/Where(s => s.ContractorId == id).ToListAsync()).Select(u => new ContractorUserViewModel(u)));
         }
 
         // GET: ContractorStaff/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contractorStaff = await _context.ContractorStaff.Include(s => s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
+            var contractorStaff = await _context.ContractorUser.Include(s => s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
             if (contractorStaff == null)
             {
                 return NotFound();
             }
 
-            return View(contractorStaff);
+            return View(new ContractorUserViewModel(contractorStaff));
         }
 
         // GET: ContractorStaff/Create
         public async Task<IActionResult> Create(int id)
         {
             Contractor contractor = await _context.Contractor.SingleOrDefaultAsync(c => c.Id == id);
-            ContractorStaff staff = new ContractorStaff
+            ContractorUserViewModel user = new ContractorUserViewModel
             {
-                Contractor = contractor,
                 ContractorId = contractor.Id
             };
-            return View(staff);
+            return View(user);
         }
 
         // POST: ContractorStaff/Create
@@ -63,31 +66,41 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContractorId,Name,Phone")] ContractorStaff contractorStaff)
+        public async Task<IActionResult> Create([Bind("ContractorId,Name,UserName,Password")]ContractorUserViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contractorStaff);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", new { id = contractorStaff.ContractorId });
+                ContractorUser user = viewModel.ToContractorUser();
+
+                if (await _userManager.Users.AnyAsync(u => u.UserName == user.UserName))
+                {
+                    ModelState.AddModelError("UserName", $"用户{user.UserName}已存在！");
+                    return View(viewModel);
+                }
+
+                await _userManager.CreateAsync(user, viewModel.Password);
+                await _userManager.AddToRoleAsync(user, Roles.Contractor);
+                //_context.Add(contractorStaff);
+                //await _context.SaveChangesAsync();
+                return RedirectToAction("Index", new { id = viewModel.ContractorId });
             }
-            return View(contractorStaff);
+            return View(viewModel);
         }
 
         // GET: ContractorStaff/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contractorStaff = await _context.ContractorStaff.Include(s => s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
+            var contractorStaff = await _context.ContractorUser.Include(s => s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
             if (contractorStaff == null)
             {
                 return NotFound();
             }
-            return View(contractorStaff);
+            return View(new ContractorUserViewModel(contractorStaff));
         }
 
         // POST: ContractorStaff/Edit/5
@@ -95,7 +108,7 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ContractorId,Name,Phone")] ContractorStaff contractorStaff)
+        public async Task<IActionResult> Edit(string id, ContractorUserViewModel contractorStaff)
         {
             if (id != contractorStaff.Id)
             {
@@ -106,12 +119,13 @@ namespace Stb.Platform.Controllers
             {
                 try
                 {
-                    _context.Update(contractorStaff);
-                    await _context.SaveChangesAsync();
+                    var appUser = await _userManager.FindByIdAsync(id);
+                    contractorStaff.Update(ref appUser);
+                    await _userManager.UpdateAsync(appUser);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContractorStaffExists(contractorStaff.Id))
+                    if (!ContractorUserExists(contractorStaff.Id))
                     {
                         return NotFound();
                     }
@@ -126,38 +140,38 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: ContractorStaff/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contractorStaff = await _context.ContractorStaff.Include(s=>s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
+            var contractorStaff = await _context.ContractorUser.Include(s => s.Contractor).SingleOrDefaultAsync(m => m.Id == id);
             if (contractorStaff == null)
             {
                 return NotFound();
             }
 
-            return View(contractorStaff);
+            return View(new ContractorUserViewModel(contractorStaff));
         }
 
         // POST: ContractorStaff/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var contractorStaff = await _context.ContractorStaff.Include(s=>s.Orders).SingleOrDefaultAsync(m => m.Id == id);
+            var contractorStaff = await _context.ContractorUser.Include(s => s.Orders).SingleOrDefaultAsync(m => m.Id == id);
             foreach (var order in contractorStaff.Orders)
-                order.ContractorStaffId = null;
-            _context.ContractorStaff.Remove(contractorStaff);
+                order.ContractorUserId = null;
+            _context.ContractorUser.Remove(contractorStaff);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { id = contractorStaff.ContractorId });
         }
 
-        private bool ContractorStaffExists(int id)
+        private bool ContractorUserExists(string id)
         {
-            return _context.ContractorStaff.Any(e => e.Id == id);
+            return _context.ContractorUser.Any(e => e.Id == id);
         }
     }
 }

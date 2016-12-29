@@ -27,7 +27,7 @@
         limit: 10,
         identify: function (datum) { return datum.id; },
         remote: {
-            url: '../../../api/ContractorStaff/Search?contractorId=%CONTRACTORID&search=%QUERY',
+            url: '../../../api/ContractorUser/Search?contractorId=%CONTRACTORID&search=%QUERY',
             prepare: function (query, settings) {
                 settings.url = settings.url.replace("%CONTRACTORID", $("#ContractorId").val())
                     .replace("%QUERY", query);
@@ -142,8 +142,8 @@
         console.log($("#ContractorName").val());
         $("#ContractorTypeahead").typeahead('val', $("#ContractorName").val());
     }
-    if ($("#ContractorStaffName").val()) {
-        $("#ContractorStaffTypeahead").typeahead('val', $("#ContractorStaffName").val());
+    if ($("#ContractorUserName").val()) {
+        $("#ContractorStaffTypeahead").typeahead('val', $("#ContractorUserName").val());
     }
     
 
@@ -158,9 +158,9 @@
                 }
                 $("#ContractorId").val(null);
                 $("#ContractorName").val(query);
-                $("#ContractorStaffId").val(null);
-                $("#ContractorStaffName").val(null);
-                $("#ContractorStaffPhone").val(null);
+                $("#ContractorUserId").val(null);
+                $("#ContractorUserName").val(null);
+                $("#ContractorUserPhone").val(null);
                 $('#ContractorStaffTypeahead').typeahead('val', '1');
                 $('#ContractorStaffTypeahead').typeahead('val', '');
                 $("#ContractorStaffTypeahead").focus();
@@ -170,7 +170,7 @@
     });
 
     $('#ContractorStaffTypeahead').bind('typeahead:change', function (ev, query) {
-        if ($("#ContractorStaffName").val() != query) {
+        if ($("#ContractorUserName").val() != query) {
             contractorStaffs.search(query, function () { }, function (data) {
                 for (i = 0; i < data.length; i++) {
                     if (data[i].name == query) {
@@ -178,10 +178,10 @@
                         return;
                     }
                 }
-                $("#ContractorStaffId").val(null);
-                $("#ContractorStaffName").val(query);
-                $("#ContractorStaffPhone").val(null);
-                $("#ContractorStaffPhone").focus();
+                $("#ContractorUserId").val(null);
+                $("#ContractorUserName").val(query);
+                $("#ContractorUserPhone").val(null);
+                $("#ContractorUserPhone").focus();
             });
         }
     });
@@ -226,19 +226,19 @@
 function onContractorSelected(suggestion) {
     $("#ContractorId").val(suggestion.id);
     $("#ContractorName").val(suggestion.name);
-    $("#ContractorStaffId").val(null);
-    $("#ContractorStaffName").val(null);
-    $("#ContractorStaffPhone").val(null);
+    $("#ContractorUserId").val(null);
+    $("#ContractorUserName").val(null);
+    $("#ContractorUserPhone").val(null);
     $("#ContractorStaffTypeahead").focus();
     $("#ContractorStaffTypeahead").typeahead('val', '1');
     $("#ContractorStaffTypeahead").typeahead('val', '');
 }
 
 function onContractorStaffSelected(suggestion) {
-    $("#ContractorStaffId").val(suggestion.id);
-    $("#ContractorStaffName").val(suggestion.name);
-    $("#ContractorStaffPhone").val(suggestion.phone);
-    $("#ContractorStaffPhone").focus();
+    $("#ContractorUserId").val(suggestion.id);
+    $("#ContractorUserName").val(suggestion.name);
+    $("#ContractorUserPhone").val(suggestion.phone);
+    $("#ContractorUserPhone").focus();
 }
 
 function onPlatoonSelected(suggestion) {

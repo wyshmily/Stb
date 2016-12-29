@@ -29,7 +29,7 @@
         <div class="form-group">
             <label asp-for="HeadStaffId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-items="@(new SelectList(Model.Staffs, "Id", "Name"))" asp-for="HeadStaffId" class="form-control">
+                <select asp-items="@(new SelectList(Model.Users, "Id", "Name"))" asp-for="HeadUserId" class="form-control">
                     <option>请选择负责人</option>
                 </select>
                 <span asp-validation-for="HeadStaffId" class="text-danger" />

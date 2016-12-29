@@ -16,6 +16,8 @@ namespace Stb.Platform.Models.OrderViewModels
     {
         public string Id { get; set; }
 
+        public DateTime CreateTime { get; set; }
+
         public int? ContractorId { get; set; }  // 承包商Id
 
         [Display(Name = "承包商")]
@@ -23,17 +25,17 @@ namespace Stb.Platform.Models.OrderViewModels
         [StringLength(64, MinimumLength = 1, ErrorMessage = "{0}长度为{2}到{1}个字符")]
         public string ContractorName { get; set; }  // 承包商名称
 
-        public int? ContractorStaffId { get; set; }
+        public string ContractorUserId { get; set; }
 
         [Display(Name = "联系人")]
         [Required(ErrorMessage = "{0}不能为空")]
         [StringLength(64, MinimumLength = 1, ErrorMessage = "{0}长度为{2}到{1}个字符")]
-        public string ContractorStaffName { get; set; } // 联系人姓名
+        public string ContractorUserName { get; set; } // 联系人姓名
 
         [Display(Name = "联系电话")]
         [RegularExpression(@"^1[3|4|5|7|8]\d{9}$", ErrorMessage = "请输入正确的手机号码")]
         [Required(ErrorMessage = "{0}不能为空")]
-        public string ContractorStaffPhone { get; set; }    // 联系电话
+        public string ContractorUserPhone { get; set; }    // 联系电话
 
         [Display(Name = "排长")]
         [Required(ErrorMessage = "请为项目选择排长")]
@@ -42,6 +44,8 @@ namespace Stb.Platform.Models.OrderViewModels
         [Display(Name = "排长")]
         //[Required(ErrorMessage = "请为项目选择排长")]
         public string PlatoonName { get; set; } // 排长姓名
+
+        public string PlatoonPortrait { get; set; } // 排长头像
 
         [Display(Name = "施工状态")]
         public byte State { get; set; } // 工单状态
@@ -107,13 +111,15 @@ namespace Stb.Platform.Models.OrderViewModels
         public OrderViewModel(Order order, ProgressData progressData = null)
         {
             Id = order.Id;
+            CreateTime = order.CreateTime;
             ContractorId = order.ContractorId;
             ContractorName = order.Contractor?.Name;
-            ContractorStaffId = order.ContractorStaffId;
-            ContractorStaffName = order.ContractorStaff?.Name;
-            ContractorStaffPhone = order.ContractorStaff?.Phone;
+            ContractorUserId = order.ContractorUserId;
+            ContractorUserName = order.ContractorUser?.Name;
+            ContractorUserPhone = order.ContractorUser?.UserName;
             PlatoonId = order.PlatoonId;
             PlatoonName = order.Platoon?.Name;
+            PlatoonPortrait = order.Platoon?.Portrait;
             State = order.State;
             Description = order.Description;
             WorkAddress = order.WorkAddress;
@@ -143,8 +149,9 @@ namespace Stb.Platform.Models.OrderViewModels
             return new Order
             {
                 Id = Id,
+                CreateTime = CreateTime,
                 ContractorId = ContractorId,
-                ContractorStaffId = ContractorStaffId,
+                ContractorUserId = ContractorUserId,
                 PlatoonId = PlatoonId,
                 State = State,
                 Description = Description,

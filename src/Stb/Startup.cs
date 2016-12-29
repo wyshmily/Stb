@@ -77,6 +77,9 @@ namespace Stb
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
 
+            services.AddIdentity<ContractorUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             //services.AddAuthorization(options =>
             //{
             //    //options.AddPolicy("Authenticated", policy => policy.RequireClaim(ClaimTypes.Name));
@@ -169,7 +172,7 @@ namespace Stb
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<PlatformUser> userManager, IOptions<TokenProviderOptions> tokenOptions)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<PlatformUser> userManager, IOptions<TokenProviderOptions> tokenOptions, UserManager<ContractorUser> contractorUserManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -259,8 +262,9 @@ namespace Stb
                     defaults: new { area = "official" });
             });
 
-            DbInitializer.Initialize(context, roleManager, userManager);
+            DbInitializer.Initialize(context, roleManager, userManager, contractorUserManager);
 
+           
         }
     }
 }

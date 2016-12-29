@@ -1,0 +1,109 @@
+﻿@model  Stb.Platform.Models.WorkLoadViewModels.OrderWorkLoadsViewModel
+
+@{
+    ViewData["Title"] = "工作量";
+
+    var count = Model.WorkLoads.Count;
+    var measureCount = Model.WorkLoads.Count(w => w.WorkerId == ViewBag.LeadWorkerId);
+    var workerIds = Model.WorkLoads.Select(w => w.WorkerId).Distinct().ToList();
+    var workerCount = workerIds.Count();
+
+}
+
+<br />
+<form asp-action="SaveWorkLoad">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.IsWorkerWorkLoadSet" />
+    <input type="hidden" asp-for="@Model.LeadWorkerName" />
+    <input type="hidden" asp-for="@Model.WorkerWorkLoadSetTime" />
+    <input type="hidden" asp-for="@Model.OrderId" />
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th colspan="3" class="h2 text-center">工作量评价表</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="@(workerCount + 1)" style="max-width:80px;min-width:80px;vertical-align:middle" class="text-center">工人工作量</td>
+                <td style="max-width:120px;min-width:120px;vertical-align:middle">工人姓名</td>
+                <td class="col-md-12">
+                    工作量
+                </td>
+            </tr>
+            @for (int i = 0; i < workerCount; i++)
+            {
+                var workerId = workerIds[i];
+                var workerWorkLoads = Model.WorkLoads.Where(w => w.WorkerId == workerId).ToList();
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => workerWorkLoads[0].WorkerName)
+                        @if (ViewBag.LeadWorkerId == workerId)
+                        {
+                            <span>(班长)</span>
+                        }
+                    </td>
+                    <td>
+                        @for (int j = 0; j < workerWorkLoads.Count; j++)
+                        {
+                            int index = Model.WorkLoads.IndexOf(workerWorkLoads[j]);
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Model.WorkLoads[index].JobMeasurementName
+                                </dt>
+                                <dd>
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].OrderId" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].JobMeasurementId" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].JobMeasurementName" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].WorkerId" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].WorkerName" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].Unit" />
+                                    <input type="hidden" asp-for="@Model.WorkLoads[index].OrderAmount" />
+                                   
+                                    <input class="form-control" asp-for="@Model.WorkLoads[index].Amount" />
+                                    <div>
+                                        <span asp-validation-for="@Model.WorkLoads[index].Amount" class="text-danger"></span>
+                                    </div>
+                                </dd>
+                            </dl>
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                @if (Model.WorkLoads.Count == 0)
+                {
+                    <td colspan="3" class="text-center text-danger">
+                        <span>该工单没有工作量设置</span>
+                    </td>
+                }
+                else
+                {
+                    <td colspan="3" class="text-right">
+                        @if (!Model.IsWorkerWorkLoadSet)
+                        {
+                            <input type="submit" value="保存评价表" class="form-control btn-primary" />
+                        }
+                        else
+                        {
+                            <span>工单班长：</span>@Html.DisplayFor(model => Model.LeadWorkerName)
+                            <span>&nbsp;&nbsp;</span>
+                            @Html.DisplayFor(model => Model.WorkerWorkLoadSetTime)
+                        }
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@if (!ViewBag.Blank)
+{
+    <div>
+        <a asp-action="Index">返回工单列表</a>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

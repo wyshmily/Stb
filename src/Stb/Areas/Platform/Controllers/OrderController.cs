@@ -13,6 +13,7 @@ using Stb.Api.Services.Push;
 using Stb.Api.Services;
 using Stb.Data.Comparer;
 using Stb.Api.Models.OrderViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Stb.Platform.Controllers
 {
@@ -23,12 +24,14 @@ namespace Stb.Platform.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPushService _pushService;
         private readonly OrderService _orderService;
+        private readonly UserManager<ContractorUser> _userManager;
 
-        public OrderController(ApplicationDbContext context, IPushService pushService, OrderService orderService)
+        public OrderController(ApplicationDbContext context, IPushService pushService, OrderService orderService, UserManager<ContractorUser> userManager)
         {
             _context = context;
             _pushService = pushService;
             _orderService = orderService;
+            _userManager = userManager;
         }
 
         // GET: Order
@@ -38,8 +41,9 @@ namespace Stb.Platform.Controllers
             int total = _context.Order.Count();
             ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
             ViewBag.Page = page;
-            var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff)
+            var orders = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorUser)
                 .Include(p => p.Platoon).Include(p => p.District)
+                .Include(p=>p.Evaluates)
                 .OrderByDescending(p => p.CreateTime)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
@@ -48,14 +52,14 @@ namespace Stb.Platform.Controllers
         }
 
         // GET: Order/Details/5
-        public async Task<IActionResult> Details(string id, bool blank=false)
+        public async Task<IActionResult> Details(string id, bool blank = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorUser).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
@@ -109,46 +113,46 @@ namespace Stb.Platform.Controllers
                     };
                     _context.Add(contractor);
 
-                    ContractorStaff contractorStaff = new ContractorStaff
+                    ContractorUser contractorUser = new ContractorUser
                     {
                         Contractor = contractor,
-                        Name = orderViewModel.ContractorStaffName,
-                        Phone = orderViewModel.ContractorStaffPhone,
+                        Name = orderViewModel.ContractorUserName,
+                        UserName = orderViewModel.ContractorUserPhone,
                     };
-                    _context.Add(contractorStaff);
+                    await _userManager.CreateAsync(contractorUser, "123456");
+                    await _userManager.AddToRoleAsync(contractorUser, Roles.Contractor);
 
-                    await _context.SaveChangesAsync();
-
-                    contractor.HeadStaffId = contractorStaff.Id;
+                    contractor.HeadUserId = contractorUser.Id;
 
                     order.ContractorId = contractor.Id;
-                    order.ContractorStaffId = contractorStaff.Id;
+                    order.ContractorUserId = contractorUser.Id;
                 }
                 else
                 {
                     Contractor contractor = await _context.Contractor.SingleAsync(c => c.Id == order.ContractorId);
                     if (contractor.Name != orderViewModel.ContractorName)
                         contractor.Name = orderViewModel.ContractorName;
-                    if (order.ContractorStaffId == null)
+                    if (order.ContractorUserId == null)
                     {
-                        ContractorStaff contractorStaff = new ContractorStaff
+                        ContractorUser contractorUser = new ContractorUser
                         {
                             Contractor = contractor,
-                            Name = orderViewModel.ContractorStaffName,
-                            Phone = orderViewModel.ContractorStaffPhone,
+                            Name = orderViewModel.ContractorUserName,
+                            UserName = orderViewModel.ContractorUserPhone,
                         };
-                        _context.Add(contractorStaff);
+                        await _userManager.CreateAsync(contractorUser, "123456");
+                        await _userManager.AddToRoleAsync(contractorUser, Roles.Contractor);
 
-                        order.ContractorStaff = contractorStaff;
+                        order.ContractorUser = contractorUser;
                     }
                     else
                     {
-                        ContractorStaff contractorStaff = await _context.ContractorStaff.SingleAsync(c => c.Id == order.ContractorStaffId);
+                        ContractorUser contractorUser = await _context.ContractorUser.SingleAsync(c => c.Id == order.ContractorUserId);
 
-                        if (contractorStaff.Name != orderViewModel.ContractorStaffName)
-                            contractorStaff.Name = orderViewModel.ContractorStaffName;
-                        if (contractorStaff.Phone != orderViewModel.ContractorStaffPhone)
-                            contractorStaff.Phone = orderViewModel.ContractorStaffPhone;
+                        if (contractorUser.Name != orderViewModel.ContractorUserName)
+                            contractorUser.Name = orderViewModel.ContractorUserName;
+                        //if (contractorUser.Phone != orderViewModel.ContractorStaffPhone)
+                        //    contractorStaff.Phone = orderViewModel.ContractorStaffPhone;
                     }
                 }
 
@@ -210,7 +214,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorUser).Include(p => p.Platoon).Include(p => p.District).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
@@ -246,48 +250,49 @@ namespace Stb.Platform.Controllers
                         };
                         _context.Add(contractor);
 
-                        ContractorStaff contractorStaff = new ContractorStaff
+                        ContractorUser contractorUser = new ContractorUser
                         {
                             Contractor = contractor,
-                            Name = orderViewModel.ContractorStaffName,
-                            Phone = orderViewModel.ContractorStaffPhone,
+                            Name = orderViewModel.ContractorUserName,
+                            UserName = orderViewModel.ContractorUserPhone,
                         };
-                        _context.Add(contractorStaff);
+                        await _userManager.CreateAsync(contractorUser, "123456");
+                        await _userManager.AddToRoleAsync(contractorUser, Roles.Contractor);
 
-                        await _context.SaveChangesAsync();
-
-                        contractor.HeadStaffId = contractorStaff.Id;
+                        contractor.HeadUserId = contractorUser.Id;
 
                         order.ContractorId = contractor.Id;
-                        order.ContractorStaffId = contractorStaff.Id;
+                        order.ContractorUserId = contractorUser.Id;
                     }
                     else
                     {
                         Contractor contractor = await _context.Contractor.SingleAsync(c => c.Id == order.ContractorId);
                         if (contractor.Name != orderViewModel.ContractorName)
                             contractor.Name = orderViewModel.ContractorName;
-                        if (order.ContractorStaffId == null)
+                        if (order.ContractorUserId == null)
                         {
-                            ContractorStaff contractorStaff = new ContractorStaff
+                            ContractorUser contractorUser = new ContractorUser
                             {
                                 Contractor = contractor,
-                                Name = orderViewModel.ContractorStaffName,
-                                Phone = orderViewModel.ContractorStaffPhone,
+                                Name = orderViewModel.ContractorUserName,
+                                UserName = orderViewModel.ContractorUserPhone,
                             };
-                            _context.Add(contractorStaff);
+                            await _userManager.CreateAsync(contractorUser, "123456");
+                            await _userManager.AddToRoleAsync(contractorUser, Roles.Contractor);
 
-                            order.ContractorStaff = contractorStaff;
+                            order.ContractorUser = contractorUser;
                         }
                         else
                         {
-                            ContractorStaff contractorStaff = await _context.ContractorStaff.SingleAsync(c => c.Id == order.ContractorStaffId);
+                            ContractorUser contractorUser = await _context.ContractorUser.SingleAsync(c => c.Id == order.ContractorUserId);
 
-                            if (contractorStaff.Name != orderViewModel.ContractorStaffName)
-                                contractorStaff.Name = orderViewModel.ContractorStaffName;
-                            if (contractorStaff.Phone != orderViewModel.ContractorStaffPhone)
-                                contractorStaff.Phone = orderViewModel.ContractorStaffPhone;
+                            if (contractorUser.Name != orderViewModel.ContractorUserName)
+                                contractorUser.Name = orderViewModel.ContractorUserName;
+                            //if (contractorStaff.Phone != orderViewModel.ContractorStaffPhone)
+                            //    contractorStaff.Phone = orderViewModel.ContractorStaffPhone;
                         }
                     }
+
                     _context.Update(order);
 
                     List<WorkLoad> curWorkLoads = await _context.WorkLoad.Where(w => w.OrderId == id && w.WorkerId == null).ToListAsync();
@@ -324,7 +329,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorUser).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
@@ -346,7 +351,7 @@ namespace Stb.Platform.Controllers
         }
 
 
-        public async Task<IActionResult> Evaluate(string id, bool blank=false)
+        public async Task<IActionResult> Evaluate(string id, bool blank = false)
         {
             OrderEvaluate_Customer evaluate = await _context.OrderEvaluate_Customer.Include(e => e.EvaluateUser).SingleOrDefaultAsync(e => e.OrderId == id);
 

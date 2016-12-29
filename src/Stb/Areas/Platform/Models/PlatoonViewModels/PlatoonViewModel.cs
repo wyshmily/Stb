@@ -28,6 +28,9 @@ namespace Stb.Platform.Models.PlatoonViewModels
         [Display(Name = "是否启用")]
         public bool Enabled { get; set; }
 
+        [Display(Name = "头像")]
+        public string Portrait { get; set; }
+
         [Display(Name = "姓名")]
         [Required(ErrorMessage = "{0}不能为空")]
         [StringLength(32, MinimumLength = 1, ErrorMessage = "{0}长度为{2}到{1}个字符")]
@@ -105,6 +108,7 @@ namespace Stb.Platform.Models.PlatoonViewModels
             Id = platoon.Id;
             UserName = platoon.UserName;
             Password = "Hidden";
+            Portrait = platoon.Portrait;
             Name = platoon.Name;
             Gender = platoon.Gender;
             IdCardNumber = platoon.IdCardNumber;
@@ -138,6 +142,7 @@ namespace Stb.Platform.Models.PlatoonViewModels
             Platoon platoon = new Platoon
             {
                 UserName = UserName,
+                Portrait = Portrait,
                 Name = Name,
                 Gender = Gender,
                 IdCardNumber = IdCardNumber,
@@ -164,6 +169,7 @@ namespace Stb.Platform.Models.PlatoonViewModels
         public void Update(ref Platoon platoon)
         {
             platoon.UserName = UserName;
+            platoon.Portrait = Portrait;
             platoon.Name = Name;
             platoon.Gender = Gender;
             platoon.IdCardNumber = IdCardNumber;

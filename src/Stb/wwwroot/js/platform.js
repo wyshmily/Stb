@@ -1,6 +1,11 @@
 ﻿bootstrap_alert = function () { }
 
 $(document).ready(function () {
+    $.getJSON("http://42.96.155.165:40003/Opark/Test/Carouses")
+        .success(function (data) {
+            console.log(data);
+        })
+
     var timer;
     bootstrap_alert.warning = function (holder, message, autoDismiss) {
         $(holder)//.addClass("place-holder")

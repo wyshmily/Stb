@@ -33,7 +33,12 @@ namespace Stb.Data.Models
         [Display(Name = "负责人")]
         public int? HeadStaffId { get; set; }
 
-        public List<ContractorStaff> Staffs { get; set; }
+        [Display(Name = "负责人")]
+        public string HeadUserId { get; set; }
+
+        //public List<ContractorStaff> Staffs { get; set; }
+
+        public List<ContractorUser> Users { get; set; }
 
         public List<Order> Orders { get; set; }
     }

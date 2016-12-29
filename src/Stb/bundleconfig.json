@@ -46,5 +46,21 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/js/crop.min.js",
+    "inputFiles": [
+      "wwwroot/js/crop.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/base64.min.js",
+    "inputFiles": [
+      "wwwroot/js/base64.js"
+    ]
   }
 ]

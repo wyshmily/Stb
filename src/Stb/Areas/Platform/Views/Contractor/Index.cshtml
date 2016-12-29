@@ -19,10 +19,10 @@
                 @Html.DisplayNameFor(model => model.Contractor.Address)
             </th>
             <th>
-                负责人@(Html.DisplayNameFor(model => model.HeadStaff.Name))
+                负责人@(Html.DisplayNameFor(model => model.HeadUser.Name))
             </th>
             <th>
-                负责人@(Html.DisplayNameFor(model => model.HeadStaff.Phone))
+                负责人@(Html.DisplayNameFor(model => model.HeadUser.UserName))
 
             </th>
             <th>
@@ -42,10 +42,10 @@
                     @Html.DisplayFor(modelItem => item.Contractor.Address)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HeadStaff.Name)
+                    @Html.DisplayFor(modelItem => item.HeadUser.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HeadStaff.Phone)
+                    @Html.DisplayFor(modelItem => item.HeadUser.UserName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Contractor.Enabled)

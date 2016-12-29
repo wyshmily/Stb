@@ -11,8 +11,8 @@ namespace Stb.Api.Models.OrderViewModels
         public PlatoonOrderData(Order order)
         {
             OrderId = order.Id;
-            Contactor = order.ContractorStaff?.Name;
-            Phone = order.ContractorStaff?.Phone;
+            Contactor = order.ContractorUser?.Name;
+            Phone = order.ContractorUser?.UserName;
             LeadWorkerName = order.LeadWorker?.Name;
             LeadWorkerName = order.LeadWorker?.UserName;
             State = order.State;

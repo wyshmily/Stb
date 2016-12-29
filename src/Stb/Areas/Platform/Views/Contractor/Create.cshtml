@@ -36,17 +36,24 @@
         <h4>负责人信息</h4>
         <hr />
         <div class="form-group">
-            <label asp-for="HeadStaff.Name" class="col-md-2 control-label"></label>
+            <label asp-for="HeadUser.Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="HeadStaff.Name" class="form-control" />
-                <span asp-validation-for="HeadStaff.Name" class="text-danger" />
+                <input asp-for="HeadUser.Name" class="form-control" />
+                <span asp-validation-for="HeadUser.Name" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="HeadStaff.Phone" class="col-md-2 control-label"></label>
+            <label asp-for="HeadUser.UserName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="HeadStaff.Phone" class="form-control" />
-                <span asp-validation-for="HeadStaff.Phone" class="text-danger" />
+                <input asp-for="HeadUser.UserName" class="form-control" />
+                <span asp-validation-for="HeadUser.UserName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="HeadUser.Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="HeadUser.Password" class="form-control" />
+                <span asp-validation-for="HeadUser.Password" class="text-danger" />
             </div>
         </div>
         <br />

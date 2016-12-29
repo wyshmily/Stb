@@ -81,6 +81,11 @@
                         {
                             <li><a asp-controller="WorkerOrder" asp-action="index">工单管理</a></li>
                         }
+
+                        @if (User.IsInRole(Roles.Contractor))
+                        {
+                            <li><a asp-controller="ContractorOrder" asp-action="index">工单管理</a></li>
+                        }
                     </ul>
                 }
                 @await Html.PartialAsync("_LoginPartial")

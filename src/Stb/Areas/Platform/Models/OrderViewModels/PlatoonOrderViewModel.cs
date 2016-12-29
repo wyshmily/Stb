@@ -18,7 +18,7 @@ namespace Stb.Platform.Models.OrderViewModels
         [Display(Name = "承包商")]
         public string ContractorName { get; set; }  // 承包商名称
 
-        public int? ContractorStaffId { get; set; }
+        public string ContractorUserId { get; set; }
 
         [Display(Name = "联系人")]
         public string ContractorStaffName { get; set; } // 联系人姓名
@@ -55,9 +55,9 @@ namespace Stb.Platform.Models.OrderViewModels
             Id = order.Id;
             ContractorId = order.ContractorId;
             ContractorName = order.Contractor?.Name;
-            ContractorStaffId = order.ContractorStaffId;
-            ContractorStaffName = order.ContractorStaff?.Name;
-            ContractorStaffPhone = order.ContractorStaff?.Phone;
+            ContractorUserId = order.ContractorUserId;
+            ContractorStaffName = order.ContractorUser?.Name;
+            ContractorStaffPhone = order.ContractorUser?.UserName;
             State = order.State;
             Description = order.Description;
             WorkAddress = order.WorkAddress;

@@ -38,9 +38,10 @@ namespace Stb.Platform.Controllers
             ViewBag.TotalPage = (int)Math.Ceiling((double)total / (double)Constants.PageSize);
             ViewBag.Page = page;
             var orders = await _context.Order.Where(o => o.LeadWorkerId == userId)
-                .Include(p => p.Contractor).Include(p => p.ContractorStaff)
+                .Include(p => p.Contractor).Include(p => p.ContractorUser)
                 .Include(p => p.Platoon).Include(p => p.District)
                 .Include(p => p.LeadWorker)
+                .Include(p => p.Evaluates)
                 .OrderByDescending(p => p.CreateTime)
                 .Skip((page - 1) * Constants.PageSize)
                 .Take(Constants.PageSize)
@@ -56,7 +57,7 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorStaff).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
+            var order = await _context.Order.Include(p => p.Contractor).Include(p => p.ContractorUser).Include(p => p.Platoon).Include(p => p.District).Include(p => p.Project).Include(p => p.OrderWorkers).ThenInclude(ow => ow.Worker).Include(p => p.Evaluates).Include(p => p.WorkLoads).ThenInclude(w => w.JobMeasurement).SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
                 return NotFound();
@@ -180,6 +181,7 @@ namespace Stb.Platform.Controllers
             }
 
             ViewBag.UserId = this.UserId();
+            ViewBag.Blank = false;
             return View("WorkLoad", viewModel);
         }
 

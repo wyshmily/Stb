@@ -23,6 +23,8 @@ namespace Stb.Platform.Models.WorkerViewModels
 
         public bool IsCandidate { get; set; }
 
+        public string Portrait { get; set; }
+
         public WorkerSimpleViewModel()
         {
 
@@ -37,6 +39,7 @@ namespace Stb.Platform.Models.WorkerViewModels
             Name = worker.Name;
             IsHeader = worker.IsHeader;
             IsCandidate = worker.IsCandidate;
+            Portrait = worker.Portrait;
         }
     }
 }

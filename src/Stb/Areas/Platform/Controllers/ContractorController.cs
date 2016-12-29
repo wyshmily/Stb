@@ -9,6 +9,8 @@ using Stb.Data;
 using Stb.Data.Models;
 using Stb.Platform.Models.ContractorViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Stb.Platform.Models.ContractorUserViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Stb.Platform.Controllers
 {
@@ -17,10 +19,12 @@ namespace Stb.Platform.Controllers
     public class ContractorController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ContractorUser> _userManager;
 
-        public ContractorController(ApplicationDbContext context)
+        public ContractorController(ApplicationDbContext context, UserManager<ContractorUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Contractors
@@ -31,44 +35,56 @@ namespace Stb.Platform.Controllers
             ViewBag.Page = page;
 
             return View(
-                await (from c in _context.Contractor
-                       join s in _context.ContractorStaff on c.HeadStaffId equals s.Id into temp
-                       from tt in temp.DefaultIfEmpty()
-                       select new ContractorViewModel
-                       {
-                           Contractor = c,
-                           HeadStaff = tt
-                       })
+                (await (from c in _context.Contractor
+                        join s in _context.ContractorUser on c.HeadUserId equals s.Id into temp
+                        from tt in temp.DefaultIfEmpty()
+                        orderby c.Id
+                        select new
+                        {
+                            Contractor = c,
+                            HeadStaff = tt
+                        })
                        .Skip((page - 1) * Constants.PageSize)
                        .Take(Constants.PageSize)
-                       .ToListAsync());
+                       .ToListAsync())
+                       .Select(u => new ContractorViewModel
+                       {
+                           Contractor = u.Contractor,
+                           HeadUser = u.HeadStaff == null ? null : new ContractorUserViewModel(u.HeadStaff)
+                       }));
         }
 
         // GET: Contractors/Details/5
         [Authorize]
 
-        public async Task<IActionResult> Details(int? id, bool blank=false)
+        public async Task<IActionResult> Details(int? id, bool blank = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            ContractorViewModel viewModel =
+            var query =
                 await (from c in _context.Contractor
-                       join s in _context.ContractorStaff on c.HeadStaffId equals s.Id into temp
+                       join s in _context.ContractorUser on c.HeadUserId equals s.Id into temp
                        from tt in temp.DefaultIfEmpty()
                        where c.Id == id
-                       select new ContractorViewModel
+                       select new
                        {
                            Contractor = c,
                            HeadStaff = tt
                        }).FirstOrDefaultAsync();
 
-            if (viewModel == null)
+            if (query == null)
             {
                 return NotFound();
             }
+
+            ContractorViewModel viewModel = new ContractorViewModel
+            {
+                Contractor = query.Contractor,
+                HeadUser = query.HeadStaff == null ? null : new ContractorUserViewModel(query.HeadStaff)
+            };
 
             ViewBag.Blank = blank;
             return View(viewModel);
@@ -85,20 +101,34 @@ namespace Stb.Platform.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Contractor contractor, ContractorStaff headStaff)
+        public async Task<IActionResult> Create(Contractor contractor, ContractorUserViewModel headUser)
         {
             if (ModelState.IsValid)
             {
-                headStaff.Contractor = contractor;
-                _context.Add(headStaff);
-                await _context.SaveChangesAsync();
+                // todo...
+                var contractorUser = headUser.ToContractorUser();
+                contractorUser.Contractor = contractor;
 
-                contractor.HeadStaffId = headStaff.Id;
+                if (await _userManager.Users.AnyAsync(u => u.UserName == headUser.UserName))
+                {
+                    ModelState.AddModelError("UserName", $"用户{headUser.UserName}已存在！");
+                    return View(new ContractorViewModel
+                    {
+                        Contractor = contractor,
+                        HeadUser = headUser,
+                    });
+                }
+
+                await _userManager.CreateAsync(contractorUser, headUser.Password);
+                await _userManager.AddToRoleAsync(contractorUser, Roles.Contractor);
+
+
+                contractor.HeadUserId = contractorUser.Id;
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
-            return View(new ContractorViewModel { Contractor = contractor, HeadStaff = headStaff });
+            return View(new ContractorViewModel { Contractor = contractor, HeadUser = headUser });
         }
 
         // GET: Contractors/Edit/5
@@ -108,8 +138,7 @@ namespace Stb.Platform.Controllers
             {
                 return NotFound();
             }
-
-            var contractor = await _context.Contractor.Include(c => c.Staffs).SingleOrDefaultAsync(m => m.Id == id);
+            var contractor = await _context.Contractor.Include(c => c.Users).SingleOrDefaultAsync(m => m.Id == id);
             if (contractor == null)
             {
                 return NotFound();
@@ -150,7 +179,7 @@ namespace Stb.Platform.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            contractor.Staffs = await _context.ContractorStaff.Where(s => s.ContractorId == id).ToListAsync();
+            contractor.Users = await _context.ContractorUser.Where(s => s.ContractorId == id).ToListAsync();
             return View(contractor);
         }
 
@@ -162,21 +191,27 @@ namespace Stb.Platform.Controllers
                 return NotFound();
             }
 
-            ContractorViewModel viewModel =
-                await (from c in _context.Contractor
-                       join s in _context.ContractorStaff on c.HeadStaffId equals s.Id into temp
-                       from tt in temp.DefaultIfEmpty()
-                       where c.Id == id
-                       select new ContractorViewModel
-                       {
-                           Contractor = c,
-                           HeadStaff = tt
-                       }).FirstOrDefaultAsync();
+            var query =
+                 await (from c in _context.Contractor
+                        join s in _context.ContractorUser on c.HeadUserId equals s.Id into temp
+                        from tt in temp.DefaultIfEmpty()
+                        where c.Id == id
+                        select new
+                        {
+                            Contractor = c,
+                            HeadStaff = tt
+                        }).FirstOrDefaultAsync();
 
-            if (viewModel == null)
+            if (query == null)
             {
                 return NotFound();
             }
+
+            ContractorViewModel viewModel = new ContractorViewModel
+            {
+                Contractor = query.Contractor,
+                HeadUser = query.HeadStaff == null ? null : new ContractorUserViewModel(query.HeadStaff)
+            };
 
             return View(viewModel);
         }
@@ -186,7 +221,7 @@ namespace Stb.Platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contractor = await _context.Contractor.Include(c => c.Staffs).SingleOrDefaultAsync(m => m.Id == id);
+            var contractor = await _context.Contractor.Include(c => c.Users).SingleOrDefaultAsync(m => m.Id == id);
             _context.Contractor.Remove(contractor);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

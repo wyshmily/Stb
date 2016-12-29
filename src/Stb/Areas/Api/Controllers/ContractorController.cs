@@ -34,7 +34,7 @@ namespace Stb.Api.Controllers
             if (search == null)
                 search = "";
             var query = (from c in _context.Contractor
-                         join s in _context.ContractorStaff on c.HeadStaffId equals s.Id into temp
+                         join s in _context.ContractorUser on c.HeadUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where c.Enabled && c.Name.Contains(search)
                          select new
@@ -43,14 +43,7 @@ namespace Stb.Api.Controllers
                              header = tt
                          });
 
-            return query.Take(10).Select(c => new ContractorViewModel
-            {
-                Id = c.contractor.Id,
-                Name = c.contractor.Name,
-                HeadStaffId = c.header == null ? null : (int?)c.header.Id,
-                HeadStaffName = c.header == null ? null : c.header.Name,
-                HeadStaffPhone = c.header == null ? null : c.header.Phone
-            });
+            return query.Take(10).Select(c => new ContractorViewModel(c.contractor, c.header));
         }
     }
 }
