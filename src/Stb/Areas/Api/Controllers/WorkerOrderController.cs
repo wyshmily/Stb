@@ -10,7 +10,7 @@ namespace Stb.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Worker/Order")]
-    [Authorize(ActiveAuthenticationSchemes = "Bearer", Roles = "工人")]
+    //[Authorize(ActiveAuthenticationSchemes = "Bearer", Roles = "工人")]
     [ApiExceptionFilter]
     public class WorkerOrderController : Controller
     {
@@ -101,15 +101,17 @@ namespace Stb.Api.Controllers
         /// App班长端：记录问题
         /// </summary>
         /// <param name="orderId">Required - 工单id</param>
-        /// <param name="issueType">Required - 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力</param>
-        /// <param name="solutionType">Required - 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号</param>
+        /// <param name="issueType">Required - 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力；0-其它问题</param>
+        /// <param name="solutionType">Required - 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号；0-其它解决方法</param>
+        /// <param name="issueDesc">Optional - 其它问题，仅当issueType == 0时有效</param>
+        /// <param name="SolutionDesc">Optional - 其它解决方法，仅当solutionType == 0时有效</param>
         /// <param name="pics">Optional - 图片链接，逗号分隔</param>
         /// <param name="audios">Optional - 录音链接，逗号分隔</param>
         /// <returns></returns>
         [HttpGet("ReportIssue")]
-        public async Task<ApiOutput<bool>> ReportIssueAsync([RequiredFromQuery]string orderId, [RequiredFromQuery]int issueType, [RequiredFromQuery]int solutionType, [FromQuery]string pics, [FromQuery] string audios)
+        public async Task<ApiOutput<bool>> ReportIssueAsync([RequiredFromQuery]string orderId, [RequiredFromQuery]int issueType, [RequiredFromQuery]int solutionType,[FromQuery]string issueDesc, [FromQuery]string SolutionDesc, [FromQuery]string pics, [FromQuery] string audios)
         {
-            return new ApiOutput<bool>(await _orderService.WorkerReportIssueAsync(this.UserId(), orderId, issueType, solutionType, pics, audios));
+            return new ApiOutput<bool>(await _orderService.WorkerReportIssueAsync(this.UserId(), orderId, issueType, solutionType,issueDesc, SolutionDesc, pics, audios));
         }
 
     }

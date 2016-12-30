@@ -220,7 +220,7 @@ namespace Stb.Api.Services
 
 
         // 班长记录问题
-        public async Task<bool> WorkerReportIssueAsync(string userId, string orderId, int issueType, int solutionType, string pics, string audios)
+        public async Task<bool> WorkerReportIssueAsync(string userId, string orderId, int issueType, int solutionType,string issueDesc, string solutionDesc, string pics, string audios)
         {
             Order order = await _context.Order.FindAsync(orderId);
             if (order == null)
@@ -234,6 +234,8 @@ namespace Stb.Api.Services
                 Time = now,
                 IssueType = issueType,
                 SolutionType = solutionType,
+                IsuueDesc = issueDesc,
+                SolutionDesc = solutionDesc,
                 Pics = pics,
                 Audios = audios,
             };

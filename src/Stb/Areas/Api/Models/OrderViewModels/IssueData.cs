@@ -50,6 +50,16 @@ namespace Stb.Api.Models.OrderViewModels
         public int SolutionType { get; set; }
 
         /// <summary>
+        /// 其它问题，仅当IssueType为0时有效
+        /// </summary>
+        public string IssueDesc { get; set; }
+
+        /// <summary>
+        /// 其它解决方法，仅当SolutionType为0时有效
+        /// </summary>
+        public string SolutionDesc { get; set; }
+
+        /// <summary>
         /// 照片列表，逗号分隔
         /// </summary>
         public string Pics { get; set; }
@@ -69,6 +79,8 @@ namespace Stb.Api.Models.OrderViewModels
             DateTime = issue.Time;
             IssueType = issue.IssueType;
             SolutionType = issue.SolutionType;
+            IssueDesc = issue.IsuueDesc;
+            SolutionDesc = issue.SolutionDesc;
             Pics = issue.Pics;
             Audios = issue.Audios;
         }

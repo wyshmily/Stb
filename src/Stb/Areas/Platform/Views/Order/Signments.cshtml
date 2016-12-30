@@ -11,6 +11,7 @@
 @foreach(var signment in Model)
 {
     <div>
+        <hr />
         <div>
             <span>@signment.UserName </span> &nbsp;&nbsp;
             @if (signment.InOut)
@@ -28,6 +29,23 @@
         </p>
         <div>
             <img class="img-responsive" src="@signment.LocationUrl" />
+        </div>
+        <br />
+        <div>
+            @if (signment.Pics != null)
+            {
+                var piclist = signment.Pics.Split(new[] { ',' }).ToList();
+                if (piclist.Count > 0)
+                {
+                    <p>签到图片</p>
+                    <div class="row">
+                        @foreach (var img in piclist)
+                        {
+                            <img src="@img" style="margin:3px" class="col-xs-6 col-sm-4 col-md-3" />
+                        }
+                    </div>
+                }
+            }
         </div>
         <br />
     </div>

@@ -238,13 +238,15 @@
             <param name="orderId">Required - 工单Id</param>
             <returns></returns>
         </member>
-        <member name="M:Stb.Api.Controllers.WorkerOrderController.ReportIssueAsync(System.String,System.Int32,System.Int32,System.String,System.String)">
+        <member name="M:Stb.Api.Controllers.WorkerOrderController.ReportIssueAsync(System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
             <summary>
             App班长端：记录问题
             </summary>
             <param name="orderId">Required - 工单id</param>
-            <param name="issueType">Required - 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力</param>
-            <param name="solutionType">Required - 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号</param>
+            <param name="issueType">Required - 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力；0-其它问题</param>
+            <param name="solutionType">Required - 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号；0-其它解决方法</param>
+            <param name="issueDesc">Optional - 其它问题，仅当issueType == 0时有效</param>
+            <param name="SolutionDesc">Optional - 其它解决方法，仅当solutionType == 0时有效</param>
             <param name="pics">Optional - 图片链接，逗号分隔</param>
             <param name="audios">Optional - 录音链接，逗号分隔</param>
             <returns></returns>
@@ -384,6 +386,16 @@
         <member name="P:Stb.Api.Models.OrderViewModels.IssueData.SolutionType">
             <summary>
             解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.IssueData.IssueDesc">
+            <summary>
+            其它问题，仅当IssueType为0时有效
+            </summary>
+        </member>
+        <member name="P:Stb.Api.Models.OrderViewModels.IssueData.SolutionDesc">
+            <summary>
+            其它解决方法，仅当SolutionType为0时有效
             </summary>
         </member>
         <member name="P:Stb.Api.Models.OrderViewModels.IssueData.Pics">

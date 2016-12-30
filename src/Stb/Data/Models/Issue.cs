@@ -19,9 +19,13 @@ namespace Stb.Data.Models
 
         public DateTime Time { get; set; }  // 记录时间
 
-        public int IssueType { get; set; }   // 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力
+        public int IssueType { get; set; }   // 问题类型：1-设计问题；2-业主要求；3-现场环境不具备施工条件；4-不可抗力；0-其它
 
-        public int SolutionType { get; set; }   // 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号
+        public int SolutionType { get; set; }   // 解决方法类型：1-重新施工；2-推迟施工；3-修改设计；4-更换设备型号；0-其它
+
+        public string IsuueDesc { get; set; }   // 其它问题
+
+        public string SolutionDesc { get; set; }    // 其它解决方法
 
         public string Pics { get; set; }    // 图片链接，逗号分隔
 
